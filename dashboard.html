@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aulifa - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #1f2a40;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    header h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+    header button {
+      background: #00c896;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    header button:hover {
+      background: #00b386;
+    }
+    main {
+      flex: 1;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .comment-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .comment-box input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #2a2a3a;
+      color: #fff;
+    }
+    .comment-box button {
+      padding: 12px 20px;
+      background: #00c896;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .comment-box button:hover {
+      background: #00b386;
+    }
+    .comments {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .comment {
+      background: #1f2a40;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .comment strong {
+      color: #00c896;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Bienvenue <span id="user-email"></span></h2>
+    <button id="logout">Déconnexion</button>
+  </header>
+
+  <main>
+    <div class="comment-box">
+      <input type="text" id="comment-input" placeholder="Écrire un commentaire..." />
+      <button id="send-comment">Envoyer</button>
+    </div>
+    <div class="comments" id="comments"></div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDE6doCDW_iU-JnxT0YRaeb6brZpJqKBKY",
+      authDomain: "testeur-1e462.firebaseapp.com",
+      projectId: "testeur-1e462",
+      storageBucket: "testeur-1e462.firebasestorage.app",
+      messagingSenderId: "67600594276",
+      appId: "1:67600594276:web:9ed96e88d91245fdc23671",
+      measurementId: "G-QD421ZB6NZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Afficher l’utilisateur connecté
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("user-email").textContent = user.email;
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+
+    // Déconnexion
+    document.getElementById("logout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+
+    // Envoyer un commentaire
+    document.getElementById("send-comment").addEventListener("click", async () => {
+      const input = document.getElementById("comment-input");
+      if (input.value.trim() !== "") {
+        await addDoc(collection(db, "comments"), {
+          text: input.value,
+          createdAt: new Date(),
+          user: auth.currentUser.email
+        });
+        input.value = "";
+      }
+    });
+
+    // Afficher les commentaires en direct
+    const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const commentsDiv = document.getElementById("comments");
+      commentsDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const c = doc.data();
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `<strong>${c.user}</strong><br>${c.text}`;
+        commentsDiv.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
