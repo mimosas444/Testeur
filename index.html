@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aulifa - Connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2c2c3c);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: #2a2a3a;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3a3a4a;
+      color: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00c896;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00b386;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .switch a {
+      color: #00c896;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="form-title">Connexion</h2>
+    <input type="email" id="email" placeholder="Adresse e-mail" />
+    <input type="password" id="password" placeholder="Mot de passe" />
+    <button id="submit">Se connecter</button>
+    <div class="switch">
+      <span id="toggle-text">Pas encore inscrit ? <a href="#" id="toggle-link">Créer un compte</a></span>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDE6doCDW_iU-JnxT0YRaeb6brZpJqKBKY",
+      authDomain: "testeur-1e462.firebaseapp.com",
+      projectId: "testeur-1e462",
+      storageBucket: "testeur-1e462.firebasestorage.app",
+      messagingSenderId: "67600594276",
+      appId: "1:67600594276:web:9ed96e88d91245fdc23671",
+      measurementId: "G-QD421ZB6NZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let isLogin = true;
+
+    document.getElementById("toggle-link").addEventListener("click", () => {
+      isLogin = !isLogin;
+      document.getElementById("form-title").textContent = isLogin ? "Connexion" : "Inscription";
+      document.getElementById("submit").textContent = isLogin ? "Se connecter" : "Créer un compte";
+      document.getElementById("toggle-text").innerHTML = isLogin
+        ? 'Pas encore inscrit ? <a href="#" id="toggle-link">Créer un compte</a>'
+        : 'Déjà inscrit ? <a href="#" id="toggle-link">Se connecter</a>';
+    });
+
+    document.getElementById("submit").addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        if (isLogin) {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "dashboard.html";
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+          window.location.href = "dashboard.html";
+        }
+      } catch (error) {
+        alert("Erreur : " + error.message);
+      }
+    });
+  </script>
+</body>
+  </html>
