@@ -4,73 +4,244 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aulifa - Connexion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
+    :root {
+      --primary: #00c896;
+      --primary-hover: #00b386;
+      --bg-dark: #121218;
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-color: #ffffff;
+      --text-muted: #a0a0b0;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2c2c3c);
-      color: #fff;
+      background-color: var(--bg-dark);
+      color: var(--text-color);
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
+
+    /* Background Animation Shapes */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+      animation: float 10s infinite ease-in-out alternate;
+    }
+    .shape-1 {
+      width: 300px; height: 300px;
+      background: #7b2cbf;
+      top: -50px; left: -50px;
+    }
+    .shape-2 {
+      width: 400px; height: 400px;
+      background: var(--primary);
+      bottom: -100px; right: -100px;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, 50px); }
+    }
+
+    /* Glass Card */
     .container {
-      background: #2a2a3a;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
       width: 100%;
-      max-width: 400px;
-    }
-    h2 {
+      max-width: 420px;
       text-align: center;
-      margin-bottom: 24px;
-      font-weight: 600;
+      animation: slideUp 0.6s ease-out;
     }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .greeting {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      margin: 0 0 30px 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    /* Input Group Styling */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
     input {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #3a3a4a;
+      padding: 14px 14px 14px 45px; /* Space for icon */
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
       color: #fff;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      outline: none;
     }
+
+    input:focus {
+      border-color: var(--primary);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 4px rgba(0, 200, 150, 0.1);
+    }
+    
+    input:focus + i {
+      color: var(--primary);
+    }
+
+    /* Button Styling */
     button {
       width: 100%;
-      padding: 12px;
-      background: #00c896;
+      padding: 14px;
+      background: var(--primary);
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       color: #fff;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
+
     button:hover {
-      background: #00b386;
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 200, 150, 0.3);
     }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: #444;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loader Animation inside button */
+    .loader {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #fff;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Switch Text */
     .switch {
-      text-align: center;
-      margin-top: 16px;
+      margin-top: 24px;
       font-size: 14px;
+      color: var(--text-muted);
     }
+
     .switch a {
-      color: #00c896;
+      color: var(--primary);
       text-decoration: none;
       font-weight: 600;
+      margin-left: 5px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .switch a:hover {
+      text-decoration: underline;
+    }
+
+    /* Error Message */
+    .error-msg {
+      color: #ff4d4d;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
   </style>
 </head>
 <body>
+
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+
   <div class="container">
+    <div class="greeting" id="time-greeting">Bienvenue</div>
     <h2 id="form-title">Connexion</h2>
-    <input type="email" id="email" placeholder="Adresse e-mail" />
-    <input type="password" id="password" placeholder="Mot de passe" />
-    <button id="submit">Se connecter</button>
+    
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Adresse e-mail" required />
+      <i class="fas fa-envelope"></i> </div>
+    
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <i class="fas fa-lock"></i> </div>
+
+    <button id="submit">
+      <span class="btn-text">Se connecter</span>
+      <span class="loader"></span>
+    </button>
+    
+    <div class="error-msg" id="error-message"></div>
+
     <div class="switch">
-      <span id="toggle-text">Pas encore inscrit ? <a href="#" id="toggle-link">Créer un compte</a></span>
+      <span id="switch-text">Pas encore de compte ?</span>
+      <a id="toggle-link">S'inscrire</a>
     </div>
   </div>
 
@@ -78,6 +249,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+    // --- Ta configuration Firebase ---
     const firebaseConfig = {
       apiKey: "AIzaSyDE6doCDW_iU-JnxT0YRaeb6brZpJqKBKY",
       authDomain: "testeur-1e462.firebaseapp.com",
@@ -91,33 +263,117 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // --- Logique UI & UX ---
+    
+    const elements = {
+      title: document.getElementById("form-title"),
+      btn: document.getElementById("submit"),
+      btnText: document.querySelector(".btn-text"),
+      loader: document.querySelector(".loader"),
+      toggleLink: document.getElementById("toggle-link"),
+      switchText: document.getElementById("switch-text"),
+      email: document.getElementById("email"),
+      password: document.getElementById("password"),
+      errorMsg: document.getElementById("error-message"),
+      greeting: document.getElementById("time-greeting")
+    };
+
     let isLogin = true;
 
-    document.getElementById("toggle-link").addEventListener("click", () => {
+    // 1. Détection automatique de l'heure
+    function setGreeting() {
+      const hour = new Date().getHours();
+      let text = "Bienvenue";
+      if (hour >= 5 && hour < 12) text = "Bonjour";
+      else if (hour >= 12 && hour < 18) text = "Bonne après-midi";
+      else text = "Bonsoir";
+      
+      elements.greeting.textContent = text;
+    }
+    setGreeting();
+
+    // 2. Basculement entre Connexion et Inscription
+    elements.toggleLink.addEventListener("click", () => {
       isLogin = !isLogin;
-      document.getElementById("form-title").textContent = isLogin ? "Connexion" : "Inscription";
-      document.getElementById("submit").textContent = isLogin ? "Se connecter" : "Créer un compte";
-      document.getElementById("toggle-text").innerHTML = isLogin
-        ? 'Pas encore inscrit ? <a href="#" id="toggle-link">Créer un compte</a>'
-        : 'Déjà inscrit ? <a href="#" id="toggle-link">Se connecter</a>';
+      
+      // Animation douce des textes
+      elements.title.style.opacity = 0;
+      setTimeout(() => {
+        elements.title.textContent = isLogin ? "Connexion" : "Créer un compte";
+        elements.btnText.textContent = isLogin ? "Se connecter" : "S'inscrire";
+        elements.switchText.textContent = isLogin ? "Pas encore de compte ?" : "Déjà un compte ?";
+        elements.toggleLink.textContent = isLogin ? "S'inscrire" : "Se connecter";
+        elements.errorMsg.style.opacity = 0; // Reset error
+        elements.title.style.opacity = 1;
+      }, 200);
     });
 
-    document.getElementById("submit").addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    // 3. Gestion de la soumission avec Animation
+    elements.btn.addEventListener("click", async () => {
+      const email = elements.email.value;
+      const password = elements.password.value;
+
+      // Validation basique
+      if(!email || !password) {
+        showError("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      // UI : État de chargement
+      setLoading(true);
 
       try {
         if (isLogin) {
           await signInWithEmailAndPassword(auth, email, password);
-          window.location.href = "dashboard.html";
         } else {
           await createUserWithEmailAndPassword(auth, email, password);
-          window.location.href = "dashboard.html";
         }
+        // Succès : Redirection
+        window.location.href = "dashboard.html";
+        
       } catch (error) {
-        alert("Erreur : " + error.message);
+        setLoading(false);
+        // Gestion des erreurs en Français
+        let message = "Une erreur est survenue.";
+        if(error.code === 'auth/invalid-credential') message = "Email ou mot de passe incorrect.";
+        else if(error.code === 'auth/email-already-in-use') message = "Cet email est déjà utilisé.";
+        else if(error.code === 'auth/weak-password') message = "Le mot de passe est trop faible.";
+        else if(error.code === 'auth/invalid-email') message = "Format d'email invalide.";
+        
+        showError(message);
       }
     });
+
+    function setLoading(state) {
+      if (state) {
+        elements.btn.disabled = true;
+        elements.btnText.style.display = "none";
+        elements.loader.style.display = "block";
+      } else {
+        elements.btn.disabled = false;
+        elements.btnText.style.display = "block";
+        elements.loader.style.display = "none";
+      }
+    }
+
+    function showError(msg) {
+      elements.errorMsg.textContent = msg;
+      elements.errorMsg.style.opacity = 1;
+      // Petite animation de secousse si erreur
+      elements.container.style.animation = "shake 0.5s";
+      setTimeout(() => elements.container.style.animation = "", 500);
+    }
   </script>
+
+  <style>
+    /* Animation de secousse pour l'erreur */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
 </body>
-  </html>
+</html>
