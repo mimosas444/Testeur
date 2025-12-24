@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Webnote Ultimate</title>
+  <title>Webnote Dashboard</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -12,18 +12,21 @@
     :root {
       /* --- THEME COLORS --- */
       --bg-dark: #09090b;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #1e1b4b, #09090b 60%);
+      --bg-gradient: radial-gradient(circle at 50% 0%, #1e1b4b, #09090b 70%);
       
-      --accent-color: #6366f1; /* Indigo vibrant */
-      --accent-glow: rgba(99, 102, 241, 0.5);
-      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --accent-color: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.4);
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-blur: blur(20px);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-blur: blur(25px);
 
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      
+      --msg-me-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --msg-other-bg: rgba(30, 41, 59, 0.7);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -40,231 +43,273 @@
       overflow: hidden;
     }
 
-    /* --- MODAL PROFIL (NOUVEAU) --- */
+    /* --- ANIMATIONS --- */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUpModal { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+    /* --- MODAL PROFIL (DESIGN PRO) --- */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
       z-index: 100;
-      display: none; /* Caché par défaut */
+      display: none;
       align-items: center; justify-content: center;
-      opacity: 0; transition: opacity 0.3s;
+      animation: fadeIn 0.2s ease-out;
     }
-    .modal-overlay.open { display: flex; opacity: 1; }
+    .modal-overlay.open { display: flex; }
 
     .modal-card {
-      background: rgba(20, 20, 25, 0.9);
+      background: rgba(20, 20, 25, 0.95);
       border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 30px;
-      width: 90%; max-width: 350px;
+      border-radius: 30px;
+      padding: 40px 30px;
+      width: 90%; max-width: 380px;
       text-align: center;
-      transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.6);
       position: relative;
+      animation: slideUpModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .modal-overlay.open .modal-card { transform: scale(1); }
+
+    .modal-avatar-wrapper {
+      position: relative;
+      width: 100px; height: 100px;
+      margin: 0 auto 20px auto;
+    }
 
     .modal-avatar-large {
-      width: 80px; height: 80px;
-      margin: 0 auto 15px auto;
+      width: 100%; height: 100%;
       border-radius: 50%;
       background: var(--accent-gradient);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; font-weight: 700; color: #fff;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-    
-    .modal-title { font-size: 1.5rem; margin: 0 0 5px 0; font-weight: 600; }
-    .modal-welcome { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; font-weight: 300; }
-    .modal-date { 
-      background: rgba(255,255,255,0.05); 
-      padding: 10px; border-radius: 12px; 
-      font-size: 0.8rem; color: var(--accent-color);
-      border: 1px solid var(--glass-border);
-    }
-    .close-modal-btn {
-      position: absolute; top: 15px; right: 15px;
-      background: none; border: none; color: var(--text-muted);
-      cursor: pointer; font-size: 1.2rem;
+      font-size: 2.5rem; font-weight: 700; color: #fff;
+      box-shadow: 0 0 30px var(--accent-glow);
+      overflow: hidden; /* Important pour l'image */
+      border: 3px solid rgba(255,255,255,0.1);
     }
 
-    /* --- HEADER FLOTTANT --- */
+    .modal-avatar-large img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .badge-pro {
+      position: absolute; bottom: 0; right: 0;
+      background: #3b82f6; color: white;
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; border: 3px solid #141419;
+    }
+    
+    .modal-name-row {
+      display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px;
+    }
+    .modal-title { font-size: 1.6rem; margin: 0; font-weight: 700; }
+    .verified-icon { color: #3b82f6; font-size: 1.1rem; }
+
+    .modal-email { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
+
+    .modal-stats {
+      display: flex; justify-content: space-around;
+      margin-bottom: 25px;
+      background: rgba(255,255,255,0.03);
+      padding: 15px; border-radius: 16px;
+    }
+    .stat-item h4 { margin: 0; font-size: 1.2rem; color: white; }
+    .stat-item span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    .btn-close-modal {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(255,255,255,0.1); border: none; color: white;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-close-modal:hover { background: rgba(255,255,255,0.2); }
+
+    /* --- HEADER --- */
     header {
-      height: 70px;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(9, 9, 11, 0.6);
-      backdrop-filter: var(--glass-blur);
+      height: 70px; padding: 0 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(9, 9, 11, 0.7); backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid var(--glass-border);
-      z-index: 50;
-      flex-shrink: 0;
+      z-index: 50; flex-shrink: 0;
     }
 
     .brand {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      background: linear-gradient(to right, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex; align-items: center; gap: 8px;
-      cursor: pointer; /* Indique que c'est cliquable */
-      transition: opacity 0.2s;
+      font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+      color: white; display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
     }
-    .brand:active { opacity: 0.7; transform: scale(0.98); }
+    .brand i { 
+      background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 5px var(--accent-glow));
+    }
 
     .user-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--glass-bg);
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--glass-border);
-      padding: 5px 5px 5px 12px;
-      border-radius: 30px;
+      padding: 6px 6px 6px 16px; border-radius: 40px;
       transition: 0.3s;
     }
+    .user-pill:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
     
-    .avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
+    .current-user-name { font-size: 0.9rem; font-weight: 500; display: none; }
+    @media(min-width: 500px) { .current-user-name { display: block; } }
+
+    .avatar-small {
+      width: 36px; height: 36px; border-radius: 50%;
       background: var(--accent-gradient);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 600; font-size: 0.8rem;
-      color: white;
-      text-transform: uppercase;
+      font-weight: 600; font-size: 0.9rem; color: white;
+      overflow: hidden; border: 2px solid rgba(255,255,255,0.1);
     }
+    .avatar-small img { width: 100%; height: 100%; object-fit: cover; }
 
     .btn-logout {
-      background: transparent; border: none; color: var(--text-muted);
-      cursor: pointer; padding: 8px; border-radius: 50%;
-      transition: 0.2s; font-size: 1rem;
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; padding: 0 5px; font-size: 1.1rem; transition: 0.2s;
     }
-    .btn-logout:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+    .btn-logout:hover { color: #ef4444; }
 
-    /* --- ZONE DE CHAT --- */
+    /* --- CHAT AREA --- */
     main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      padding-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      scroll-behavior: smooth;
+      flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 10px;
+      display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
     }
-
-    /* Scrollbar invisible */
-    main::-webkit-scrollbar { width: 6px; }
+    main::-webkit-scrollbar { width: 5px; }
     main::-webkit-scrollbar-track { background: transparent; }
-    main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 
-    /* --- MESSAGES --- */
+    /* Messages */
     .msg-group {
-      display: flex; flex-direction: column; position: relative; max-width: 85%;
+      display: flex; flex-direction: column; max-width: 80%;
       animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
     }
     @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
     .msg-group.me { align-self: flex-end; align-items: flex-end; }
     .msg-group.other { align-self: flex-start; align-items: flex-start; }
 
-    .sender-info {
-      font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;
-      margin-left: 12px; display: flex; align-items: center; gap: 6px;
+    .msg-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+      font-size: 0.75rem; color: var(--text-muted); margin-left: 5px;
     }
-    .msg-group.me .sender-info { display: none; }
+    .msg-group.me .msg-header { flex-direction: row-reverse; margin-right: 5px; }
+
+    .msg-avatar {
+      width: 24px; height: 24px; border-radius: 50%; overflow: hidden;
+      background: #333; display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; color: white;
+    }
+    .msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .bubble {
-      padding: 14px 18px; font-size: 0.95rem; line-height: 1.6;
-      border-radius: 20px; position: relative; word-wrap: break-word;
+      padding: 12px 18px; font-size: 0.95rem; line-height: 1.5;
+      border-radius: 18px; position: relative; word-wrap: break-word;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .msg-group.other .bubble {
-      background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.05);
-      border-bottom-left-radius: 4px; backdrop-filter: blur(10px);
+      background: var(--msg-other-bg); 
+      border-top-left-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
     .msg-group.me .bubble {
-      background: var(--accent-gradient); color: white;
-      border-bottom-right-radius: 4px; box-shadow: 0 8px 25px var(--accent-glow);
+      background: var(--msg-me-bg); color: white;
+      border-top-right-radius: 4px;
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+    }
+
+    .msg-time {
+      font-size: 0.65rem; opacity: 0.6; margin-top: 4px;
+      text-align: right; display: block;
     }
 
     .reply-context {
-      font-size: 0.75rem; margin-bottom: 8px; padding-left: 8px;
-      border-left: 2px solid rgba(255,255,255,0.5); opacity: 0.8;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+      font-size: 0.75rem; margin-bottom: 6px; padding: 4px 8px;
+      background: rgba(0,0,0,0.2); border-radius: 6px;
+      border-left: 2px solid rgba(255,255,255,0.5);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
     }
 
+    /* Actions & Reactions */
     .message-actions {
       display: flex; gap: 5px; margin-top: 5px; opacity: 0; transition: opacity 0.2s;
     }
     .msg-group:hover .message-actions { opacity: 1; }
     
     .action-icon {
-      font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;
-      background: rgba(255,255,255,0.1); cursor: pointer; color: var(--text-muted);
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-muted); font-size: 0.8rem;
     }
     .action-icon:hover { background: rgba(255,255,255,0.2); color: white; }
 
-    .reactions-list { display: flex; gap: 4px; margin-top: -10px; z-index: 2; margin-bottom: 5px; }
+    .reactions-list { display: flex; gap: 4px; margin-top: -8px; z-index: 2; margin-bottom: 5px; }
     .msg-group.me .reactions-list { justify-content: flex-end; }
     .reaction-tag {
-      background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.7rem; padding: 2px 8px; border-radius: 12px;
+      background: #0f172a; border: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.75rem; padding: 2px 8px; border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /* --- INPUT AREA --- */
+    /* --- FOOTER INPUT --- */
     .footer-dock {
-      padding: 0 20px 20px 20px;
-      background: linear-gradient(to top, var(--bg-dark) 20%, transparent);
+      padding: 0 15px 15px 15px;
+      background: linear-gradient(to top, var(--bg-dark) 40%, transparent);
       z-index: 50; flex-shrink: 0;
     }
 
-    .input-container {
-      background: rgba(20, 20, 25, 0.8); backdrop-filter: blur(20px);
+    .input-wrapper {
+      background: rgba(30, 30, 35, 0.8); backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border); border-radius: 24px;
-      padding: 8px; display: flex; align-items: center;
+      padding: 6px; display: flex; align-items: center; gap: 10px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.4); position: relative;
     }
-    .input-container:focus-within {
-      border-color: rgba(99, 102, 241, 0.4); box-shadow: 0 10px 40px rgba(99, 102, 241, 0.15);
-    }
+    .input-wrapper:focus-within { border-color: rgba(99, 102, 241, 0.5); }
 
     input {
       flex: 1; background: transparent; border: none; color: white;
-      padding: 12px 15px; font-size: 1rem; outline: none; font-family: inherit;
+      padding: 12px 10px; font-size: 1rem; outline: none; font-family: inherit;
     }
 
     .send-btn {
-      width: 42px; height: 42px; border-radius: 50%; border: none;
+      width: 44px; height: 44px; border-radius: 50%; border: none;
       background: var(--accent-gradient); color: white; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; transition: transform 0.2s;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s;
+      box-shadow: 0 0 15px var(--accent-glow);
     }
     .send-btn:hover { transform: scale(1.05); }
 
     .reply-preview {
-      position: absolute; top: -40px; left: 0; right: 0;
-      background: rgba(30, 41, 59, 0.9); padding: 8px 15px; border-radius: 12px;
-      font-size: 0.8rem; display: none; align-items: center; justify-content: space-between;
+      position: absolute; top: -50px; left: 0; right: 0;
+      background: rgba(30, 41, 59, 0.95); padding: 10px 15px; border-radius: 16px;
+      font-size: 0.85rem; display: none; align-items: center; justify-content: space-between;
       border: 1px solid var(--accent-color);
-      animation: slideUp 0.2s ease;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      animation: slideUpModal 0.2s ease;
     }
-    @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     .typing-status {
       position: absolute; top: -25px; left: 20px; font-size: 0.75rem;
-      color: var(--accent-color); font-weight: 500; opacity: 0; transition: opacity 0.3s;
+      color: var(--accent-color); font-weight: 600; opacity: 0; transition: opacity 0.3s;
+      text-shadow: 0 0 10px rgba(99,102,241,0.5);
     }
 
     .emoji-popover {
       position: absolute; bottom: 100%; right: 0;
-      background: #1e293b; padding: 5px; border-radius: 12px;
-      display: none; gap: 5px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      background: #1e293b; padding: 6px; border-radius: 12px;
+      display: none; gap: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
       border: 1px solid var(--glass-border);
     }
     .message-actions:hover .emoji-popover, .emoji-popover:hover { display: flex; }
+    
+    /* Loading Skeleton */
+    .skeleton {
+      height: 40px; background: rgba(255,255,255,0.05); margin-bottom: 10px;
+      border-radius: 10px; animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
   </style>
 </head>
@@ -272,42 +317,70 @@
 
   <div class="modal-overlay" id="user-modal">
     <div class="modal-card">
-      <button class="close-modal-btn" id="close-modal"><i class="fas fa-times"></i></button>
-      <div class="modal-avatar-large" id="modal-avatar">?</div>
-      <h3 class="modal-title" id="modal-name">Utilisateur</h3>
-      <p class="modal-welcome">Ravi de vous compter parmi nous.</p>
-      <div class="modal-date" id="modal-date">
-        <i class="far fa-clock"></i> Membre depuis le...
+      <button class="btn-close-modal" id="close-modal"><i class="fas fa-times"></i></button>
+      
+      <div class="modal-avatar-wrapper">
+        <div class="modal-avatar-large" id="modal-avatar-container">
+          </div>
+        <div class="badge-pro"><i class="fas fa-camera"></i></div>
       </div>
+      
+      <div class="modal-name-row">
+        <h3 class="modal-title" id="modal-name">Chargement...</h3>
+        <i class="fas fa-check-circle verified-icon" title="Vérifié"></i>
+      </div>
+      <p class="modal-email" id="modal-email">...</p>
+
+      <div class="modal-stats">
+        <div class="stat-item">
+          <h4 id="stat-msgs">0</h4>
+          <span>Messages</span>
+        </div>
+        <div class="stat-item">
+          <h4>PRO</h4>
+          <span>Status</span>
+        </div>
+        <div class="stat-item">
+          <h4 id="stat-date">-</h4>
+          <span>Depuis</span>
+        </div>
+      </div>
+
+      <button id="modal-logout-btn" style="width:100%; padding:12px; border-radius:12px; border:1px solid #ef4444; background:rgba(239,68,68,0.1); color:#ef4444; cursor:pointer; font-weight:600;">
+        <i class="fas fa-sign-out-alt"></i> Se déconnecter
+      </button>
     </div>
   </div>
 
   <header>
-    <div class="brand" id="brand-logo" title="Voir mon profil">
-      <i class="fas fa-meteor" style="color:var(--accent-color)"></i> Webnote
+    <div class="brand" id="brand-trigger">
+      <i class="fas fa-meteor"></i> Webnote
     </div>
-    <div class="user-pill">
-      <div class="avatar" id="current-avatar">?</div>
-      <button id="logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+    <div class="user-pill" id="header-pill">
+      <span class="current-user-name" id="header-name">Invité</span>
+      <div class="avatar-small" id="header-avatar-container">
+        </div>
+      <button id="header-logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </header>
 
   <main id="chat-feed">
-    <div style="text-align:center; margin-top: 50px; color: var(--text-muted);">
-      <i class="fas fa-circle-notch fa-spin"></i> Chargement...
-    </div>
+    <div class="skeleton" style="width: 50%"></div>
+    <div class="skeleton" style="width: 70%; align-self:flex-end"></div>
+    <div class="skeleton" style="width: 40%"></div>
   </main>
 
   <div class="footer-dock">
-    <div class="input-container">
+    <div class="input-wrapper">
       <div class="typing-status" id="typing-indicator">
         <i class="fas fa-pen-nib"></i> <span id="typing-text"></span>
       </div>
       <div class="reply-preview" id="reply-bar">
-        <span>Réponse à <b id="reply-user-name">...</b></span>
-        <i class="fas fa-times" id="close-reply" style="cursor:pointer"></i>
+        <span><i class="fas fa-reply" style="color:var(--accent-color)"></i> Réponse à <b id="reply-user-name">...</b></span>
+        <i class="fas fa-times" id="close-reply" style="cursor:pointer; padding:5px;"></i>
       </div>
-      <input type="text" id="msg-input" placeholder="Écrivez quelque chose..." autocomplete="off" />
+      
+      <input type="text" id="msg-input" placeholder="Écrivez un message..." autocomplete="off" />
       <button id="send-btn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
@@ -317,7 +390,7 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, updateDoc, doc, arrayUnion, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // --- CONFIG ---
+    // --- CONFIG FIREBASE ---
     const firebaseConfig = {
       apiKey: "AIzaSyDE6doCDW_iU-JnxT0YRaeb6brZpJqKBKY",
       authDomain: "testeur-1e462.firebaseapp.com",
@@ -336,7 +409,7 @@
     let replyData = null;
     let typingTimer = null;
 
-    // --- UTILS ---
+    // --- FONCTION COULEUR ALÉATOIRE ---
     function stringToColor(str) {
       let hash = 0;
       for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -344,62 +417,78 @@
       return '#' + '00000'.substring(0, 6 - c.length) + c;
     }
 
-    // --- AUTH & PROFIL MODAL ---
+    // --- GESTION UTILISATEUR & INTERFACE PROFIL ---
+    function updateProfileUI(user) {
+      const name = user.displayName || user.email.split('@')[0];
+      const initial = name.charAt(0).toUpperCase();
+      const photoURL = user.photoURL;
+      
+      // Contenu Avatar (Image ou Initiale)
+      let avatarContent;
+      if (photoURL) {
+        avatarContent = `<img src="${photoURL}" alt="Avatar">`;
+      } else {
+        avatarContent = initial;
+      }
+      
+      // 1. Header
+      const headerAvatar = document.getElementById("header-avatar-container");
+      headerAvatar.innerHTML = avatarContent;
+      if(!photoURL) headerAvatar.style.background = stringToColor(user.uid);
+      
+      document.getElementById("header-name").textContent = name;
+
+      // 2. Modal
+      const modalAvatar = document.getElementById("modal-avatar-container");
+      modalAvatar.innerHTML = avatarContent;
+      if(!photoURL) modalAvatar.style.background = stringToColor(user.uid);
+
+      document.getElementById("modal-name").textContent = name;
+      document.getElementById("modal-email").textContent = user.email;
+
+      // Date de création
+      if (user.metadata.creationTime) {
+        const date = new Date(user.metadata.creationTime);
+        document.getElementById("stat-date").textContent = date.getFullYear(); // Juste l'année pour le style "stat"
+      }
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
-        const name = user.email.split('@')[0];
-        const initial = name.charAt(0).toUpperCase();
-        
-        // Setup Header Avatar
-        const headerAvatar = document.getElementById("current-avatar");
-        headerAvatar.textContent = initial;
-        headerAvatar.style.background = `linear-gradient(135deg, ${stringToColor(user.email)}, #6366f1)`;
-
-        // Setup Modal Data
-        document.getElementById("modal-name").textContent = name;
-        document.getElementById("modal-avatar").textContent = initial;
-        document.getElementById("modal-avatar").style.background = headerAvatar.style.background;
-
-        // Date de création (Membre depuis)
-        if (user.metadata.creationTime) {
-            const date = new Date(user.metadata.creationTime);
-            const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-            const formattedDate = date.toLocaleDateString('fr-FR', options);
-            document.getElementById("modal-date").innerHTML = `<i class="far fa-calendar-alt"></i> Membre depuis le<br><b>${formattedDate}</b>`;
-        }
-
+        updateProfileUI(user);
       } else {
         window.location.href = "index.html";
       }
     });
 
-    // --- GESTION DU MODAL (POP-UP) ---
+    // --- LOGIQUE MODAL ---
     const modal = document.getElementById("user-modal");
-    const brandLogo = document.getElementById("brand-logo");
-    const closeModal = document.getElementById("close-modal");
-
-    // Ouvrir le modal au clic sur le logo
-    brandLogo.addEventListener("click", () => {
-        modal.classList.add("open"); // Ajoute la classe CSS pour afficher
+    
+    // Ouvre le modal depuis le logo OU le "pill" utilisateur
+    document.getElementById("brand-trigger").addEventListener("click", () => modal.classList.add("open"));
+    document.getElementById("header-pill").addEventListener("click", (e) => {
+        // Évite d'ouvrir si on clique sur le bouton logout du header
+        if(!e.target.closest("#header-logout")) modal.classList.add("open");
     });
 
-    // Fermer le modal
-    function hideModal() { modal.classList.remove("open"); }
-    closeModal.addEventListener("click", hideModal);
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) hideModal(); // Fermer si on clique en dehors de la carte
-    });
+    document.getElementById("close-modal").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
 
-    document.getElementById("logout").addEventListener("click", () => signOut(auth));
+    // Déconnexion
+    const logoutAction = () => signOut(auth);
+    document.getElementById("header-logout").addEventListener("click", (e) => { e.stopPropagation(); logoutAction(); });
+    document.getElementById("modal-logout-btn").addEventListener("click", logoutAction);
+
 
     // --- LOGIQUE CHAT ---
     const inputField = document.getElementById("msg-input");
-    
+
+    // Indicateur de frappe
     inputField.addEventListener("input", async () => {
       if (!currentUser) return;
       const ref = doc(db, "typingStatus", currentUser.uid);
-      await setDoc(ref, { user: currentUser.email.split('@')[0], timestamp: serverTimestamp() });
+      await setDoc(ref, { user: currentUser.displayName || currentUser.email.split('@')[0], timestamp: serverTimestamp() });
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => deleteDoc(ref), 2000);
     });
@@ -416,15 +505,25 @@
       }
     });
 
+    // Envoi Message
     async function sendMessage() {
       const text = inputField.value.trim();
       if (!text) return;
       try {
         if(currentUser) deleteDoc(doc(db, "typingStatus", currentUser.uid));
+        
         await addDoc(collection(db, "comments"), {
-          text, createdAt: serverTimestamp(), user: currentUser.email, userId: currentUser.uid,
-          reactions: {}, isEdited: false, replyTo: replyData
+          text,
+          createdAt: serverTimestamp(),
+          user: currentUser.displayName || currentUser.email, // Nom d'affichage prioritaire
+          userEmail: currentUser.email,
+          userId: currentUser.uid,
+          userPhoto: currentUser.photoURL || null, // Sauvegarde la photo
+          reactions: {},
+          isEdited: false,
+          replyTo: replyData
         });
+        
         inputField.value = "";
         cancelReply();
         scrollToBottom(true);
@@ -434,8 +533,9 @@
     document.getElementById("send-btn").addEventListener("click", sendMessage);
     inputField.addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
 
-    // --- FONCTIONS WINDOW ---
+    // --- FONCTIONS WINDOW (Globales) ---
     const replyBar = document.getElementById("reply-bar");
+    
     window.triggerReply = (id, user, text) => {
       replyData = { id, user, text };
       replyBar.style.display = "flex";
@@ -455,26 +555,59 @@
       await updateDoc(doc(db, "comments", id), { [`reactions.${emoji}`]: arrayUnion(currentUser.uid) });
     };
 
-    // --- RENDER FEED ---
+    // --- RENDU DES MESSAGES ---
     const chatFeed = document.getElementById("chat-feed");
+    
     function scrollToBottom(force = false) {
       const threshold = 150;
       const isNearBottom = chatFeed.scrollHeight - chatFeed.scrollTop - chatFeed.clientHeight < threshold;
       if (force || isNearBottom) chatFeed.scrollTop = chatFeed.scrollHeight;
     }
+    
     let firstLoad = true;
 
     const q = query(collection(db, "comments"), orderBy("createdAt", "asc"));
     onSnapshot(q, (snapshot) => {
+      if(snapshot.empty) {
+          chatFeed.innerHTML = '<div style="text-align:center; margin-top:50px; opacity:0.5;">Aucun message pour l\'instant.</div>';
+          return;
+      }
+
       chatFeed.innerHTML = "";
+      
+      let msgCountForMe = 0; // Pour compter les messages de l'utilisateur dans le modal
+
       snapshot.forEach((docSnap) => {
         const msg = docSnap.data();
         const id = docSnap.id;
-        const isMe = msg.user === currentUser?.email;
-        const userName = msg.user.split('@')[0];
+        
+        // Identification
+        const isMe = msg.userId === currentUser?.uid; // Comparaison plus sûre par UID
+        if(isMe) msgCountForMe++;
+
+        // Formatage Nom & Avatar
+        const userName = msg.user.includes('@') ? msg.user.split('@')[0] : msg.user;
+        
+        // Logique Avatar Message (Priorité à la photo stockée, sinon calcul)
+        let avatarHtml;
+        if (msg.userPhoto) {
+             avatarHtml = `<div class="msg-avatar"><img src="${msg.userPhoto}"></div>`;
+        } else {
+             const color = stringToColor(msg.userId || "anon");
+             avatarHtml = `<div class="msg-avatar" style="background:${color}">${userName.charAt(0).toUpperCase()}</div>`;
+        }
+
+        // Temps
+        let timeStr = "";
+        if(msg.createdAt) {
+            const date = msg.createdAt.toDate();
+            timeStr = date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+        }
+
         const canEdit = isMe && msg.createdAt && (Date.now() - msg.createdAt.toMillis() < 600000);
         const safeText = msg.text.replace(/"/g, '&quot;');
 
+        // Réactions
         let reactHtml = "";
         if (msg.reactions) {
             let pills = "";
@@ -484,20 +617,26 @@
             if(pills) reactHtml = `<div class="reactions-list">${pills}</div>`;
         }
 
-        const replyHtml = msg.replyTo ? `<div class="reply-context">↩️ <b>${msg.replyTo.user}</b>: ${msg.replyTo.text}</div>` : "";
-        const userColor = stringToColor(msg.user);
-        const avatarHtml = !isMe ? `<div class="avatar" style="background:${userColor}; width:28px; height:28px; font-size:0.7rem; margin-top:5px;">${msg.user.charAt(0).toUpperCase()}</div>` : "";
+        const replyHtml = msg.replyTo ? `<div class="reply-context"><i class="fas fa-share" style="transform:scaleX(-1)"></i> <b>${msg.replyTo.user}</b>: ${msg.replyTo.text}</div>` : "";
 
         const div = document.createElement("div");
         div.className = `msg-group ${isMe ? 'me' : 'other'}`;
         div.innerHTML = `
-          <div style="display:flex; gap:10px; max-width:100%;">
-            ${avatarHtml}
-            <div>
-               ${!isMe ? `<div class="sender-info">${userName}</div>` : ''}
+          <div class="msg-header">
+             ${!isMe ? `<span>${userName}</span>` : ''}
+          </div>
+          
+          <div style="display:flex; gap:10px; align-items:flex-end;">
+            ${!isMe ? avatarHtml : ''}
+            
+            <div style="max-width:100%">
                <div class="bubble">
-                 ${replyHtml} ${msg.text} ${msg.isEdited ? '<small style="opacity:0.6">(modif)</small>' : ''}
+                 ${replyHtml} 
+                 ${msg.text} 
+                 ${msg.isEdited ? '<i class="fas fa-pen" style="font-size:0.6rem; opacity:0.5; margin-left:5px;"></i>' : ''}
+                 <span class="msg-time">${timeStr}</span>
                </div>
+               
                <div class="message-actions">
                  <div class="action-icon" onclick="triggerReply('${id}', '${userName}', '${safeText}')"><i class="fas fa-reply"></i></div>
                  ${canEdit ? `<div class="action-icon" onclick="editMessage('${id}', '${safeText}')"><i class="fas fa-pen"></i></div>` : ''}
@@ -507,6 +646,7 @@
                        <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleReaction('${id}', '❤️')">❤️</span>
                        <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleReaction('${id}', '🔥')">🔥</span>
                        <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleReaction('${id}', '😂')">😂</span>
+                       <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleReaction('${id}', '👍')">👍</span>
                     </div>
                  </div>
                </div>
@@ -516,6 +656,10 @@
         `;
         chatFeed.appendChild(div);
       });
+      
+      // Mise à jour du compteur stats
+      document.getElementById("stat-msgs").textContent = msgCountForMe;
+
       if (firstLoad) { chatFeed.scrollTop = chatFeed.scrollHeight; firstLoad = false; }
       else { scrollToBottom(false); }
     });
