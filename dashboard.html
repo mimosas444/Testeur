@@ -8,10 +8,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <style>
     :root {
-      /* Palette moderne "Midnight Neon" */
       --bg-dark: #0f172a;
       --bg-gradient: radial-gradient(circle at top left, #1e293b, #0f172a);
-      --primary: #38bdf8; /* Bleu ciel lumineux */
+      --primary: #38bdf8;
       --primary-glow: rgba(56, 189, 248, 0.4);
       --glass-surface: rgba(30, 41, 59, 0.7);
       --glass-border: rgba(255, 255, 255, 0.08);
@@ -21,7 +20,7 @@
       --bubble-other: rgba(51, 65, 85, 0.8);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
     body {
       margin: 0;
@@ -32,233 +31,110 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow: hidden; /* Empêche le rebond sur iOS */
     }
-
-    /* --- NOTIFICATION TOAST (Le message de bienvenue) --- */
-    #toast-notification {
-      position: fixed;
-      top: 90px;
-      right: 20px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--primary);
-      padding: 15px 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transform: translateX(150%);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      max-width: 300px;
-    }
-    #toast-notification.show { transform: translateX(0); }
-    #toast-notification i { color: var(--primary); font-size: 1.2rem; }
-    #toast-notification p { margin: 0; font-size: 0.9rem; line-height: 1.4; }
-    #toast-notification small { color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 4px; }
 
     /* --- HEADER --- */
     header {
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(20px);
-      height: 75px;
-      padding: 0 25px;
+      height: 65px;
+      padding: 0 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--glass-border);
-      z-index: 10;
+      flex-shrink: 0;
     }
 
-    .brand {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .brand { font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 
-    /* Profil Utilisateur Interactif */
     .user-profile {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: rgba(255,255,255,0.05);
-      padding: 6px 8px 6px 15px;
-      border-radius: 30px;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      padding: 5px 5px 5px 12px;
+      border-radius: 20px;
     }
-    .user-profile:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.1);
-    }
-    .user-info { text-align: right; line-height: 1.1; }
-    .user-name { font-size: 0.85rem; font-weight: 600; display: block;}
-    .user-status { font-size: 0.7rem; color: #4ade80; display: block; } /* Vert connecté */
+    .user-name { font-size: 0.8rem; font-weight: 600; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .avatar-circle {
-      width: 38px;
-      height: 38px;
+      width: 32px; height: 32px;
       background: var(--primary);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #0f172a;
-      box-shadow: 0 0 10px var(--primary-glow);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #0f172a; font-size: 0.8rem;
     }
-
-    .btn-logout {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.1rem;
-      margin-left: 10px;
-      padding: 8px;
-      border-radius: 50%;
-      transition: 0.2s;
-    }
-    .btn-logout:hover { background: rgba(255, 50, 50, 0.1); color: #ff5555; }
 
     /* --- CHAT AREA --- */
     main {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
-      padding-bottom: 40px; /* Espace pour le scroll */
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
+      padding-bottom: 20px;
     }
     
-    /* Scrollbar Design */
-    main::-webkit-scrollbar { width: 5px; }
-    main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+    main::-webkit-scrollbar { width: 4px; }
+    main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
     /* --- MESSAGES --- */
-    .message-container {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      max-width: 80%;
-      animation: slideIn 0.3s ease-out;
-    }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+    .message-container { display: flex; align-items: flex-end; gap: 8px; max-width: 85%; animation: slideIn 0.2s ease-out; }
     .message-container.me { align-self: flex-end; flex-direction: row-reverse; }
     
-    /* Avatar dans le chat */
-    .chat-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #475569;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      flex-shrink: 0;
-      margin-bottom: 5px;
-    }
-    .message-container.me .chat-avatar { display: none; } /* Pas d'avatar pour moi */
+    .chat-avatar { width: 28px; height: 28px; border-radius: 50%; background: #475569; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+    .message-container.me .chat-avatar { display: none; }
 
-    .bubble-wrapper {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .sender-name {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      margin-left: 10px;
-    }
-    .message-container.me .sender-name { display: none; }
-
+    .bubble-wrapper { display: flex; flex-direction: column; position: relative; max-width: 100%; }
+    .sender-name { font-size: 0.65rem; color: var(--text-muted); margin: 0 0 3px 5px; }
+    
     .bubble {
-      padding: 12px 18px;
+      padding: 10px 14px;
       border-radius: 18px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      position: relative;
+      font-size: 0.9rem;
+      line-height: 1.4;
       word-wrap: break-word;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .message-container.other .bubble {
-      background: var(--bubble-other);
-      border-bottom-left-radius: 4px;
-      backdrop-filter: blur(5px);
-    }
+    .message-container.other .bubble { background: var(--bubble-other); border-bottom-left-radius: 4px; }
+    .message-container.me .bubble { background: var(--bubble-me); color: #fff; border-bottom-right-radius: 4px; }
 
-    .message-container.me .bubble {
-      background: var(--bubble-me);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-    }
+    /* Actions mobiles simplifiées */
+    .actions { margin-top: 4px; display: flex; gap: 10px; opacity: 0.6; font-size: 0.75rem; }
+    .message-container.me .actions { justify-content: flex-end; }
+    .action-link { cursor: pointer; color: var(--text-muted); }
+    .action-link:hover { color: var(--primary); }
 
-    /* Actions (Edit, Reply) */
-    .actions {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      gap: 5px;
-      opacity: 0;
-      transition: all 0.2s;
-    }
-    .message-container:hover .actions { opacity: 1; }
-    .message-container.other .actions { right: -80px; }
-    .message-container.me .actions { left: -80px; flex-direction: row-reverse; }
-
-    .action-btn {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem;
-    }
-    .action-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
-
-    /* --- INPUT AREA (FLOATING) --- */
+    /* --- INPUT AREA RESPONSIVE --- */
     .input-container-outer {
-      padding: 0 20px 25px 20px; /* Espace du bas remonté */
-      background: linear-gradient(to top, var(--bg-dark) 20%, transparent);
-      z-index: 20;
+      padding: 10px 15px 25px 15px;
+      background: var(--bg-dark);
+      border-top: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    .status-bar { display: flex; justify-content: space-between; align-items: center; min-height: 20px; margin-bottom: 5px; }
+    #typing-indicator { font-size: 0.7rem; color: var(--primary); }
+
+    .reply-badge {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      display: none;
     }
 
     .input-area {
-      background: rgba(30, 41, 59, 0.6);
-      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--glass-border);
-      padding: 8px;
-      border-radius: 50px; /* Forme de pilule */
+      padding: 5px;
+      border-radius: 25px;
       display: flex;
       align-items: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-      position: relative;
-      transition: box-shadow 0.3s;
-    }
-
-    .input-area:focus-within {
-      box-shadow: 0 10px 40px rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.3);
     }
 
     .input-area input {
@@ -266,134 +142,51 @@
       background: transparent;
       border: none;
       color: #fff;
-      padding: 12px 20px;
+      padding: 10px 15px;
       font-size: 1rem;
       outline: none;
-      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     .send-btn {
-      width: 45px;
-      height: 45px;
+      width: 40px; height: 40px;
       border-radius: 50%;
       border: none;
       background: var(--primary);
       color: #0f172a;
-      font-size: 1.1rem;
-      cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s;
-      margin-left: 5px;
-    }
-    .send-btn:hover { transform: scale(1.05) rotate(-10deg); }
-
-    /* Typing & Reply Indicators */
-    .status-bar {
-      padding: 0 30px;
-      height: 25px;
-      margin-bottom: 5px;
-      font-size: 0.8rem;
-      color: var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    /* Reply Preview */
-    .reply-badge {
-      display: none;
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--primary);
-      padding: 5px 15px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      margin-bottom: 8px;
       cursor: pointer;
-      border: 1px solid rgba(56, 189, 248, 0.2);
-    }
-    .reply-badge i { margin-left: 5px; }
-
-    /* --- HELPERS --- */
-    .reply-quote {
-      border-left: 2px solid rgba(255,255,255,0.5);
-      padding-left: 8px;
-      margin-bottom: 5px;
-      font-size: 0.75rem;
-      opacity: 0.8;
-    }
-    
-    .reaction-bar {
-      display: flex; gap: 4px; margin-top: -8px; z-index: 5;
-    }
-    .message-container.me .reaction-bar { justify-content: flex-end; }
-    .reaction {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--glass-border);
-      padding: 2px 8px; border-radius: 10px; font-size: 0.7rem;
     }
 
-    /* Emoji Menu */
-    .emoji-menu {
-      position: absolute;
-      bottom: 40px;
-      background: #1e293b;
-      padding: 5px;
-      border-radius: 20px;
-      display: none;
-      gap: 5px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    }
-    .actions:hover .emoji-menu, .emoji-menu:hover { display: flex; }
+    .reaction-bar { display: flex; gap: 4px; margin-top: 2px; }
+    .reaction { background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 8px; font-size: 0.65rem; }
 
+    @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <div id="toast-notification">
-    <i class="fas fa-heart"></i>
-    <div>
-      <p id="toast-message">Heureux de vous avoir parmi nous !</p>
-      <small>- L'équipe Webnote</small>
-    </div>
-  </div>
-
   <header>
-    <div class="brand">
-      <i class="fas fa-bolt" style="color:var(--primary);"></i> Webnote
-    </div>
-    
-    <div style="display: flex; align-items: center;">
-      <div class="user-profile" id="user-profile-btn">
-        <div class="user-info">
-          <span class="user-name" id="display-name">Chargement...</span>
-          <span class="user-status">En ligne</span>
-        </div>
+    <div class="brand"><i class="fas fa-bolt" style="color:var(--primary);"></i> Webnote</div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="user-profile">
+        <span class="user-name" id="display-name">...</span>
         <div class="avatar-circle" id="header-avatar">?</div>
       </div>
-      
-      <button id="logout" class="btn-logout" title="Déconnexion"><i class="fas fa-power-off"></i></button>
+      <button id="logout" style="background:none; border:none; color:var(--text-muted); font-size:1.1rem;"><i class="fas fa-power-off"></i></button>
     </div>
   </header>
 
-  <main id="chat-feed">
-    <div style="text-align:center; color: rgba(255,255,255,0.2); margin-top: 100px;">
-        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
-    </div>
-  </main>
+  <main id="chat-feed"></main>
 
   <div class="input-container-outer">
-    
     <div class="status-bar">
-      <div id="typing-indicator" style="opacity:0; transition: opacity 0.3s;">
-        <i class="fas fa-pen-nib"></i> <span id="typing-text">...</span>
-      </div>
+      <div id="typing-indicator"></div>
       <div id="reply-preview-bar" class="reply-badge">
-        Réponse à <span id="reply-user">...</span> <i class="fas fa-times" id="cancel-reply"></i>
+        Rep : <span id="reply-user"></span> <i class="fas fa-times" id="cancel-reply" style="margin-left:5px; cursor:pointer;"></i>
       </div>
     </div>
-
     <div class="input-area">
-      <input type="text" id="comment-input" placeholder="Écrivez votre message..." autocomplete="off" />
+      <input type="text" id="comment-input" placeholder="Message..." autocomplete="off" />
       <button id="send-btn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
@@ -410,7 +203,6 @@
       storageBucket: "testeur-1e462.firebasestorage.app",
       messagingSenderId: "67600594276",
       appId: "1:67600594276:web:9ed96e88d91245fdc23671",
-      measurementId: "G-QD421ZB6NZ"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -421,190 +213,94 @@
     let replyContext = null;
     let typingTimeout = null;
 
-    // --- LOGIQUE UTILISATEUR & UX ---
-
-    // 1. Gestion du Profil et du Toast
-    const profileBtn = document.getElementById("user-profile-btn");
-    const toast = document.getElementById("toast-notification");
-    
-    profileBtn.addEventListener("click", () => {
-      // Afficher le toast
-      toast.classList.add("show");
-      
-      // Animation petite secousse du profil
-      profileBtn.style.transform = "scale(0.95)";
-      setTimeout(() => profileBtn.style.transform = "scale(1)", 150);
-
-      // Cacher après 4 secondes
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 4000);
-    });
-
-    // Helper: Initiales pour Avatar
-    function getInitial(email) {
-      return email ? email.charAt(0).toUpperCase() : "?";
-    }
+    const inputField = document.getElementById("comment-input");
+    const chatFeed = document.getElementById("chat-feed");
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
-        const name = user.email.split('@')[0];
-        document.getElementById("display-name").textContent = name;
-        document.getElementById("header-avatar").textContent = getInitial(user.email);
-      } else {
-        window.location.href = "index.html";
-      }
+        document.getElementById("display-name").textContent = user.email.split('@')[0];
+        document.getElementById("header-avatar").textContent = user.email.charAt(0).toUpperCase();
+      } else { window.location.href = "index.html"; }
     });
 
-    document.getElementById("logout").addEventListener("click", () => signOut(auth));
-
-    // --- CHAT LOGIC ---
-
-    const inputField = document.getElementById("comment-input");
-    const sendBtn = document.getElementById("send-btn");
-    const chatFeed = document.getElementById("chat-feed");
-    const replyBar = document.getElementById("reply-preview-bar");
+    document.getElementById("logout").onclick = () => signOut(auth);
 
     // Typing Logic
-    inputField.addEventListener("input", async () => {
+    inputField.oninput = async () => {
       if (!currentUser) return;
-      const typingRef = doc(db, "typingStatus", currentUser.uid);
-      await setDoc(typingRef, { user: currentUser.email.split('@')[0], timestamp: serverTimestamp() });
+      const ref = doc(db, "typingStatus", currentUser.uid);
+      await setDoc(ref, { user: currentUser.email.split('@')[0] });
       clearTimeout(typingTimeout);
-      typingTimeout = setTimeout(async () => { await deleteDoc(typingRef); }, 2000);
+      typingTimeout = setTimeout(() => deleteDoc(ref), 2000);
+    };
+
+    onSnapshot(collection(db, "typingStatus"), (s) => {
+      const t = [];
+      s.forEach(d => { if(d.id !== currentUser?.uid) t.push(d.data().user); });
+      document.getElementById("typing-indicator").textContent = t.length ? `${t[0]} écrit...` : "";
     });
 
-    onSnapshot(collection(db, "typingStatus"), (snapshot) => {
-      const typers = [];
-      snapshot.forEach(doc => { if (doc.id !== currentUser?.uid) typers.push(doc.data().user); });
-      const typingDiv = document.getElementById("typing-indicator");
-      if (typers.length > 0) {
-        typingDiv.style.opacity = 1;
-        document.getElementById("typing-text").textContent = `${typers.join(", ")} écrit...`;
-      } else {
-        typingDiv.style.opacity = 0;
-      }
-    });
-
-    // Send Message
-    async function sendMessage() {
-      const text = inputField.value.trim();
-      if (!text) return;
-      
-      // Animation bouton
-      sendBtn.style.transform = "scale(0.8)";
-      setTimeout(() => sendBtn.style.transform = "scale(1)", 150);
-
-      try {
-        if(currentUser) deleteDoc(doc(db, "typingStatus", currentUser.uid));
-        
-        await addDoc(collection(db, "comments"), {
-          text: text,
-          createdAt: serverTimestamp(),
-          user: currentUser.email,
-          userId: currentUser.uid,
-          reactions: {},
-          isEdited: false,
-          replyTo: replyContext
-        });
-        
-        inputField.value = "";
-        cancelReply();
-        // Scroll to bottom
-        setTimeout(() => chatFeed.scrollTop = chatFeed.scrollHeight, 100);
-
-      } catch (e) { console.error(e); }
+    // Send
+    async function send() {
+      const val = inputField.value.trim();
+      if (!val || !currentUser) return;
+      await addDoc(collection(db, "comments"), {
+        text: val,
+        user: currentUser.email,
+        createdAt: serverTimestamp(),
+        replyTo: replyContext
+      });
+      inputField.value = "";
+      cancelReply();
     }
 
-    sendBtn.addEventListener("click", sendMessage);
-    inputField.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+    document.getElementById("send-btn").onclick = send;
+    inputField.onkeypress = (e) => { if(e.key === "Enter") send(); };
 
-    // Reply Logic
-    window.triggerReply = (id, user, text) => {
-      replyContext = { id, user, text };
-      replyBar.style.display = "inline-block";
+    window.triggerReply = (user, text) => {
+      replyContext = { user, text };
       document.getElementById("reply-user").textContent = user;
+      document.getElementById("reply-preview-bar").style.display = "block";
       inputField.focus();
     };
 
     function cancelReply() {
       replyContext = null;
-      replyBar.style.display = "none";
+      document.getElementById("reply-preview-bar").style.display = "none";
     }
-    document.getElementById("cancel-reply").addEventListener("click", cancelReply);
+    document.getElementById("cancel-reply").onclick = cancelReply;
 
-    // Edit & Reactions
-    window.editMessage = async (msgId, currentText) => {
-      const newText = prompt("Modifier :", currentText);
-      if (newText && newText !== currentText) {
-        await updateDoc(doc(db, "comments", msgId), { text: newText.trim(), isEdited: true });
-      }
-    };
-
-    window.toggleReaction = async (msgId, emoji) => {
-      await updateDoc(doc(db, "comments", msgId), { [`reactions.${emoji}`]: arrayUnion(currentUser.uid) });
-    };
-
-    // Render Feed
+    // RENDER & FIX HISTORIQUE
     const q = query(collection(db, "comments"), orderBy("createdAt", "asc"));
     onSnapshot(q, (snapshot) => {
       chatFeed.innerHTML = "";
       snapshot.forEach((docSnap) => {
         const msg = docSnap.data();
-        const msgId = docSnap.id;
         const isMe = msg.user === currentUser?.email;
-        const safeText = msg.text.replace(/"/g, '&quot;');
+        const name = msg.user.split('@')[0];
         
-        // Check edit time (10 min)
-        const isEditable = isMe && msg.createdAt && (Date.now() - msg.createdAt.toMillis() < 600000);
-
-        const row = document.createElement("div");
-        row.className = `message-container ${isMe ? 'me' : 'other'}`;
+        const div = document.createElement("div");
+        div.className = `message-container ${isMe ? 'me' : 'other'}`;
         
-        let replyHtml = msg.replyTo ? `<div class="reply-quote"><small><b>${msg.replyTo.user}</b>: ${msg.replyTo.text.substring(0,30)}...</small></div>` : "";
-        
-        let reactionsHtml = "";
-        if (msg.reactions) {
-          let pills = "";
-          for (const [emoji, users] of Object.entries(msg.reactions)) {
-             if (users && users.length > 0) pills += `<span class="reaction">${emoji} ${users.length}</span>`;
-          }
-          if (pills) reactionsHtml = `<div class="reaction-bar">${pills}</div>`;
-        }
-
-        const editBtn = isEditable ? `<button class="action-btn" onclick="editMessage('${msgId}', '${safeText}')"><i class="fas fa-pen"></i></button>` : "";
-
-        // Avatar Initiale pour les autres
-        const avatarHtml = `<div class="chat-avatar">${getInitial(msg.user)}</div>`;
-
-        row.innerHTML = `
-          ${avatarHtml}
+        div.innerHTML = `
+          <div class="chat-avatar">${msg.user.charAt(0).toUpperCase()}</div>
           <div class="bubble-wrapper">
-            <div class="sender-name">${msg.user.split('@')[0]}</div>
+            <span class="sender-name">${name}</span>
             <div class="bubble">
-              ${replyHtml}
+              ${msg.replyTo ? `<div style="font-size:0.7rem; opacity:0.6; border-left:2px solid #fff; padding-left:5px; margin-bottom:5px;"><b>${msg.replyTo.user}</b>: ${msg.replyTo.text.substring(0,20)}...</div>` : ''}
               ${msg.text}
-              <div class="actions">
-                ${editBtn}
-                <button class="action-btn" onclick="triggerReply('${msgId}', '${msg.user.split('@')[0]}', '${safeText}')"><i class="fas fa-reply"></i></button>
-                <div class="emoji-menu">
-                   <span onclick="toggleReaction('${msgId}', '❤️')" style="cursor:pointer;">❤️</span>
-                   <span onclick="toggleReaction('${msgId}', '😂')" style="cursor:pointer;">😂</span>
-                   <span onclick="toggleReaction('${msgId}', '🔥')" style="cursor:pointer;">🔥</span>
-                </div>
-                <button class="action-btn"><i class="far fa-smile"></i></button>
-              </div>
             </div>
-            ${reactionsHtml}
+            <div class="actions">
+              <span class="action-link" onclick="triggerReply('${name}', '${msg.text.replace(/'/g, "\\'")}')">Répondre</span>
+            </div>
           </div>
         `;
-        chatFeed.appendChild(row);
+        chatFeed.appendChild(div);
       });
-      // Auto scroll only if near bottom or initial load (simplified here to always scroll for demo)
-      // chatFeed.scrollTop = chatFeed.scrollHeight; 
+      // SOLUTION HISTORIQUE : Scroll forcé vers le bas à chaque mise à jour
+      chatFeed.scrollTo({ top: chatFeed.scrollHeight, behavior: 'smooth' });
     });
-
   </script>
 </body>
 </html>
