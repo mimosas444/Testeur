@@ -28,8 +28,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh; /* Utiliser min-height pour éviter les coupures sur petits écrans */
+      overflow: hidden; /* Attention: peut couper le contenu si l'écran est très petit verticalement */
       position: relative;
     }
 
@@ -68,10 +68,12 @@
       border-radius: 20px;
       border: 1px solid var(--glass-border);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      width: 100%;
+      width: 90%; /* Responsive width */
       max-width: 420px;
       text-align: center;
       animation: slideUp 0.6s ease-out;
+      position: relative;
+      z-index: 10;
     }
 
     @keyframes slideUp {
@@ -133,7 +135,7 @@
     }
 
     /* Button Styling */
-    button {
+    .btn-primary {
       width: 100%;
       padding: 14px;
       background: var(--primary);
@@ -152,20 +154,70 @@
       gap: 10px;
     }
 
-    button:hover {
+    .btn-primary:hover {
       background: var(--primary-hover);
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0, 200, 150, 0.3);
     }
 
-    button:active {
+    .btn-primary:active {
       transform: translateY(0);
     }
 
-    button:disabled {
+    .btn-primary:disabled {
       background: #444;
       cursor: not-allowed;
       transform: none;
+    }
+
+    /* Separator */
+    .separator {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .separator::before, .separator::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .separator span {
+      padding: 0 10px;
+    }
+
+    /* Google Button Styling */
+    .btn-google {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      border: none;
+      border-radius: 12px;
+      color: #121218; /* Dark text for contrast */
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-google:hover {
+      background: #f1f1f1;
+      transform: translateY(-2px);
+    }
+
+    .google-icon {
+      font-size: 18px;
+      /* Using a gradient for the G logo is hard with just CSS, using standard colored icon logic roughly or simple color */
+      color: #db4437; /* Google Red fallback */
+      background: -webkit-linear-gradient(45deg, #4285F4, #DB4437, #F4B400, #0F9D58);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; 
     }
 
     /* Loader Animation inside button */
@@ -232,9 +284,18 @@
       <input type="password" id="password" placeholder="Mot de passe" required />
       <i class="fas fa-lock"></i> </div>
 
-    <button id="submit">
+    <button id="submit" class="btn-primary">
       <span class="btn-text">Se connecter</span>
       <span class="loader"></span>
+    </button>
+
+    <div class="separator">
+      <span>OU</span>
+    </div>
+
+    <button id="google-btn" class="btn-google">
+      <i class="fab fa-google google-icon"></i>
+      <span>Continuer avec Google</span>
     </button>
     
     <div class="error-msg" id="error-message"></div>
@@ -247,7 +308,8 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    // Ajout des imports GoogleAuthProvider et signInWithPopup
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // --- Ta configuration Firebase ---
     const firebaseConfig = {
@@ -262,12 +324,14 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider(); // Initialisation du fournisseur Google
 
     // --- Logique UI & UX ---
     
     const elements = {
       title: document.getElementById("form-title"),
       btn: document.getElementById("submit"),
+      googleBtn: document.getElementById("google-btn"), // Référence au bouton Google
       btnText: document.querySelector(".btn-text"),
       loader: document.querySelector(".loader"),
       toggleLink: document.getElementById("toggle-link"),
@@ -275,7 +339,8 @@
       email: document.getElementById("email"),
       password: document.getElementById("password"),
       errorMsg: document.getElementById("error-message"),
-      greeting: document.getElementById("time-greeting")
+      greeting: document.getElementById("time-greeting"),
+      container: document.querySelector(".container")
     };
 
     let isLogin = true;
@@ -296,30 +361,27 @@
     elements.toggleLink.addEventListener("click", () => {
       isLogin = !isLogin;
       
-      // Animation douce des textes
       elements.title.style.opacity = 0;
       setTimeout(() => {
         elements.title.textContent = isLogin ? "Connexion" : "Créer un compte";
         elements.btnText.textContent = isLogin ? "Se connecter" : "S'inscrire";
         elements.switchText.textContent = isLogin ? "Pas encore de compte ?" : "Déjà un compte ?";
         elements.toggleLink.textContent = isLogin ? "S'inscrire" : "Se connecter";
-        elements.errorMsg.style.opacity = 0; // Reset error
+        elements.errorMsg.style.opacity = 0;
         elements.title.style.opacity = 1;
       }, 200);
     });
 
-    // 3. Gestion de la soumission avec Animation
+    // 3. Gestion de la soumission EMAIL / PASSWORD
     elements.btn.addEventListener("click", async () => {
       const email = elements.email.value;
       const password = elements.password.value;
 
-      // Validation basique
       if(!email || !password) {
         showError("Veuillez remplir tous les champs.");
         return;
       }
 
-      // UI : État de chargement
       setLoading(true);
 
       try {
@@ -328,45 +390,65 @@
         } else {
           await createUserWithEmailAndPassword(auth, email, password);
         }
-        // Succès : Redirection
         window.location.href = "dashboard.html";
         
       } catch (error) {
         setLoading(false);
-        // Gestion des erreurs en Français
-        let message = "Une erreur est survenue.";
-        if(error.code === 'auth/invalid-credential') message = "Email ou mot de passe incorrect.";
-        else if(error.code === 'auth/email-already-in-use') message = "Cet email est déjà utilisé.";
-        else if(error.code === 'auth/weak-password') message = "Le mot de passe est trop faible.";
-        else if(error.code === 'auth/invalid-email') message = "Format d'email invalide.";
-        
-        showError(message);
+        handleError(error);
+      }
+    });
+
+    // 4. Gestion de la connexion GOOGLE
+    elements.googleBtn.addEventListener("click", async () => {
+      // Pas besoin de vérifier email/mdp, c'est Google qui gère
+      
+      try {
+        await signInWithPopup(auth, googleProvider);
+        // Si succès :
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        handleError(error);
       }
     });
 
     function setLoading(state) {
       if (state) {
         elements.btn.disabled = true;
+        elements.googleBtn.disabled = true; // On désactive aussi le bouton Google
         elements.btnText.style.display = "none";
         elements.loader.style.display = "block";
       } else {
         elements.btn.disabled = false;
+        elements.googleBtn.disabled = false;
         elements.btnText.style.display = "block";
         elements.loader.style.display = "none";
       }
     }
 
+    function handleError(error) {
+      let message = "Une erreur est survenue.";
+      console.log(error.code); // Pour le debug
+
+      if(error.code === 'auth/invalid-credential') message = "Email ou mot de passe incorrect.";
+      else if(error.code === 'auth/user-not-found') message = "Aucun compte trouvé.";
+      else if(error.code === 'auth/wrong-password') message = "Mot de passe incorrect.";
+      else if(error.code === 'auth/email-already-in-use') message = "Cet email est déjà utilisé.";
+      else if(error.code === 'auth/weak-password') message = "Le mot de passe est trop faible.";
+      else if(error.code === 'auth/invalid-email') message = "Format d'email invalide.";
+      else if(error.code === 'auth/popup-closed-by-user') message = "Connexion Google annulée.";
+      
+      showError(message);
+    }
+
     function showError(msg) {
       elements.errorMsg.textContent = msg;
       elements.errorMsg.style.opacity = 1;
-      // Petite animation de secousse si erreur
       elements.container.style.animation = "shake 0.5s";
       setTimeout(() => elements.container.style.animation = "", 500);
     }
   </script>
 
   <style>
-    /* Animation de secousse pour l'erreur */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
