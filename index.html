@@ -3,122 +3,190 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aulifa - Connexion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <title>WebNote - Portail Global</title>
+  
+  <meta property="og:title" content="WebNote - Connectez-vous au monde" />
+  
+  <meta property="og:description" content="Rejoignez WebNote pour écrire, partager et découvrir. Connectez-vous maintenant pour voir ce que le monde écrit." />
+  
+  <meta property="og:image" content="LIEN_DE_VOTRE_IMAGE_ICI" />
+  
+  <meta property="og:type" content="website" />
+  
+  <meta property="og:url" content="https://webnote-app.com" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WebNote - Portail Global" />
+  <meta name="twitter:description" content="Connectez-vous pour voir ce que le monde écrit." />
+  <meta name="twitter:image" content="LIEN_DE_VOTRE_IMAGE_ICI" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
       --primary: #00c896;
       --primary-hover: #00b386;
-      --bg-dark: #121218;
-      --glass-bg: rgba(255, 255, 255, 0.07);
-      --glass-border: rgba(255, 255, 255, 0.1);
+      --accent-sun: #ffd700;
+      --accent-moon: #a29bfe;
+      --bg-dark: #0f0f13;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.08);
       --text-color: #ffffff;
-      --text-muted: #a0a0b0;
+      --text-muted: #8b8b9e;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Outfit', sans-serif;
       background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-dark) 70%);
       color: var(--text-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh; /* Utiliser min-height pour éviter les coupures sur petits écrans */
-      overflow: hidden; /* Attention: peut couper le contenu si l'écran est très petit verticalement */
+      min-height: 100vh;
+      overflow: hidden;
       position: relative;
     }
 
-    /* Background Animation Shapes */
-    .shape {
+    /* Background Ambiance */
+    .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(100px);
       z-index: -1;
-      opacity: 0.6;
-      animation: float 10s infinite ease-in-out alternate;
+      opacity: 0.5;
+      animation: floatOrb 15s infinite ease-in-out alternate;
     }
-    .shape-1 {
-      width: 300px; height: 300px;
-      background: #7b2cbf;
-      top: -50px; left: -50px;
-    }
-    .shape-2 {
+    .orb-1 {
       width: 400px; height: 400px;
-      background: var(--primary);
-      bottom: -100px; right: -100px;
-      animation-delay: -5s;
+      background: radial-gradient(circle, #560bad, transparent);
+      top: -100px; left: -100px;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--primary), transparent);
+      bottom: -150px; right: -150px;
+      animation-delay: -7s;
     }
 
-    @keyframes float {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(30px, 50px); }
+    @keyframes floatOrb {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.1) translate(30px, -30px); }
     }
 
-    /* Glass Card */
+    /* Main Card */
     .container {
       background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       padding: 40px;
-      border-radius: 20px;
+      border-radius: 24px;
       border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      width: 90%; /* Responsive width */
-      max-width: 420px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
       text-align: center;
-      animation: slideUp 0.6s ease-out;
       position: relative;
       z-index: 10;
+      overflow: hidden;
+      transition: height 0.3s ease;
     }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Top Atmosphere Section (Date/Icon) */
+    .atmosphere {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 25px;
     }
 
-    .greeting {
-      font-size: 14px;
-      color: var(--primary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    .atmosphere-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      transition: all 0.5s ease;
     }
 
-    h2 {
-      margin: 0 0 30px 0;
+    /* Animations spécifiques Soleil/Lune */
+    .fa-sun {
+      color: var(--accent-sun);
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+      animation: spin-slow 12s linear infinite;
+    }
+    
+    .fa-moon {
+      color: var(--accent-moon);
+      filter: drop-shadow(0 0 10px rgba(162, 155, 254, 0.4));
+      animation: swing 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+    @keyframes swing { 0% { transform: rotate(-10deg); } 100% { transform: rotate(10deg); } }
+
+    .datetime-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .current-time {
       font-size: 28px;
       font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #fff, #ccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    /* Input Group Styling */
-    .input-group {
+    .current-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+    }
+
+    /* Header Text */
+    .app-branding h1 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--primary);
+    }
+    
+    .app-branding p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 5px 0 25px 0;
+      line-height: 1.4;
+    }
+
+    /* Inputs */
+    .input-wrapper {
       position: relative;
-      margin-bottom: 20px;
-      text-align: left;
+      margin-bottom: 16px;
     }
 
-    .input-group i {
+    .input-wrapper i {
       position: absolute;
       top: 50%;
-      left: 15px;
+      left: 16px;
       transform: translateY(-50%);
       color: var(--text-muted);
-      transition: color 0.3s;
+      font-size: 14px;
+      transition: 0.3s;
     }
 
     input {
       width: 100%;
-      padding: 14px 14px 14px 45px; /* Space for icon */
+      padding: 16px 16px 16px 45px;
       border: 1px solid var(--glass-border);
-      border-radius: 12px;
+      border-radius: 14px;
       background: rgba(0, 0, 0, 0.2);
       color: #fff;
+      font-family: 'Outfit', sans-serif;
       font-size: 15px;
       transition: all 0.3s ease;
       outline: none;
@@ -129,189 +197,166 @@
       background: rgba(0, 0, 0, 0.4);
       box-shadow: 0 0 0 4px rgba(0, 200, 150, 0.1);
     }
-    
-    input:focus + i {
-      color: var(--primary);
-    }
+    input:focus + i { color: var(--primary); }
 
-    /* Button Styling */
+    /* Main Button */
     .btn-primary {
       width: 100%;
-      padding: 14px;
-      background: var(--primary);
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00a87e);
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       color: #fff;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+      transition: 0.3s;
+      margin-top: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0, 200, 150, 0.2);
     }
 
     .btn-primary:hover {
-      background: var(--primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 200, 150, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 200, 150, 0.3);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary:disabled {
-      background: #444;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Separator */
-    .separator {
+    /* Divider */
+    .divider {
       display: flex;
       align-items: center;
-      text-align: center;
       margin: 20px 0;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 600;
     }
-    .separator::before, .separator::after {
+    .divider::before, .divider::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid var(--glass-border);
+      height: 1px;
+      background: var(--glass-border);
     }
-    .separator span {
-      padding: 0 10px;
-    }
+    .divider span { padding: 0 10px; }
 
-    /* Google Button Styling */
+    /* Google Btn */
     .btn-google {
       width: 100%;
-      padding: 12px;
-      background: #ffffff;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.95);
       border: none;
-      border-radius: 12px;
-      color: #121218; /* Dark text for contrast */
-      font-size: 15px;
+      border-radius: 14px;
+      color: #333;
       font-weight: 600;
+      font-family: 'Outfit', sans-serif;
       cursor: pointer;
-      transition: all 0.3s ease;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.3s;
     }
-
     .btn-google:hover {
-      background: #f1f1f1;
+      background: #fff;
       transform: translateY(-2px);
     }
 
-    .google-icon {
-      font-size: 18px;
-      /* Using a gradient for the G logo is hard with just CSS, using standard colored icon logic roughly or simple color */
-      color: #db4437; /* Google Red fallback */
-      background: -webkit-linear-gradient(45deg, #4285F4, #DB4437, #F4B400, #0F9D58);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; 
-    }
-
-    /* Loader Animation inside button */
-    .loader {
-      display: none;
-      width: 18px;
-      height: 18px;
-      border: 2px solid #fff;
-      border-bottom-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Switch Text */
-    .switch {
-      margin-top: 24px;
+    /* Footer / Switch */
+    .switch-mode {
+      margin-top: 25px;
       font-size: 14px;
       color: var(--text-muted);
     }
-
-    .switch a {
+    .switch-mode a {
       color: var(--primary);
       text-decoration: none;
       font-weight: 600;
       margin-left: 5px;
       cursor: pointer;
-      transition: color 0.2s;
     }
-    
-    .switch a:hover {
-      text-decoration: underline;
-    }
+    .switch-mode a:hover { text-decoration: underline; }
 
     /* Error Message */
     .error-msg {
-      color: #ff4d4d;
+      color: #ff5f5f;
       font-size: 13px;
-      margin-top: 10px;
-      min-height: 20px;
+      margin-top: 15px;
+      min-height: 18px;
       opacity: 0;
       transition: opacity 0.3s;
     }
+
+    /* Loader */
+    .loader {
+      width: 20px; height: 20px;
+      border: 2px solid #fff;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
   </style>
 </head>
 <body>
 
-  <div class="shape shape-1"></div>
-  <div class="shape shape-2"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 
   <div class="container">
-    <div class="greeting" id="time-greeting">Bienvenue</div>
-    <h2 id="form-title">Connexion</h2>
     
-    <div class="input-group">
-      <input type="email" id="email" placeholder="Adresse e-mail" required />
-      <i class="fas fa-envelope"></i> </div>
+    <div class="atmosphere">
+      <div id="visual-icon" class="atmosphere-icon">
+        </div>
+      <div class="datetime-container">
+        <div class="current-time" id="clock">00:00</div>
+        <div class="current-date" id="date">Chargement...</div>
+      </div>
+    </div>
+
+    <div class="app-branding">
+      <h1 id="page-title">Connexion WebNote</h1>
+      <p id="page-desc">Connectez-vous pour voir ce que le monde écrit.</p>
+    </div>
+
+    <div class="input-wrapper">
+      <input type="email" id="email" placeholder="Email" required autocomplete="off"/>
+      <i class="fas fa-envelope"></i>
+    </div>
     
-    <div class="input-group">
+    <div class="input-wrapper">
       <input type="password" id="password" placeholder="Mot de passe" required />
-      <i class="fas fa-lock"></i> </div>
+      <i class="fas fa-lock"></i>
+    </div>
 
     <button id="submit" class="btn-primary">
-      <span class="btn-text">Se connecter</span>
+      <span class="btn-text">Entrer dans WebNote</span>
       <span class="loader"></span>
     </button>
 
-    <div class="separator">
-      <span>OU</span>
-    </div>
+    <div class="divider"><span>OU CONTINUER AVEC</span></div>
 
     <button id="google-btn" class="btn-google">
-      <i class="fab fa-google google-icon"></i>
-      <span>Continuer avec Google</span>
+      <i class="fab fa-google" style="background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+      <span>Google</span>
     </button>
-    
+
     <div class="error-msg" id="error-message"></div>
 
-    <div class="switch">
-      <span id="switch-text">Pas encore de compte ?</span>
-      <a id="toggle-link">S'inscrire</a>
+    <div class="switch-mode">
+      <span id="switch-text">Nouveau sur WebNote ?</span>
+      <a id="toggle-link">Créer un compte</a>
     </div>
+
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    // Ajout des imports GoogleAuthProvider et signInWithPopup
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // --- Ta configuration Firebase ---
+    // --- Configuration Firebase ---
     const firebaseConfig = {
       apiKey: "AIzaSyDE6doCDW_iU-JnxT0YRaeb6brZpJqKBKY",
       authDomain: "testeur-1e462.firebaseapp.com",
@@ -324,61 +369,110 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const googleProvider = new GoogleAuthProvider(); // Initialisation du fournisseur Google
+    const googleProvider = new GoogleAuthProvider();
 
-    // --- Logique UI & UX ---
-    
-    const elements = {
-      title: document.getElementById("form-title"),
-      btn: document.getElementById("submit"),
-      googleBtn: document.getElementById("google-btn"), // Référence au bouton Google
-      btnText: document.querySelector(".btn-text"),
-      loader: document.querySelector(".loader"),
-      toggleLink: document.getElementById("toggle-link"),
-      switchText: document.getElementById("switch-text"),
-      email: document.getElementById("email"),
-      password: document.getElementById("password"),
-      errorMsg: document.getElementById("error-message"),
-      greeting: document.getElementById("time-greeting"),
-      container: document.querySelector(".container")
+    // --- Éléments du DOM ---
+    const els = {
+      clock: document.getElementById('clock'),
+      date: document.getElementById('date'),
+      icon: document.getElementById('visual-icon'),
+      title: document.getElementById('page-title'),
+      desc: document.getElementById('page-desc'),
+      submitBtn: document.getElementById('submit'),
+      googleBtn: document.getElementById('google-btn'),
+      btnText: document.querySelector('.btn-text'),
+      loader: document.querySelector('.loader'),
+      email: document.getElementById('email'),
+      pass: document.getElementById('password'),
+      error: document.getElementById('error-message'),
+      toggle: document.getElementById('toggle-link'),
+      switchText: document.getElementById('switch-text'),
+      container: document.querySelector('.container')
     };
 
     let isLogin = true;
 
-    // 1. Détection automatique de l'heure
-    function setGreeting() {
-      const hour = new Date().getHours();
-      let text = "Bienvenue";
-      if (hour >= 5 && hour < 12) text = "Bonjour";
-      else if (hour >= 12 && hour < 18) text = "Bonne après-midi";
-      else text = "Bonsoir";
-      
-      elements.greeting.textContent = text;
-    }
-    setGreeting();
+    // --- FONCTIONNALITÉS PRO : Gestion du Temps & Visuels ---
 
-    // 2. Basculement entre Connexion et Inscription
-    elements.toggleLink.addEventListener("click", () => {
-      isLogin = !isLogin;
+    function updateTimeAndVisuals() {
+      const now = new Date();
       
-      elements.title.style.opacity = 0;
+      // 1. Mise à jour de l'horloge
+      const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      els.clock.textContent = timeString;
+
+      // 2. Mise à jour de la date
+      const dateString = now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      els.date.textContent = dateString;
+
+      // 3. Gestion de l'ambiance (Icône & Message)
+      const hour = now.getHours();
+      let iconHTML = '';
+      let greeting = '';
+
+      if (hour >= 6 && hour < 12) {
+        // Matin
+        iconHTML = '<i class="fas fa-sun" title="Bonjour"></i>';
+        greeting = "Bonne matinée";
+      } else if (hour >= 12 && hour < 18) {
+        // Après-midi
+        iconHTML = '<i class="fas fa-sun" style="color:#ff9f43" title="Bon après-midi"></i>';
+        greeting = "Bon après-midi";
+      } else if (hour >= 18 && hour < 22) {
+        // Soirée
+        iconHTML = '<i class="fas fa-moon" style="color:#a29bfe" title="Bonsoir"></i>';
+        greeting = "Bonne soirée";
+      } else {
+        // Nuit
+        iconHTML = '<i class="fas fa-moon" title="Bonne nuit"></i>';
+        greeting = "Bienvenue, noctambule";
+      }
+
+      // On injecte l'icône seulement si elle change pour éviter de recharger l'anim
+      if (els.icon.innerHTML !== iconHTML) {
+        els.icon.innerHTML = iconHTML;
+      }
+    }
+
+    // Mise à jour chaque seconde
+    setInterval(updateTimeAndVisuals, 1000);
+    updateTimeAndVisuals(); // Appel initial immédiat
+
+
+    // --- Logique Auth (Connexion / Inscription) ---
+
+    els.toggle.addEventListener('click', () => {
+      isLogin = !isLogin;
+      // Effet de transition simple
+      els.title.style.opacity = 0;
+      els.desc.style.opacity = 0;
+      
       setTimeout(() => {
-        elements.title.textContent = isLogin ? "Connexion" : "Créer un compte";
-        elements.btnText.textContent = isLogin ? "Se connecter" : "S'inscrire";
-        elements.switchText.textContent = isLogin ? "Pas encore de compte ?" : "Déjà un compte ?";
-        elements.toggleLink.textContent = isLogin ? "S'inscrire" : "Se connecter";
-        elements.errorMsg.style.opacity = 0;
-        elements.title.style.opacity = 1;
+        if(isLogin) {
+          els.title.textContent = "Connexion WebNote";
+          els.desc.textContent = "Connectez-vous pour voir ce que le monde écrit.";
+          els.btnText.textContent = "Entrer dans WebNote";
+          els.switchText.textContent = "Nouveau sur WebNote ?";
+          els.toggle.textContent = "Créer un compte";
+        } else {
+          els.title.textContent = "Rejoindre WebNote";
+          els.desc.textContent = "Créez votre espace et partagez avec le monde.";
+          els.btnText.textContent = "S'inscrire gratuitement";
+          els.switchText.textContent = "Déjà membre ?";
+          els.toggle.textContent = "Se connecter";
+        }
+        els.title.style.opacity = 1;
+        els.desc.style.opacity = 1;
+        els.error.style.opacity = 0;
       }, 200);
     });
 
-    // 3. Gestion de la soumission EMAIL / PASSWORD
-    elements.btn.addEventListener("click", async () => {
-      const email = elements.email.value;
-      const password = elements.password.value;
+    els.submitBtn.addEventListener('click', async () => {
+      const email = els.email.value;
+      const password = els.pass.value;
 
-      if(!email || !password) {
-        showError("Veuillez remplir tous les champs.");
+      if (!email || !password) {
+        showError("Merci de compléter tous les champs.");
         return;
       }
 
@@ -390,72 +484,61 @@
         } else {
           await createUserWithEmailAndPassword(auth, email, password);
         }
+        // Redirection succès
         window.location.href = "dashboard.html";
-        
-      } catch (error) {
+      } catch (err) {
         setLoading(false);
-        handleError(error);
+        handleFirebaseError(err);
       }
     });
 
-    // 4. Gestion de la connexion GOOGLE
-    elements.googleBtn.addEventListener("click", async () => {
-      // Pas besoin de vérifier email/mdp, c'est Google qui gère
-      
+    els.googleBtn.addEventListener('click', async () => {
       try {
         await signInWithPopup(auth, googleProvider);
-        // Si succès :
         window.location.href = "dashboard.html";
-      } catch (error) {
-        handleError(error);
+      } catch (err) {
+        handleFirebaseError(err);
       }
     });
 
-    function setLoading(state) {
-      if (state) {
-        elements.btn.disabled = true;
-        elements.googleBtn.disabled = true; // On désactive aussi le bouton Google
-        elements.btnText.style.display = "none";
-        elements.loader.style.display = "block";
+    function setLoading(isLoading) {
+      if(isLoading) {
+        els.submitBtn.disabled = true;
+        els.btnText.style.display = "none";
+        els.loader.style.display = "block";
       } else {
-        elements.btn.disabled = false;
-        elements.googleBtn.disabled = false;
-        elements.btnText.style.display = "block";
-        elements.loader.style.display = "none";
+        els.submitBtn.disabled = false;
+        els.btnText.style.display = "block";
+        els.loader.style.display = "none";
       }
     }
 
-    function handleError(error) {
-      let message = "Une erreur est survenue.";
-      console.log(error.code); // Pour le debug
-
-      if(error.code === 'auth/invalid-credential') message = "Email ou mot de passe incorrect.";
-      else if(error.code === 'auth/user-not-found') message = "Aucun compte trouvé.";
-      else if(error.code === 'auth/wrong-password') message = "Mot de passe incorrect.";
-      else if(error.code === 'auth/email-already-in-use') message = "Cet email est déjà utilisé.";
-      else if(error.code === 'auth/weak-password') message = "Le mot de passe est trop faible.";
-      else if(error.code === 'auth/invalid-email') message = "Format d'email invalide.";
-      else if(error.code === 'auth/popup-closed-by-user') message = "Connexion Google annulée.";
+    function handleFirebaseError(error) {
+      let msg = "Une erreur est survenue.";
+      const code = error.code;
       
-      showError(message);
+      if(code === 'auth/invalid-credential' || code === 'auth/wrong-password') msg = "Identifiants incorrects.";
+      else if(code === 'auth/user-not-found') msg = "Aucun compte lié à cet email.";
+      else if(code === 'auth/email-already-in-use') msg = "Cet email est déjà utilisé par un autre membre.";
+      else if(code === 'auth/weak-password') msg = "Le mot de passe doit faire au moins 6 caractères.";
+      else if(code === 'auth/invalid-email') msg = "Le format de l'email est invalide.";
+
+      showError(msg);
     }
 
-    function showError(msg) {
-      elements.errorMsg.textContent = msg;
-      elements.errorMsg.style.opacity = 1;
-      elements.container.style.animation = "shake 0.5s";
-      setTimeout(() => elements.container.style.animation = "", 500);
+    function showError(message) {
+      els.error.textContent = message;
+      els.error.style.opacity = 1;
+      
+      // Animation de secousse (Shake)
+      els.container.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-5px)' },
+        { transform: 'translateX(5px)' },
+        { transform: 'translateX(0)' }
+      ], { duration: 400 });
     }
+
   </script>
-
-  <style>
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
-    }
-  </style>
 </body>
-</html>
+  </html>
