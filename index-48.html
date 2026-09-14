@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Life OS — Connexion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- Panneau latéral (desktop) -->
+  <div class="auth-side">
+    <div class="auth-side-mark"><span>Life<span class="dot">OS</span></span></div>
+    <div class="auth-side-quote">
+      <div class="num" id="side-date-num">--</div>
+      <p id="side-quote-text">Ton tableau de bord personnel : projets, objectifs, habitudes, temps et finances, réunis au même endroit.</p>
+    </div>
+    <div class="auth-side-foot">Life OS — géré par toi, pour toi.</div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="auth-main">
+    <div class="auth-box">
+      <div class="auth-box-mark">Life<span class="dot">OS</span></div>
+
+      <h1 class="auth-title" id="form-title">Content de te revoir</h1>
+      <p class="auth-sub" id="form-sub">Connecte-toi pour retrouver ton tableau de bord.</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login">Connexion</button>
+        <button class="auth-tab" id="tab-register">Créer un compte</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form class="auth-form" id="login-form">
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap"><input type="email" id="login-email" placeholder="toi@exemple.com" required/></div>
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="input-wrap">
+            <input type="password" id="login-password" placeholder="••••••••" required/>
+            <button type="button" class="eye-btn" data-target="login-password">👁</button>
+          </div>
+        </div>
+        <div id="login-error"></div>
+        <button type="submit" class="btn-primary btn-full" id="login-btn"><span>Se connecter</span></button>
+        <button type="button" class="btn-ghost btn-full" id="forgot-btn">Mot de passe oublié ?</button>
+      </form>
+
+      <!-- REGISTER -->
+      <form class="auth-form hidden" id="register-form">
+        <div class="field">
+          <label>Nom d'utilisateur</label>
+          <div class="input-wrap"><input type="text" id="reg-username" placeholder="ton pseudo" minlength="3" maxlength="20" required/></div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap"><input type="email" id="reg-email" placeholder="toi@exemple.com" required/></div>
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="input-wrap">
+            <input type="password" id="reg-password" placeholder="8 caractères min." minlength="8" required/>
+            <button type="button" class="eye-btn" data-target="reg-password">👁</button>
+          </div>
+        </div>
+        <div id="register-error"></div>
+        <button type="submit" class="btn-primary btn-full" id="register-btn"><span>Créer mon compte</span></button>
+      </form>
+
+      <!-- FORGOT PASSWORD -->
+      <form class="auth-form hidden" id="forgot-form">
+        <p class="auth-sub" style="margin-bottom:6px">On t'envoie un lien de réinitialisation par email.</p>
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap"><input type="email" id="forgot-email" placeholder="toi@exemple.com" required/></div>
+        </div>
+        <div id="forgot-error"></div>
+        <div id="forgot-success"></div>
+        <button type="submit" class="btn-primary btn-full" id="forgot-btn-submit"><span>Envoyer le lien</span></button>
+        <button type="button" class="btn-ghost btn-full" id="back-to-login-btn">Retour à la connexion</button>
+      </form>
+
+      <p class="auth-switch" id="switch-hint">Pas encore de compte ? <button id="switch-to-register">Créer un compte</button></p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script type="module">
+import {
+  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  onAuthStateChanged, sendPasswordResetEmail, updateProfile, createUserProfile
+} from "./assets/firebase.js";
+
+function $(id){ return document.getElementById(id); }
+
+// Redirige si déjà connecté
+onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
+
+// Petite touche : date du jour dans le panneau latéral
+const now = new Date();
+$("side-date-num").textContent = now.toLocaleDateString("fr-FR",{ day:"2-digit", month:"2-digit" });
+
+// ── Bascule entre les 3 formulaires ──
+const views = { login: $("login-form"), register: $("register-form"), forgot: $("forgot-form") };
+function showView(name){
+  Object.values(views).forEach(v => v.classList.add("hidden"));
+  views[name].classList.remove("hidden");
+  $("tab-login").classList.toggle("active", name==="login");
+  $("tab-register").classList.toggle("active", name==="register");
+  $("switch-hint").classList.toggle("hidden", name==="forgot");
+  if (name==="login"){ $("form-title").textContent="Content de te revoir"; $("form-sub").textContent="Connecte-toi pour retrouver ton tableau de bord."; $("switch-hint").innerHTML='Pas encore de compte ? <button id="switch-to-register">Créer un compte</button>'; $("switch-to-register").onclick=()=>showView("register"); }
+  if (name==="register"){ $("form-title").textContent="Créer ton espace"; $("form-sub").textContent="Quelques infos et ton Life OS est prêt."; $("switch-hint").innerHTML='Déjà un compte ? <button id="switch-to-login">Se connecter</button>'; $("switch-to-login").onclick=()=>showView("login"); }
+  if (name==="forgot"){ $("form-title").textContent="Réinitialiser le mot de passe"; $("form-sub").textContent="Pas de panique, ça arrive."; }
+}
+$("tab-login").addEventListener("click", ()=>showView("login"));
+$("tab-register").addEventListener("click", ()=>showView("register"));
+$("forgot-btn").addEventListener("click", ()=>showView("forgot"));
+$("back-to-login-btn").addEventListener("click", ()=>showView("login"));
+
+document.querySelectorAll(".eye-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const inp = $(btn.dataset.target);
+    inp.type = inp.type === "password" ? "text" : "password";
+  });
+});
+
+function showError(elId, msg){ $(elId).innerHTML = `<div class="error-msg">${msg}</div>`; }
+function clearError(elId){ $(elId).innerHTML = ""; }
+function friendlyError(err){
+  const code = err.code || "";
+  if (code.includes("email-already-in-use")) return "Cet email est déjà utilisé.";
+  if (code.includes("invalid-email")) return "Adresse email invalide.";
+  if (code.includes("weak-password")) return "Mot de passe trop court (8 caractères min.).";
+  if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")) return "Email ou mot de passe incorrect.";
+  if (code.includes("too-many-requests")) return "Trop de tentatives. Réessaie dans un instant.";
+  return "Une erreur est survenue. Réessaie.";
+}
+
+// ── LOGIN ──
+$("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearError("login-error");
+  const btn = $("login-btn"); btn.disabled = true; btn.querySelector("span").textContent = "Connexion…";
+  try {
+    await signInWithEmailAndPassword(auth, $("login-email").value.trim(), $("login-password").value);
+    window.location.href = "dashboard.html";
+  } catch(err){
+    showError("login-error", friendlyError(err));
+    btn.disabled = false; btn.querySelector("span").textContent = "Se connecter";
+  }
+});
+
+// ── REGISTER ──
+$("register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearError("register-error");
+  const username = $("reg-username").value.trim();
+  if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) { showError("register-error","Le pseudo doit faire 3-20 caractères (lettres, chiffres, _)."); return; }
+  const btn = $("register-btn"); btn.disabled = true; btn.querySelector("span").textContent = "Création…";
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, $("reg-email").value.trim(), $("reg-password").value);
+    await updateProfile(cred.user, { displayName: username });
+    await createUserProfile(cred.user.uid, { username, email: cred.user.email });
+    window.location.href = "dashboard.html";
+  } catch(err){
+    showError("register-error", friendlyError(err));
+    btn.disabled = false; btn.querySelector("span").textContent = "Créer mon compte";
+  }
+});
+
+// ── FORGOT PASSWORD ──
+$("forgot-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearError("forgot-error"); $("forgot-success").innerHTML = "";
+  const btn = $("forgot-btn-submit"); btn.disabled = true; btn.querySelector("span").textContent = "Envoi…";
+  try {
+    await sendPasswordResetEmail(auth, $("forgot-email").value.trim());
+    $("forgot-success").innerHTML = `<div style="background:var(--ok-dim);border:1px solid rgba(78,201,143,.3);color:var(--ok);border-radius:10px;padding:10px 14px;font-size:.82rem">Lien envoyé — vérifie ta boîte mail.</div>`;
+  } catch(err){
+    showError("forgot-error", friendlyError(err));
+  }
+  btn.disabled = false; btn.querySelector("span").textContent = "Envoyer le lien";
+});
+</script>
+</body>
+</html>
