@@ -66,7 +66,7 @@ button,input,textarea,select{font-family:inherit}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
 .hidden{display:none!important}
 h1,h2,h3,.font-display{font-family:var(--font-display)}
-.glass{background:var(--glass);backdrop-filter:blur(var(--glass-blur)) saturate(1.4);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.4);border:1px solid var(--glass-bd);box-shadow:var(--glass-sh);border-radius:var(--radius-lg);transition:background-color .4s ease,border-color .4s ease,box-shadow .4s ease,transform .2s ease}
+.glass{background:var(--glass);backdrop-filter:blur(var(--glass-blur)) saturate(1.4);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.4);border:1px solid var(--glass-bd);box-shadow:var(--glass-sh);border-radius:var(--radius-lg);transition:background-color .4s ease,border-color .4s ease,box-shadow .4s ease,transform .2s ease,padding .25s ease}
 .glass.liftable:hover{transform:translateY(-2px);box-shadow:0 26px 60px -24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08)}
 
 .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--amber),#d4872a);color:#141014;border:none;border-radius:var(--radius-sm);padding:11px 20px;font-weight:700;font-size:.86rem;cursor:pointer;transition:.2s;white-space:nowrap;min-height:42px}
@@ -82,6 +82,9 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .btn-icon:hover{color:var(--tx);border-color:var(--tx2)}
 .btn-full{width:100%}
 .btn-sm-link{background:none;border:none;color:var(--amber);font-size:.76rem;font-weight:700;cursor:pointer;padding:0}
+.seg-control{display:flex;gap:4px;background:rgba(128,128,128,.08);border:1px solid var(--bd2);border-radius:var(--radius-sm);padding:3px}
+.seg-btn{flex:1;background:transparent;border:none;color:var(--tx2);font-size:.78rem;font-weight:700;padding:7px 10px;border-radius:7px;cursor:pointer;transition:.15s}
+.seg-btn.active{background:var(--amber-dim);color:var(--amber)}
 
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:.72rem;font-weight:600;color:var(--tx2)}
@@ -151,18 +154,23 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 html[data-theme="light"] .icon-btn .moon{display:none}
 html[data-theme="light"] .icon-btn .sun{display:block}
 
-.page-body{padding:28px clamp(20px,3vw,32px) 60px;display:flex;flex-direction:column;gap:22px}
+.page-body{padding:28px clamp(20px,3vw,32px) 60px;display:flex;flex-direction:column;gap:22px;transition:gap .25s ease}
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .page-eyebrow{font-size:.78rem;color:var(--tx3);margin-bottom:4px}
 .page-title{font-family:var(--font-display);font-size:1.55rem;font-weight:700;letter-spacing:-.4px}
 .view-section{animation:fadeUp .35s cubic-bezier(.23,1,.32,1) both}
 
-.widget-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.widget-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;transition:gap .25s ease}
 .w-card{border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px}
 .w-3{grid-column:span 3}.w-4{grid-column:span 4}.w-6{grid-column:span 6}.w-8{grid-column:span 8}.w-12{grid-column:span 12}
 .w-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .w-title{font-size:.82rem;font-weight:700;color:var(--tx2);display:flex;align-items:center;gap:7px}
 .w-empty{color:var(--tx3);font-size:.82rem;padding:14px 0;text-align:center}
+
+body.density-compact .w-card{padding:14px;gap:9px}
+body.density-compact .page-body{gap:15px;padding-top:20px}
+body.density-compact .widget-grid{gap:12px}
+body.density-compact .item-row,body.density-compact .habit-item,body.density-compact .project-card{padding:10px 12px}
 
 @media(max-width:1100px){.w-3{grid-column:span 6}.w-4{grid-column:span 6}.w-8{grid-column:span 12}}
 @media(max-width:860px){
@@ -248,6 +256,8 @@ html[data-theme="light"] .icon-btn .sun{display:block}
 .stat-box{padding:16px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);text-align:center;transition:.2s}
 .stat-box:hover{border-color:var(--amber-bd)}
 .stat-num{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--amber)}
+.stat-num.teal{color:var(--teal)}
+.stat-num.coral{color:var(--coral)}
 .stat-label{font-size:.7rem;color:var(--tx3);margin-top:3px}
 
 /* ── Settings page ── */
@@ -270,26 +280,49 @@ html[data-theme="light"] .icon-btn .sun{display:block}
 
 /* ── Calendar ── */
 .calendar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.calendar-month-label{font-family:var(--font-display);font-size:1.1rem;font-weight:700;min-width:170px}
-.calendar-nav{display:flex;gap:6px}
+.calendar-month-label{font-family:var(--font-display);font-size:1.1rem;font-weight:700;min-width:170px;text-transform:capitalize}
+.calendar-nav{display:flex;gap:6px;align-items:center}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .calendar-dow{font-size:.68rem;font-weight:700;color:var(--tx3);text-align:center;padding-bottom:4px}
-.calendar-cell{aspect-ratio:1/.82;border-radius:12px;border:1px solid var(--bd);background:rgba(128,128,128,.03);padding:8px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:.15s;position:relative;animation:fadeUp .3s ease both}
+.calendar-cell{aspect-ratio:1/.82;border-radius:12px;border:1px solid var(--bd);background:rgba(128,128,128,.035);padding:8px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:.15s;position:relative;animation:fadeUp .3s ease both}
 .calendar-cell:hover{border-color:var(--bd2);transform:translateY(-1px)}
-.calendar-cell.other-month{opacity:.35}
+.calendar-cell.other-month{background:rgba(140,130,150,.045);border-style:dashed}
+.calendar-cell.other-month .calendar-daynum{color:var(--tx3);font-weight:600}
 .calendar-cell.today{border-color:var(--amber-bd);background:var(--amber-dim)}
+.calendar-cell.today .calendar-daynum{color:var(--amber)}
 .calendar-cell.selected{border-color:var(--amber);box-shadow:0 0 0 2px var(--amber-dim)}
 .calendar-daynum{font-size:.78rem;font-weight:700}
 .calendar-dots{display:flex;gap:3px;flex-wrap:wrap}
 .calendar-dot{width:6px;height:6px;border-radius:50%}
 @media(max-width:640px){.calendar-cell{aspect-ratio:1/1}.calendar-daynum{font-size:.72rem}}
 
-.agenda-day-title{font-size:.92rem;font-weight:700;font-family:var(--font-display)}
+.agenda-day-title{font-size:.92rem;font-weight:700;font-family:var(--font-display);text-transform:capitalize}
 .event-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(128,128,128,.045);border:1px solid var(--bd);animation:fadeUp .3s ease both}
 .event-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .event-body{flex:1;min-width:0}
 .event-title{font-size:.85rem;font-weight:600}
 .event-time{font-size:.7rem;color:var(--tx3)}
+
+/* ── Finances ── */
+.fin-hero-num{font-family:var(--font-display);font-size:1.9rem;font-weight:700}
+.fin-hero-num.positive{color:var(--teal)}
+.fin-hero-num.negative{color:var(--coral)}
+.fin-bar-wrap{display:flex;flex-direction:column;gap:10px}
+.fin-bar-row{display:flex;align-items:center;gap:10px}
+.fin-bar-label{width:76px;font-size:.76rem;color:var(--tx3);flex-shrink:0}
+.fin-bar-track{flex:1;height:11px;border-radius:99px;background:rgba(128,128,128,.12);overflow:hidden}
+.fin-bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.23,1,.32,1)}
+.fin-bar-amount{width:88px;text-align:right;font-size:.76rem;font-weight:700;flex-shrink:0}
+.tx-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);animation:fadeUp .3s ease both}
+.tx-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-size:.85rem}
+.tx-icon.income{background:var(--teal-dim);color:var(--teal)}
+.tx-icon.expense{background:var(--coral-dim);color:var(--coral)}
+.tx-body{flex:1;min-width:0}
+.tx-desc{font-size:.86rem;font-weight:600}
+.tx-meta{font-size:.72rem;color:var(--tx3);margin-top:2px}
+.tx-amount{font-weight:700;font-size:.9rem;flex-shrink:0}
+.tx-amount.income{color:var(--teal)}
+.tx-amount.expense{color:var(--coral)}
 </style>
 </head>
 <body>
@@ -547,6 +580,79 @@ html[data-theme="light"] .icon-btn .sun{display:block}
           </div>
         </section>
 
+        <!-- ═══ VUE : FINANCES — VUE D'ENSEMBLE ═══ -->
+        <section class="view-section hidden" id="view-finances-overview">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Vue d'ensemble</h1></div></div>
+
+          <div class="widget-grid">
+            <div class="w-card glass liftable w-4">
+              <div class="w-title">Solde total</div>
+              <div class="fin-hero-num" id="fin-balance">0 €</div>
+              <div style="font-size:.72rem;color:var(--tx3)">Revenus − dépenses, toutes périodes</div>
+            </div>
+            <div class="w-card glass liftable w-4">
+              <div class="w-title">Revenus — ce mois</div>
+              <div class="fin-hero-num positive" id="fin-income-month">0 €</div>
+            </div>
+            <div class="w-card glass liftable w-4">
+              <div class="w-title">Dépenses — ce mois</div>
+              <div class="fin-hero-num negative" id="fin-expense-month">0 €</div>
+            </div>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:6px">Revenus vs dépenses — ce mois</div>
+            <div class="fin-bar-wrap" id="fin-bar-chart">
+              <div class="w-empty">Ajoute une transaction pour voir le comparatif.</div>
+            </div>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-title">Nouvelle transaction</div>
+            <form class="quick-form" id="transaction-form" data-fixed-type="">
+              <div class="field input-wrap"><label>Type</label>
+                <select id="tx-type"><option value="expense" selected>Dépense</option><option value="income">Revenu</option></select>
+              </div>
+              <div class="field input-wrap"><label>Montant</label><input type="number" id="tx-amount" step="0.01" min="0.01" placeholder="0.00" required/></div>
+              <div class="field input-wrap"><label>Catégorie</label><select id="tx-category"></select></div>
+              <div class="field grow input-wrap"><label>Description</label><input type="text" id="tx-desc" placeholder="Ex : Courses de la semaine"/></div>
+              <div class="field input-wrap"><label>Date</label><input type="date" id="tx-date"/></div>
+              <button type="submit" class="btn-primary"><span>Ajouter</span></button>
+            </form>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-head"><div class="w-title">Transactions récentes</div><span style="font-size:.72rem;color:var(--tx3)" id="tx-count"></span></div>
+            <div class="list-col" id="tx-list-all"><div class="w-empty">Aucune transaction pour l'instant.</div></div>
+          </div>
+        </section>
+
+        <!-- ═══ VUE : FINANCES — REVENUS ═══ -->
+        <section class="view-section hidden" id="view-finances-income">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Revenus</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Total des revenus (ce mois)</div>
+            <div class="fin-hero-num positive" id="fin-income-total-page">0 €</div>
+          </div>
+          <div class="w-card glass">
+            <div class="w-title">Toutes tes rentrées d'argent</div>
+            <div class="list-col" id="tx-list-income" style="margin-top:8px"><div class="w-empty">Aucun revenu enregistré.</div></div>
+          </div>
+        </section>
+
+        <!-- ═══ VUE : FINANCES — DÉPENSES ═══ -->
+        <section class="view-section hidden" id="view-finances-expenses">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Dépenses</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Total des dépenses (ce mois)</div>
+            <div class="fin-hero-num negative" id="fin-expense-total-page">0 €</div>
+          </div>
+          <div class="w-card glass">
+            <div class="w-title">Toutes tes sorties d'argent</div>
+            <div class="list-col" id="tx-list-expense" style="margin-top:8px"><div class="w-empty">Aucune dépense enregistrée.</div></div>
+          </div>
+        </section>
+
         <!-- ═══ VUE : PROFIL ═══ -->
         <section class="view-section hidden" id="view-profile">
           <div class="page-head"><div><div class="page-eyebrow">Ton espace</div><h1 class="page-title">Profil</h1></div></div>
@@ -572,6 +678,7 @@ html[data-theme="light"] .icon-btn .sun{display:block}
               <div class="stat-box"><div class="stat-num" id="stat-projects-done">0</div><div class="stat-label">Projets terminés</div></div>
               <div class="stat-box"><div class="stat-num" id="stat-habit-streak">0</div><div class="stat-label">Meilleur streak (jours)</div></div>
               <div class="stat-box"><div class="stat-num" id="stat-active-habits">0</div><div class="stat-label">Habitudes suivies</div></div>
+              <div class="stat-box"><div class="stat-num teal" id="stat-fin-balance">0 €</div><div class="stat-label">Solde</div></div>
             </div>
           </div>
 
@@ -588,10 +695,11 @@ html[data-theme="light"] .icon-btn .sun{display:block}
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Compte</div>
             <form class="quick-form" id="settings-account-form" style="margin-top:8px">
-              <div class="field grow input-wrap"><label>Nom d'utilisateur</label><input type="text" id="settings-username" minlength="3" maxlength="20" required/></div>
+              <div class="field grow input-wrap"><label>Nom d'utilisateur</label><input type="text" id="settings-username" minlength="2" maxlength="30" required/></div>
               <div class="field grow input-wrap"><label>Email</label><input type="email" id="settings-email" disabled/></div>
               <button type="submit" class="btn-primary"><span>Enregistrer</span></button>
             </form>
+            <div id="settings-account-msg" style="margin-top:10px"></div>
           </div>
 
           <div class="w-card glass">
@@ -611,6 +719,13 @@ html[data-theme="light"] .icon-btn .sun{display:block}
               <div class="toggle-switch" id="settings-theme-toggle"><div class="knob"></div></div>
             </div>
             <div class="settings-row">
+              <div><div class="settings-row-label">Densité d'affichage</div><div class="settings-row-desc">Confortable pour plus d'air, compact pour voir plus d'informations à l'écran.</div></div>
+              <div class="seg-control" style="width:220px">
+                <button type="button" class="seg-btn" data-density="comfortable">Confortable</button>
+                <button type="button" class="seg-btn" data-density="compact">Compact</button>
+              </div>
+            </div>
+            <div class="settings-row">
               <div><div class="settings-row-label">Couleur de ton avatar</div><div class="settings-row-desc">Visible dans la sidebar et sur ton profil.</div></div>
               <div class="avatar-swatches" id="avatar-swatches"></div>
             </div>
@@ -621,6 +736,17 @@ html[data-theme="light"] .icon-btn .sun{display:block}
             <div class="settings-row">
               <div><div class="settings-row-label">Fuseau horaire</div><div class="settings-row-desc">Utilisé pour calculer tes journées et tes échéances.</div></div>
               <div class="input-wrap" style="width:220px"><select id="settings-timezone"></select></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Devise du portefeuille</div><div class="settings-row-desc">Utilisée sur toutes les pages Finances.</div></div>
+              <div class="input-wrap" style="width:220px"><select id="settings-currency"></select></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Premier jour de la semaine</div><div class="settings-row-desc">Change le point de départ du calendrier.</div></div>
+              <div class="seg-control" style="width:220px">
+                <button type="button" class="seg-btn" data-weekstart="monday">Lundi</button>
+                <button type="button" class="seg-btn" data-weekstart="sunday">Dimanche</button>
+              </div>
             </div>
           </div>
 
@@ -638,7 +764,7 @@ html[data-theme="light"] .icon-btn .sun{display:block}
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:10px">Données</div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Exporter mes données</div><div class="settings-row-desc">Télécharge un fichier JSON avec tes tâches, projets, habitudes, événements et activités.</div></div>
+              <div><div class="settings-row-label">Exporter mes données</div><div class="settings-row-desc">Télécharge un fichier JSON avec tes tâches, projets, habitudes, événements, transactions et activités.</div></div>
               <button class="btn-ghost" id="settings-export-btn">Exporter</button>
             </div>
             <div class="danger-zone" style="margin-top:14px">
@@ -670,7 +796,7 @@ html[data-theme="light"] .icon-btn .sun{display:block}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, signOut, onAuthStateChanged, EmailAuthProvider,
-  reauthenticateWithCredential, updatePassword, deleteUser
+  reauthenticateWithCredential, updatePassword, updateProfile, deleteUser
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp,
@@ -695,9 +821,10 @@ function $(id){ return document.getElementById(id); }
 function escHtml(str){ return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
 function dstr(d){ return d.toISOString().slice(0,10); }
+function monthKey(dateStr){ return (dateStr||"").slice(0,7); }
 
 let currentUser = null, profile = null;
-let tasks = [], projects = [], habits = [], activities = [], events = [];
+let tasks = [], projects = [], habits = [], activities = [], events = [], transactions = [];
 let tasksLoaded = false, projectsLoaded = false;
 let calendarMonth = new Date(); calendarMonth.setDate(1);
 let selectedDay = todayStr();
@@ -713,6 +840,22 @@ const CATEGORY_COLORS = { travail:"amber", perso:"teal", urgent:"coral", autre:"
 const CATEGORY_LABELS = { travail:"Travail", perso:"Personnel", urgent:"Urgent", autre:"Autre" };
 function colorVar(name){ return { amber:"var(--amber)", teal:"var(--teal)", coral:"var(--coral)", violet:"var(--violet)" }[name] || "var(--tx3)"; }
 
+const CURRENCIES = { EUR:"€", USD:"$", GBP:"£", CHF:"CHF", CAD:"$ CA", MAD:"DH", XOF:"FCFA", XAF:"FCFA" };
+const EXPENSE_CATEGORIES = [
+  { key:"alimentation", label:"Alimentation" }, { key:"transport", label:"Transport" },
+  { key:"logement", label:"Logement" }, { key:"loisirs", label:"Loisirs" },
+  { key:"sante", label:"Santé" }, { key:"abonnements", label:"Abonnements" }, { key:"autre", label:"Autre" }
+];
+const INCOME_CATEGORIES = [
+  { key:"salaire", label:"Salaire" }, { key:"freelance", label:"Freelance" },
+  { key:"cadeau", label:"Cadeau" }, { key:"autre", label:"Autre" }
+];
+function currencySymbol(){ return CURRENCIES[profile?.preferences?.currency] || "€"; }
+function formatMoney(amount){
+  const sign = amount < 0 ? "-" : "";
+  return `${sign}${Math.abs(amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})} ${currencySymbol()}`;
+}
+
 // ── AUTH GUARD ──
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = "index.html"; return; }
@@ -725,6 +868,7 @@ onAuthStateChanged(auth, async (user) => {
     profile = { username: user.email?.split("@")[0]||"toi", email:user.email, xp:0, level:1 };
   }
   applyTheme(profile.preferences?.theme || "dark");
+  applyDensity(profile.preferences?.density || "comfortable");
   renderShell();
   $("dash-skeleton").classList.add("hidden");
   $("dash-content").classList.remove("hidden");
@@ -732,11 +876,15 @@ onAuthStateChanged(auth, async (user) => {
   renderProfilePage();
   renderSettingsPage();
   populateTimezoneSelect();
+  populateCurrencySelect();
+  populateTxCategorySelect();
+  $("tx-date").value = todayStr();
   listenTasks();
   listenProjects();
   listenHabits();
   listenActivities();
   listenEvents();
+  listenTransactions();
   renderCalendar();
 }, (err) => {
   console.error("Auth error:", err);
@@ -761,7 +909,7 @@ function renderTodayHeader(){
   $("page-greeting").textContent = `${greet}, ${profile?.username||"toi"} 👋`;
 }
 
-// ═══════════════ THÈME ═══════════════
+// ═══════════════ THÈME & AFFICHAGE ═══════════════
 function applyTheme(theme){
   document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
   const toggle = $("settings-theme-toggle");
@@ -777,6 +925,34 @@ async function toggleTheme(){
   catch(e){ console.error(e); }
 }
 
+function applyDensity(density){
+  document.body.classList.toggle("density-compact", density === "compact");
+  document.querySelectorAll("[data-density]").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.density === density);
+  });
+}
+document.querySelectorAll("[data-density]").forEach(btn=>{
+  btn.addEventListener("click", async () => {
+    applyDensity(btn.dataset.density);
+    profile.preferences = { ...(profile.preferences||{}), density: btn.dataset.density };
+    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.density": btn.dataset.density }); }
+    catch(e){ console.error(e); }
+  });
+});
+
+function applyWeekStart(ws){
+  document.querySelectorAll("[data-weekstart]").forEach(btn=>{ btn.classList.toggle("active", btn.dataset.weekstart === ws); });
+}
+document.querySelectorAll("[data-weekstart]").forEach(btn=>{
+  btn.addEventListener("click", async () => {
+    applyWeekStart(btn.dataset.weekstart);
+    profile.preferences = { ...(profile.preferences||{}), weekStart: btn.dataset.weekstart };
+    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.weekStart": btn.dataset.weekstart }); }
+    catch(e){ console.error(e); }
+    renderCalendarDow(); renderCalendar();
+  });
+});
+
 function xpForLevel(level){ return level * 100; }
 
 function updateXpWidget(){
@@ -790,10 +966,7 @@ function updateXpWidget(){
   renderProfilePage();
 }
 
-/**
- * Système XP anti-duplication (règle 42).
- * eventId doit être déterministe et unique par action (ex: "task_done_<taskId>").
- */
+/** Système XP anti-duplication (règle 42). */
 async function awardXPOnce(eventId, amount, label){
   if (!currentUser) return;
   const evRef = doc(db, "users", currentUser.uid, "xpEvents", eventId);
@@ -859,7 +1032,7 @@ function listenActivities(){
     (err) => console.error("activities listener:", err));
 }
 
-const ACTIVITY_COLORS = { task:"var(--amber)", project:"var(--teal)", habit:"var(--coral)" };
+const ACTIVITY_COLORS = { task:"var(--amber)", project:"var(--teal)", habit:"var(--coral)", finance:"var(--violet)" };
 function activityRowHtml(a,i){
   const time = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "à l'instant";
   return `<div class="activity-row" style="animation-delay:${i*0.03}s">
@@ -874,8 +1047,8 @@ function renderActivityWidgets(){
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const realPages = { today:"view-today", tasks:"view-tasks", projects:"view-projects", habits:"view-habits", profile:"view-profile", settings:"view-settings", calendar:"view-calendar" };
-const pageLabels = { goals:"Objectifs", quests:"Quêtes", time:"Temps", "finances-overview":"Vue d'ensemble", "finances-income":"Revenus", "finances-expenses":"Dépenses", "finances-budgets":"Budgets", "finances-goals":"Objectifs financiers", "finances-debts":"Dettes & emprunts", notes:"Notes", stats:"Statistiques" };
+const realPages = { today:"view-today", tasks:"view-tasks", projects:"view-projects", habits:"view-habits", profile:"view-profile", settings:"view-settings", calendar:"view-calendar", "finances-overview":"view-finances-overview", "finances-income":"view-finances-income", "finances-expenses":"view-finances-expenses" };
+const pageLabels = { goals:"Objectifs", quests:"Quêtes", time:"Temps", "finances-budgets":"Budgets", "finances-goals":"Objectifs financiers", "finances-debts":"Dettes & emprunts", notes:"Notes", stats:"Statistiques" };
 
 function showPage(page){
   document.querySelectorAll(".view-section").forEach(s=>s.classList.add("hidden"));
@@ -1017,15 +1190,13 @@ $("project-form").addEventListener("submit", async (e) => {
   btn.disabled = false;
 });
 
-/** Calcul centralisé de la progression d'un projet (règle 58). */
 function calculateProjectProgress(project){
   const linked = tasks.filter(t=>t.projectId === project.id);
-  if (!linked.length) return null; // pas de tâche liée -> progression manuelle
+  if (!linked.length) return null;
   const done = linked.filter(t=>t.status==="done").length;
   return { pct: Math.round((done/linked.length)*100), done, total: linked.length };
 }
 
-/** Synchronise automatiquement la progression des projets ayant des tâches liées. */
 async function syncProjectProgress(){
   for (const p of projects){
     const calc = calculateProjectProgress(p);
@@ -1099,7 +1270,7 @@ function renderProjects(){
 
 async function updateProjectProgress(id, value){
   const p = projects.find(x=>x.id===id); if (!p) return;
-  if (calculateProjectProgress(p)) return; // progression automatique, le slider ne s'affiche pas dans ce cas
+  if (calculateProjectProgress(p)) return;
   const wasComplete = p.progress >= 100;
   try {
     await updateDoc(doc(db,"users",currentUser.uid,"projects",id), { progress: value, status: value>=100 ? "terminé" : (p.status==="terminé"?"en cours":p.status) });
@@ -1250,6 +1421,9 @@ function renderProfilePage(){
   const bestStreaks = habits.map(h=>computeBestStreak(h.checkins));
   $("stat-habit-streak").textContent = bestStreaks.length ? Math.max(...bestStreaks) : 0;
   $("stat-active-habits").textContent = habits.length;
+  const balance = transactions.reduce((a,t)=>a+(t.type==="income"?t.amount:-t.amount),0);
+  const balEl = $("stat-fin-balance");
+  if (balEl){ balEl.textContent = formatMoney(balance); balEl.className = "stat-num " + (balance>=0?"teal":"coral"); }
 }
 
 // ═══════════════ PARAMÈTRES ═══════════════
@@ -1263,7 +1437,8 @@ const NOTIF_DEFS = [
   { key:"deadlines", label:"Échéances proches", desc:"Tâches et projets qui approchent de leur date limite." },
   { key:"dailySummary", label:"Résumé quotidien", desc:"Un récapitulatif de ta journée chaque matin." },
   { key:"habitReminders", label:"Rappels d'habitudes", desc:"Un rappel si une habitude du jour n'est pas encore cochée." },
-  { key:"levelUp", label:"Passage de niveau", desc:"Prévenu·e quand tu montes de niveau." }
+  { key:"levelUp", label:"Passage de niveau", desc:"Prévenu·e quand tu montes de niveau." },
+  { key:"budgetAlerts", label:"Alertes de budget", desc:"Prévenu·e à 80 %, 90 % et 100 % d'un budget dépensé." }
 ];
 
 function populateTimezoneSelect(){
@@ -1278,10 +1453,23 @@ function populateTimezoneSelect(){
   });
 }
 
+function populateCurrencySelect(){
+  const current = profile?.preferences?.currency || "EUR";
+  $("settings-currency").innerHTML = Object.keys(CURRENCIES).map(c=>`<option value="${c}" ${c===current?"selected":""}>${c} (${CURRENCIES[c]})</option>`).join("");
+  $("settings-currency").addEventListener("change", async (e) => {
+    profile.preferences = { ...(profile.preferences||{}), currency: e.target.value };
+    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.currency": e.target.value }); showToast("✅ Devise mise à jour."); }
+    catch(err){ console.error(err); showToast("⚠️ Erreur."); }
+    renderFinances();
+  });
+}
+
 function renderSettingsPage(){
   if (!profile) return;
   $("settings-username").value = profile.username || "";
   $("settings-email").value = profile.email || currentUser.email || "";
+  applyDensity(profile.preferences?.density || "comfortable");
+  applyWeekStart(profile.preferences?.weekStart || "monday");
 
   const activeWidgets = profile.preferences?.widgets || WIDGET_DEFS.map(w=>w.key);
   $("settings-widgets-list").innerHTML = WIDGET_DEFS.map(w => `
@@ -1329,18 +1517,31 @@ async function toggleNotif(key, el){
 
 $("settings-theme-toggle").addEventListener("click", () => toggleTheme());
 
+/**
+ * Modifier le nom d'utilisateur — met à jour Firestore ET le profil Firebase Auth,
+ * avec un message de confirmation visible directement sous le formulaire.
+ */
 $("settings-account-form").addEventListener("submit", async (e) => {
   e.preventDefault();
+  const msgEl = $("settings-account-msg"); msgEl.innerHTML = "";
   const username = $("settings-username").value.trim();
-  if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) { showToast("⚠️ Pseudo invalide (3-20 caractères)."); return; }
+  if (!/^[\p{L}\p{N} _'-]{2,30}$/u.test(username)) {
+    msgEl.innerHTML = '<div class="error-msg">Le nom d\'utilisateur doit faire 2 à 30 caractères (lettres, chiffres, espaces, _ - \').</div>';
+    return;
+  }
   const btn = e.target.querySelector("button");
   btn.disabled = true;
   try {
     await updateDoc(doc(db,"users",currentUser.uid), { username });
+    try { await updateProfile(currentUser, { displayName: username }); } catch(_e){ /* non bloquant */ }
     profile.username = username;
     renderShell(); renderTodayHeader(); renderProfilePage();
+    msgEl.innerHTML = '<div class="success-msg">Nom d\'utilisateur mis à jour.</div>';
     showToast("✅ Profil mis à jour.");
-  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'enregistrement."); }
+  } catch(err){
+    console.error(err);
+    msgEl.innerHTML = '<div class="error-msg">Impossible d\'enregistrer — vérifie ta connexion et réessaie.</div>';
+  }
   btn.disabled = false;
 });
 
@@ -1370,7 +1571,7 @@ $("settings-password-form").addEventListener("submit", async (e) => {
 $("settings-export-btn").addEventListener("click", async () => {
   const btn = $("settings-export-btn"); btn.disabled = true; btn.textContent = "Export en cours…";
   try {
-    const data = { profile, tasks, projects, habits, activities, events, exportedAt: new Date().toISOString() };
+    const data = { profile, tasks, projects, habits, activities, events, transactions, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1394,7 +1595,7 @@ $("settings-delete-btn").addEventListener("click", async () => {
   }
   btn.disabled = true; btn.textContent = "Suppression…";
   try {
-    const collections = ["tasks","projects","habits","activities","events","xpEvents"];
+    const collections = ["tasks","projects","habits","activities","events","xpEvents","transactions"];
     for (const col of collections){
       const snap = await getDocs(collection(db,"users",currentUser.uid,col));
       await Promise.all(snap.docs.map(d => deleteDoc(d.ref)));
@@ -1417,21 +1618,24 @@ function listenEvents(){
     (err) => console.error("events listener:", err));
 }
 
-const DOW_LABELS = ["L","M","M","J","V","S","D"];
-function renderCalendarDow(){ $("calendar-dow-row").innerHTML = DOW_LABELS.map(d=>`<div class="calendar-dow">${d}</div>`).join(""); }
+function renderCalendarDow(){
+  const ws = profile?.preferences?.weekStart || "monday";
+  const labels = ws === "sunday" ? ["D","L","M","M","J","V","S"] : ["L","M","M","J","V","S","D"];
+  $("calendar-dow-row").innerHTML = labels.map(d=>`<div class="calendar-dow">${d}</div>`).join("");
+}
 renderCalendarDow();
 
 function renderCalendar(){
+  const ws = profile?.preferences?.weekStart || "monday";
   const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
   $("calendar-month-label").textContent = calendarMonth.toLocaleDateString("fr-FR",{ month:"long", year:"numeric" });
   const firstOfMonth = new Date(year, month, 1);
-  let startOffset = firstOfMonth.getDay() - 1; if (startOffset < 0) startOffset = 6;
+  let startOffset;
+  if (ws === "sunday"){ startOffset = firstOfMonth.getDay(); }
+  else { startOffset = firstOfMonth.getDay() - 1; if (startOffset < 0) startOffset = 6; }
   const startDate = new Date(year, month, 1 - startOffset);
   const cells = [];
-  for (let i=0;i<42;i++){
-    const d = new Date(startDate); d.setDate(startDate.getDate()+i);
-    cells.push(d);
-  }
+  for (let i=0;i<42;i++){ const d = new Date(startDate); d.setDate(startDate.getDate()+i); cells.push(d); }
   const today = todayStr();
   const grid = $("calendar-grid");
   grid.innerHTML = cells.map((d,i) => {
@@ -1493,6 +1697,110 @@ $("event-form").addEventListener("submit", async (e) => {
 
 async function deleteEvent(id){
   try { await deleteDoc(doc(db,"users",currentUser.uid,"events",id)); showToast("🗑️ Événement supprimé."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ FINANCES (PORTEFEUILLE) ═══════════════
+function populateTxCategorySelect(){
+  const type = $("tx-type").value;
+  const cats = type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  $("tx-category").innerHTML = cats.map(c=>`<option value="${c.key}">${c.label}</option>`).join("");
+}
+$("tx-type").addEventListener("change", populateTxCategorySelect);
+
+function listenTransactions(){
+  const q = query(collection(db,"users",currentUser.uid,"transactions"), orderBy("date","desc"));
+  onSnapshot(q, (snap) => { transactions = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderFinances(); renderProfilePage(); },
+    (err) => { console.error("transactions listener:", err); showToast("⚠️ Impossible de charger les finances."); });
+}
+
+function categoryLabelFor(tx){
+  const cats = tx.type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  return (cats.find(c=>c.key===tx.category) || {}).label || "Autre";
+}
+
+function txRowHtml(t,i){
+  const dLabel = new Date(t.date+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+  return `
+    <div class="tx-row" style="animation-delay:${Math.min(i,10)*0.025}s" data-id="${t.id}">
+      <div class="tx-icon ${t.type}">${t.type==="income"?"↑":"↓"}</div>
+      <div class="tx-body">
+        <div class="tx-desc">${escHtml(t.description || categoryLabelFor(t))}</div>
+        <div class="tx-meta">${categoryLabelFor(t)} · ${dLabel}</div>
+      </div>
+      <div class="tx-amount ${t.type}">${t.type==="income"?"+":"-"}${formatMoney(Math.abs(t.amount))}</div>
+      <button class="btn-danger" data-action="delete-tx" data-id="${t.id}">Suppr.</button>
+    </div>`;
+}
+
+function renderFinances(){
+  const thisMonth = todayStr().slice(0,7);
+  const balance = transactions.reduce((a,t)=>a+(t.type==="income"?t.amount:-t.amount),0);
+  const monthTx = transactions.filter(t=>monthKey(t.date)===thisMonth);
+  const incomeMonth = monthTx.filter(t=>t.type==="income").reduce((a,t)=>a+t.amount,0);
+  const expenseMonth = monthTx.filter(t=>t.type==="expense").reduce((a,t)=>a+t.amount,0);
+
+  if ($("fin-balance")){
+    $("fin-balance").textContent = formatMoney(balance);
+    $("fin-balance").className = "fin-hero-num " + (balance>=0?"positive":"negative");
+  }
+  if ($("fin-income-month")) $("fin-income-month").textContent = formatMoney(incomeMonth);
+  if ($("fin-expense-month")) $("fin-expense-month").textContent = formatMoney(expenseMonth);
+  if ($("fin-income-total-page")) $("fin-income-total-page").textContent = formatMoney(incomeMonth);
+  if ($("fin-expense-total-page")) $("fin-expense-total-page").textContent = formatMoney(expenseMonth);
+
+  const chartEl = $("fin-bar-chart");
+  if (chartEl){
+    if (!incomeMonth && !expenseMonth){
+      chartEl.innerHTML = '<div class="w-empty">Ajoute une transaction pour voir le comparatif.</div>';
+    } else {
+      const max = Math.max(incomeMonth, expenseMonth, 1);
+      chartEl.innerHTML = `
+        <div class="fin-bar-row"><div class="fin-bar-label">Revenus</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(incomeMonth/max)*100}%;background:linear-gradient(90deg,var(--teal),#6fe0d6)"></div></div><div class="fin-bar-amount">${formatMoney(incomeMonth)}</div></div>
+        <div class="fin-bar-row"><div class="fin-bar-label">Dépenses</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(expenseMonth/max)*100}%;background:linear-gradient(90deg,var(--coral),#f28d8b)"></div></div><div class="fin-bar-amount">${formatMoney(expenseMonth)}</div></div>`;
+    }
+  }
+
+  if ($("tx-list-all")){
+    $("tx-count").textContent = transactions.length ? `${transactions.length} transaction${transactions.length>1?"s":""}` : "";
+    $("tx-list-all").innerHTML = transactions.length ? transactions.slice(0,25).map(txRowHtml).join("") : '<div class="w-empty">Aucune transaction pour l\'instant.</div>';
+    wireTxDelete($("tx-list-all"));
+  }
+  if ($("tx-list-income")){
+    const incomeTx = transactions.filter(t=>t.type==="income");
+    $("tx-list-income").innerHTML = incomeTx.length ? incomeTx.map(txRowHtml).join("") : '<div class="w-empty">Aucun revenu enregistré.</div>';
+    wireTxDelete($("tx-list-income"));
+  }
+  if ($("tx-list-expense")){
+    const expenseTx = transactions.filter(t=>t.type==="expense");
+    $("tx-list-expense").innerHTML = expenseTx.length ? expenseTx.map(txRowHtml).join("") : '<div class="w-empty">Aucune dépense enregistrée.</div>';
+    wireTxDelete($("tx-list-expense"));
+  }
+}
+function wireTxDelete(container){
+  container.querySelectorAll("[data-action='delete-tx']").forEach(btn=>{ btn.addEventListener("click", () => deleteTransaction(btn.dataset.id)); });
+}
+
+$("transaction-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const amount = parseFloat($("tx-amount").value);
+  if (!amount || amount <= 0) { showToast("⚠️ Montant invalide."); return; }
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  const type = $("tx-type").value;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"transactions"), {
+      type, amount, category: $("tx-category").value, description: $("tx-desc").value.trim(),
+      date: $("tx-date").value || todayStr(), createdAt: serverTimestamp()
+    });
+    logActivity(`${type==="income"?"Revenu":"Dépense"} ajouté${type==="income"?"":"e"} : ${formatMoney(amount)}`, "finance");
+    $("transaction-form").reset(); $("tx-type").value = "expense"; populateTxCategorySelect(); $("tx-date").value = todayStr();
+    showToast("✅ Transaction ajoutée !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'ajout."); }
+  btn.disabled = false;
+});
+
+async function deleteTransaction(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"transactions",id)); showToast("🗑️ Transaction supprimée."); }
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 
