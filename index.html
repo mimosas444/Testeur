@@ -130,72 +130,6 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 
 @media(min-width:960px){.auth-side{display:flex}}
 
-/* ════════════════════════════════════════
-   DASHBOARD SHELL (dashboard.html)
-════════════════════════════════════════ */
-.app-shell{display:flex;min-height:100dvh;position:relative;z-index:1}
-
-.sidebar{width:248px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--bd);background:rgba(10,12,17,.5);backdrop-filter:blur(20px);position:fixed;top:0;bottom:0;left:0;z-index:80;transition:transform .25s}
-.sidebar-mark{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:1.02rem;padding:22px 22px 18px}
-.sidebar-mark .dot{color:var(--amber)}
-.sidebar-nav{flex:1;overflow-y:auto;padding:6px 14px;display:flex;flex-direction:column;gap:2px}
-.sidebar-group-label{font-size:.65rem;font-weight:700;letter-spacing:.6px;color:var(--tx3);padding:16px 10px 6px}
-.sidebar-link{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--tx2);font-size:.86rem;font-weight:600;cursor:pointer;transition:.15s}
-.sidebar-link svg{flex-shrink:0;opacity:.85}
-.sidebar-link:hover{background:rgba(255,255,255,.04);color:var(--tx)}
-.sidebar-link.active{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-bd)}
-.sidebar-link.active svg{opacity:1}
-.sidebar-foot{padding:14px;border-top:1px solid var(--bd)}
-.sidebar-user{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;cursor:pointer;transition:.15s}
-.sidebar-user:hover{background:rgba(255,255,255,.04)}
-.sidebar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--coral));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#141014;flex-shrink:0}
-.sidebar-user-info{flex:1;min-width:0;line-height:1.25}
-.sidebar-uname{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sidebar-ulevel{font-size:.68rem;color:var(--tx3)}
-
-.main-area{flex:1;margin-left:248px;min-width:0;display:flex;flex-direction:column}
-.topbar{height:66px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 28px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,12,17,.55);backdrop-filter:blur(20px);z-index:60}
-.topbar-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-.sidebar-toggle{display:none;width:36px;height:36px;border-radius:9px;background:var(--glass);border:1px solid var(--glass-bd);align-items:center;justify-content:center;color:var(--tx2);cursor:pointer;flex-shrink:0}
-.topbar-search{flex:1;max-width:380px;position:relative;display:flex;align-items:center}
-.topbar-search svg{position:absolute;left:13px;color:var(--tx3);pointer-events:none}
-.topbar-search input{width:100%;background:rgba(255,255,255,.03);border:1.5px solid var(--bd2);border-radius:var(--radius-sm);padding:9px 14px 9px 38px;color:var(--tx);font-size:.85rem;outline:none;transition:.2s}
-.topbar-search input:focus{border-color:var(--amber);box-shadow:0 0 0 4px var(--amber-dim)}
-.topbar-search-kbd{position:absolute;right:10px;font-size:.65rem;color:var(--tx3);background:rgba(255,255,255,.05);border:1px solid var(--bd2);border-radius:5px;padding:2px 6px}
-.topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.icon-btn{width:38px;height:38px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-bd);display:flex;align-items:center;justify-content:center;color:var(--tx2);cursor:pointer;transition:.2s;position:relative}
-.icon-btn:hover{color:var(--amber);border-color:var(--amber-bd)}
-.icon-btn .dot-badge{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 2px var(--bg-0)}
-
-.page-body{padding:28px clamp(20px,3vw,32px) 60px;display:flex;flex-direction:column;gap:22px}
-.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.page-eyebrow{font-size:.78rem;color:var(--tx3);margin-bottom:4px}
-.page-title{font-family:var(--font-display);font-size:1.55rem;font-weight:700;letter-spacing:-.4px}
-
-.widget-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
-.w-card{border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px}
-.w-3{grid-column:span 3}.w-4{grid-column:span 4}.w-6{grid-column:span 6}.w-8{grid-column:span 8}.w-12{grid-column:span 12}
-.w-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.w-title{font-size:.82rem;font-weight:700;color:var(--tx2);display:flex;align-items:center;gap:7px}
-.w-empty{color:var(--tx3);font-size:.82rem;padding:14px 0;text-align:center}
-
-@media(max-width:1100px){.w-3{grid-column:span 6}.w-4{grid-column:span 6}.w-8{grid-column:span 12}}
-@media(max-width:860px){
-  .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
-  .main-area{margin-left:0}
-  .sidebar-toggle{display:flex}
-  .topbar-search{display:none}
-  .widget-grid{grid-template-columns:1fr 1fr}
-  .w-3,.w-4,.w-6,.w-8,.w-12{grid-column:span 2}
-}
-@media(max-width:520px){
-  .widget-grid{grid-template-columns:1fr}
-  .w-3,.w-4,.w-6,.w-8,.w-12{grid-column:span 1}
-  .page-body{padding:20px 14px 50px}
-  .topbar{padding:0 14px}
-}
-
 </style>
 </head>
 <body>
@@ -319,14 +253,24 @@ const db = getFirestore(fireApp);
  * au fur et à mesure qu'ils sont construits.
  */
 async function createUserProfile(uid, { username, email }) {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
   await setDoc(doc(db, "users", uid), {
     username,
     email,
+    avatarColor: pickAvatarColor(username),
+    timezone,
     xp: 0,
     level: 1,
     createdAt: serverTimestamp(),
-    preferences: { theme: "dark", widgets: ["progress","today","projects","goals","finances"] }
+    preferences: { theme: "dark", widgets: ["progress","level","today-tasks","today-habits","today-projects","activity"] }
   });
+}
+
+function pickAvatarColor(seed){
+  const palette = ["amber","teal","coral","violet"];
+  let hash = 0;
+  for (let i=0;i<seed.length;i++) hash = (hash*31 + seed.charCodeAt(i)) % 997;
+  return palette[hash % palette.length];
 }
 
 async function getUserProfile(uid) {
