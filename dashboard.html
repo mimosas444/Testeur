@@ -53,6 +53,7 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .btn-primary:disabled{opacity:.55;cursor:wait;transform:none}
 .btn-ghost{background:transparent;color:var(--tx2);border:1.5px solid var(--bd2);border-radius:var(--radius-sm);padding:10px 18px;font-size:.83rem;font-weight:600;cursor:pointer;transition:.2s}
 .btn-ghost:hover{border-color:var(--tx2);color:var(--tx)}
+.btn-ghost.active{border-color:var(--amber);color:var(--amber);background:var(--amber-dim)}
 .btn-danger{background:var(--err-dim);color:var(--coral);border:1px solid rgba(232,97,95,.3);border-radius:8px;padding:7px 12px;font-size:.76rem;font-weight:700;cursor:pointer;transition:.2s}
 .btn-danger:hover{background:rgba(232,97,95,.22)}
 .btn-icon{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;color:var(--tx2);cursor:pointer;transition:.2s;flex-shrink:0}
@@ -95,9 +96,15 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .sidebar-user{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;cursor:pointer;transition:.15s}
 .sidebar-user:hover{background:rgba(255,255,255,.04)}
 .sidebar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--coral));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#141014;flex-shrink:0}
+.sidebar-avatar.c-amber{background:linear-gradient(135deg,var(--amber),#d4872a)}
+.sidebar-avatar.c-teal{background:linear-gradient(135deg,var(--teal),#1f8e86)}
+.sidebar-avatar.c-coral{background:linear-gradient(135deg,var(--coral),#c23d3b)}
+.sidebar-avatar.c-violet{background:linear-gradient(135deg,var(--violet),#6f5fd4)}
 .sidebar-user-info{flex:1;min-width:0;line-height:1.25}
 .sidebar-uname{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sidebar-ulevel{font-size:.68rem;color:var(--tx3)}
+.sidebar-mini-progress{height:4px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:10px}
+.sidebar-mini-progress .fill{height:100%;background:linear-gradient(90deg,var(--amber),#f4c469);border-radius:99px;transition:width .8s cubic-bezier(.23,1,.32,1)}
 
 .main-area{flex:1;margin-left:248px;min-width:0;display:flex;flex-direction:column}
 .topbar{height:66px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 28px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,12,17,.55);backdrop-filter:blur(20px);z-index:60}
@@ -186,6 +193,38 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .view-section{display:flex;flex-direction:column;gap:22px}
 .placeholder-card{padding:60px 24px;text-align:center;color:var(--tx3)}
 .placeholder-icon{font-size:2.2rem;margin-bottom:12px}
+
+/* ── Activity feed ── */
+.activity-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.activity-row:last-child{border-bottom:none}
+.activity-dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.activity-text{font-size:.82rem;color:var(--tx)}
+.activity-time{font-size:.7rem;color:var(--tx3);margin-top:2px}
+
+/* ── Profile page ── */
+.profile-hero{display:flex;align-items:center;gap:20px;padding:26px;flex-wrap:wrap}
+.profile-avatar-lg{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.6rem;color:#141014;flex-shrink:0}
+.profile-hero-info{flex:1;min-width:180px}
+.profile-hero-name{font-family:var(--font-display);font-size:1.3rem;font-weight:700}
+.profile-hero-email{font-size:.8rem;color:var(--tx3);margin-top:2px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.stat-box{padding:16px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--bd);text-align:center}
+.stat-num{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--amber)}
+.stat-label{font-size:.7rem;color:var(--tx3);margin-top:3px}
+
+/* ── Settings page ── */
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--bd)}
+.settings-row:last-child{border-bottom:none}
+.settings-row-label{font-size:.87rem;font-weight:600}
+.settings-row-desc{font-size:.75rem;color:var(--tx3);margin-top:2px}
+.toggle-switch{width:42px;height:24px;border-radius:99px;background:rgba(255,255,255,.09);border:1px solid var(--bd2);position:relative;cursor:pointer;flex-shrink:0;transition:.2s}
+.toggle-switch.on{background:var(--amber-dim);border-color:var(--amber-bd)}
+.toggle-switch .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--tx3);transition:.2s}
+.toggle-switch.on .knob{left:20px;background:var(--amber)}
+
+/* ── XP toast (level up) ── */
+.xp-float{position:fixed;top:80px;right:28px;background:linear-gradient(135deg,var(--amber),#d4872a);color:#141014;font-weight:700;font-size:.85rem;padding:10px 18px;border-radius:12px;z-index:998;box-shadow:0 14px 34px -8px rgba(232,163,61,.5);opacity:0;transform:translateY(-8px);transition:.3s}
+.xp-float.show{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
@@ -244,6 +283,7 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
           <div class="sidebar-ulevel" id="sb-level">Niveau 1</div>
         </div>
       </div>
+      <div class="sidebar-mini-progress"><div class="fill" id="sb-mini-xp" style="width:0%"></div></div>
     </div>
   </aside>
 
@@ -258,7 +298,7 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
         </div>
       </div>
       <div class="topbar-right">
-        <button class="icon-btn" id="notif-btn" title="Notifications"><span class="dot-badge" id="notif-dot"></span><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 8a5 5 0 0110 0c0 4 1.5 5 1.5 5h-13S5 12 5 8z"/><path d="M8.3 16a1.8 1.8 0 003.4 0"/></svg></button>
+        <button class="icon-btn" id="notif-btn" title="Notifications"><span class="dot-badge hidden" id="notif-dot"></span><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 8a5 5 0 0110 0c0 4 1.5 5 1.5 5h-13S5 12 5 8z"/><path d="M8.3 16a1.8 1.8 0 003.4 0"/></svg></button>
         <button class="icon-btn" id="logout-btn" title="Déconnexion"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 17H4a1 1 0 01-1-1V4a1 1 0 011-1h3M13 14l4-4-4-4M17 10H7"/></svg></button>
       </div>
     </header>
@@ -321,6 +361,11 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
             <div class="w-card glass w-4">
               <div class="w-head"><div class="w-title">Projets actifs</div></div>
               <div class="list-col" id="today-projects-list"><div class="w-empty">Aucun projet en cours.</div></div>
+            </div>
+
+            <div class="w-card glass w-4">
+              <div class="w-head"><div class="w-title">Activité récente</div></div>
+              <div class="list-col" id="today-activity-list"><div class="w-empty">Ton activité apparaîtra ici.</div></div>
             </div>
           </div>
         </section>
@@ -390,6 +435,69 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
           </div>
         </section>
 
+        <!-- ═══ VUE : PROFIL ═══ -->
+        <section class="view-section hidden" id="view-profile">
+          <div class="page-head"><div><div class="page-eyebrow">Ton espace</div><h1 class="page-title">Profil</h1></div></div>
+
+          <div class="w-card glass profile-hero">
+            <div class="profile-avatar-lg" id="profile-avatar-lg">?</div>
+            <div class="profile-hero-info">
+              <div class="profile-hero-name" id="profile-name">—</div>
+              <div class="profile-hero-email" id="profile-email">—</div>
+            </div>
+            <div style="min-width:200px;flex:1">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--tx3);margin-bottom:6px">
+                <span id="profile-level-label">Niveau 1</span><span id="profile-xp-label">0 / 100 XP</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" id="profile-xp-fill"></div></div>
+            </div>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:6px">Tes chiffres</div>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-num" id="stat-tasks-done">0</div><div class="stat-label">Tâches terminées</div></div>
+              <div class="stat-box"><div class="stat-num" id="stat-projects-done">0</div><div class="stat-label">Projets terminés</div></div>
+              <div class="stat-box"><div class="stat-num" id="stat-habit-streak">0</div><div class="stat-label">Meilleur streak (jours)</div></div>
+              <div class="stat-box"><div class="stat-num" id="stat-active-habits">0</div><div class="stat-label">Habitudes suivies</div></div>
+            </div>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-head"><div class="w-title">Activité récente</div></div>
+            <div class="list-col" id="profile-activity-list"><div class="w-empty">Aucune activité pour l'instant.</div></div>
+          </div>
+        </section>
+
+        <!-- ═══ VUE : PARAMÈTRES ═══ -->
+        <section class="view-section hidden" id="view-settings">
+          <div class="page-head"><div><div class="page-eyebrow">Ton espace</div><h1 class="page-title">Paramètres</h1></div></div>
+
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:4px">Compte</div>
+            <form class="quick-form" id="settings-account-form" style="margin-top:8px">
+              <div class="field grow input-wrap"><label>Nom d'utilisateur</label><input type="text" id="settings-username" minlength="3" maxlength="20" required/></div>
+              <div class="field grow input-wrap"><label>Email</label><input type="email" id="settings-email" disabled/></div>
+              <button type="submit" class="btn-primary"><span>Enregistrer</span></button>
+            </form>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:4px">Préférences</div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Fuseau horaire</div><div class="settings-row-desc" id="settings-timezone-desc">—</div></div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Apparence</div><div class="settings-row-desc">Thème sombre — le seul disponible pour le moment</div></div>
+            </div>
+          </div>
+
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:4px">Widgets du tableau de bord "Aujourd'hui"</div>
+            <div id="settings-widgets-list" style="margin-top:8px"></div>
+          </div>
+        </section>
+
         <!-- ═══ VUES PLACEHOLDER (à construire) ═══ -->
         <section class="view-section hidden" id="view-placeholder">
           <div class="page-head"><div><div class="page-eyebrow">Bientôt</div><h1 class="page-title" id="placeholder-title">—</h1></div></div>
@@ -405,6 +513,7 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 </div>
 
 <div id="toast" class="toast hidden"></div>
+<div id="xp-float" class="xp-float"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -413,7 +522,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp,
-  collection, addDoc, deleteDoc, onSnapshot, query, orderBy, increment
+  collection, addDoc, deleteDoc, onSnapshot, query, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -435,7 +544,15 @@ function escHtml(str){ return String(str||"").replace(/&/g,"&amp;").replace(/</g
 function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
 
 let currentUser = null, profile = null;
-let tasks = [], projects = [], habits = [];
+let tasks = [], projects = [], habits = [], activities = [];
+
+const AVATAR_COLORS = ["amber","teal","coral","violet"];
+function avatarColorFor(profileData, uid){
+  if (profileData && AVATAR_COLORS.includes(profileData.avatarColor)) return profileData.avatarColor;
+  let hash = 0; const seed = uid || "x";
+  for (let i=0;i<seed.length;i++) hash = (hash*31 + seed.charCodeAt(i)) % 997;
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
 
 // ── AUTH GUARD ──
 onAuthStateChanged(auth, async (user) => {
@@ -443,18 +560,21 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
-    profile = snap.exists() ? snap.data() : { username: user.email?.split("@")[0]||"toi", xp:0, level:1 };
+    profile = snap.exists() ? snap.data() : { username: user.email?.split("@")[0]||"toi", email:user.email, xp:0, level:1 };
   } catch(e){
     console.error("Erreur chargement profil:", e);
-    profile = { username: user.email?.split("@")[0]||"toi", xp:0, level:1 };
+    profile = { username: user.email?.split("@")[0]||"toi", email:user.email, xp:0, level:1 };
   }
   renderShell();
   $("dash-skeleton").classList.add("hidden");
   $("dash-content").classList.remove("hidden");
   renderTodayHeader();
+  renderProfilePage();
+  renderSettingsPage();
   listenTasks();
   listenProjects();
   listenHabits();
+  listenActivities();
 }, (err) => {
   console.error("Auth error:", err);
   showToast("⚠️ Erreur de connexion. Réessaie.");
@@ -462,8 +582,10 @@ onAuthStateChanged(auth, async (user) => {
 
 function renderShell(){
   const username = profile?.username || "toi";
+  const color = avatarColorFor(profile, currentUser.uid);
   $("sb-username").textContent = username;
   $("sb-avatar").textContent = username[0].toUpperCase();
+  $("sb-avatar").className = "sidebar-avatar c-" + color;
   $("sb-level").textContent = `Niveau ${profile?.level || 1}`;
   updateXpWidget();
 }
@@ -476,31 +598,108 @@ function renderTodayHeader(){
   $("page-greeting").textContent = `${greet}, ${profile?.username||"toi"} 👋`;
 }
 
+function xpForLevel(level){ return level * 100; }
+
 function updateXpWidget(){
   const level = profile?.level || 1;
   const xp = profile?.xp || 0;
-  const xpForNext = level * 100;
+  const xpForNext = xpForLevel(level);
   $("widget-level").textContent = `Niveau ${level}`;
   $("xp-label").textContent = `${xp} / ${xpForNext} XP`;
   $("xp-fill").style.width = Math.min(100, (xp/xpForNext)*100) + "%";
+  $("sb-mini-xp").style.width = Math.min(100, (xp/xpForNext)*100) + "%";
+  renderProfilePage();
 }
 
-async function awardXP(amount){
+/**
+ * Système XP anti-duplication (règle 42).
+ * eventId doit être déterministe et unique par action (ex: "task_done_<taskId>").
+ * On vérifie d'abord /users/{uid}/xpEvents/{eventId} avant d'attribuer l'XP.
+ */
+async function awardXPOnce(eventId, amount, label){
   if (!currentUser) return;
+  const evRef = doc(db, "users", currentUser.uid, "xpEvents", eventId);
+  try {
+    const evSnap = await getDoc(evRef);
+    if (evSnap.exists()) return; // déjà récompensé, on ne redonne rien
+    await setDoc(evRef, { amount, label, createdAt: serverTimestamp() });
+  } catch(e){ console.error("xpEvents check failed:", e); return; }
+
   let level = profile.level || 1;
   let xp = (profile.xp || 0) + amount;
-  let xpForNext = level * 100;
-  while (xp >= xpForNext){ xp -= xpForNext; level += 1; xpForNext = level * 100; }
+  let xpForNext = xpForLevel(level);
+  let leveledUp = false;
+  while (xp >= xpForNext){ xp -= xpForNext; level += 1; xpForNext = xpForLevel(level); leveledUp = true; }
   profile.level = level; profile.xp = xp;
   updateXpWidget();
   $("sb-level").textContent = `Niveau ${level}`;
   try { await updateDoc(doc(db,"users",currentUser.uid), { xp, level }); }
   catch(e){ console.error("XP update failed:", e); }
+
+  showXpFloat(`+${amount} XP · ${label}`, leveledUp ? level : null);
+}
+
+/** Annule une récompense XP si l'action est défaite (ex: tâche décochée). */
+async function revokeXPOnce(eventId){
+  if (!currentUser) return;
+  const evRef = doc(db, "users", currentUser.uid, "xpEvents", eventId);
+  try {
+    const evSnap = await getDoc(evRef);
+    if (!evSnap.exists()) return;
+    const amount = evSnap.data().amount || 0;
+    await deleteDoc(evRef);
+    let level = profile.level || 1;
+    let xp = (profile.xp || 0) - amount;
+    while (xp < 0 && level > 1){ level -= 1; xp += xpForLevel(level); }
+    if (xp < 0) xp = 0;
+    profile.level = level; profile.xp = xp;
+    updateXpWidget();
+    $("sb-level").textContent = `Niveau ${level}`;
+    await updateDoc(doc(db,"users",currentUser.uid), { xp, level });
+  } catch(e){ console.error("XP revoke failed:", e); }
+}
+
+function showXpFloat(msg, newLevel){
+  const el = $("xp-float");
+  el.textContent = newLevel ? `NIVEAU SUPÉRIEUR · Niveau ${newLevel}` : msg;
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), 2400);
+}
+
+/** Journal d'activité (règle 38) — écriture réelle dans Firestore. */
+async function logActivity(text, type){
+  if (!currentUser) return;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"activities"), { text, type, createdAt: serverTimestamp() });
+  } catch(e){ console.error("activity log failed:", e); }
+}
+
+function listenActivities(){
+  const q = query(collection(db,"users",currentUser.uid,"activities"), orderBy("createdAt","desc"), limit(12));
+  onSnapshot(q, (snap) => {
+    activities = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+    renderActivityWidgets();
+  }, (err) => console.error("activities listener:", err));
+}
+
+const ACTIVITY_COLORS = { task:"var(--amber)", project:"var(--teal)", habit:"var(--coral)" };
+function activityRowHtml(a){
+  const time = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "à l'instant";
+  return `<div class="activity-row">
+    <div class="activity-dot" style="background:${ACTIVITY_COLORS[a.type]||'var(--tx3)'}"></div>
+    <div><div class="activity-text">${escHtml(a.text)}</div><div class="activity-time">${time}</div></div>
+  </div>`;
+}
+function renderActivityWidgets(){
+  const html = activities.length ? activities.map(activityRowHtml).join("") : '<div class="w-empty">Ton activité apparaîtra ici.</div>';
+  const todayList = $("today-activity-list"); if (todayList) todayList.innerHTML = activities.length ? activities.slice(0,6).map(activityRowHtml).join("") : '<div class="w-empty">Ton activité apparaîtra ici.</div>';
+  const profileList = $("profile-activity-list"); if (profileList) profileList.innerHTML = html;
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const realPages = { today:"view-today", tasks:"view-tasks", projects:"view-projects", habits:"view-habits" };
-const pageLabels = { goals:"Objectifs", quests:"Quêtes", calendar:"Calendrier", time:"Temps", "finances-overview":"Vue d'ensemble", "finances-income":"Revenus", "finances-expenses":"Dépenses", "finances-budgets":"Budgets", "finances-goals":"Objectifs financiers", "finances-debts":"Dettes & emprunts", notes:"Notes", stats:"Statistiques", profile:"Profil", settings:"Paramètres" };
+const realPages = { today:"view-today", tasks:"view-tasks", projects:"view-projects", habits:"view-habits", profile:"view-profile", settings:"view-settings" };
+const pageLabels = { goals:"Objectifs", quests:"Quêtes", calendar:"Calendrier", time:"Temps", "finances-overview":"Vue d'ensemble", "finances-income":"Revenus", "finances-expenses":"Dépenses", "finances-budgets":"Budgets", "finances-goals":"Objectifs financiers", "finances-debts":"Dettes & emprunts", notes:"Notes", stats:"Statistiques" };
 
 function showPage(page){
   document.querySelectorAll(".view-section").forEach(s=>s.classList.add("hidden"));
@@ -518,6 +717,7 @@ function showPage(page){
 document.querySelectorAll(".sidebar-link").forEach(link=>{
   link.addEventListener("click", () => showPage(link.dataset.page));
 });
+$("sidebar-user-btn").addEventListener("click", () => showPage("profile"));
 
 // ═══════════════ TÂCHES ═══════════════
 function listenTasks(){
@@ -527,6 +727,7 @@ function listenTasks(){
     renderTasks();
     renderTodayWidgets();
     renderGlobalProgress();
+    renderProfilePage();
   }, (err) => { console.error("tasks listener:", err); showToast("⚠️ Impossible de charger les tâches."); });
 }
 
@@ -581,7 +782,8 @@ async function toggleTask(id){
   const newStatus = t.status === "done" ? "todo" : "done";
   try {
     await updateDoc(doc(db,"users",currentUser.uid,"tasks",id), { status: newStatus });
-    if (newStatus === "done") awardXP(10);
+    if (newStatus === "done") { awardXPOnce(`task_done_${id}`, 10, "tâche terminée"); logActivity(`Tâche terminée : ${t.title}`, "task"); }
+    else { revokeXPOnce(`task_done_${id}`); }
   } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 async function deleteTask(id){
@@ -597,6 +799,7 @@ function listenProjects(){
     renderProjects();
     renderTodayWidgets();
     renderGlobalProgress();
+    renderProfilePage();
   }, (err) => { console.error("projects listener:", err); showToast("⚠️ Impossible de charger les projets."); });
 }
 
@@ -653,7 +856,8 @@ async function updateProjectProgress(id, value){
   const wasComplete = p.progress >= 100;
   try {
     await updateDoc(doc(db,"users",currentUser.uid,"projects",id), { progress: value, status: value>=100 ? "terminé" : (p.status==="terminé"?"en cours":p.status) });
-    if (value >= 100 && !wasComplete) awardXP(30);
+    if (value >= 100 && !wasComplete) { awardXPOnce(`project_done_${id}`, 50, "projet terminé"); logActivity(`Projet terminé : ${p.name}`, "project"); }
+    if (value < 100 && wasComplete) { revokeXPOnce(`project_done_${id}`); }
   } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 async function deleteProject(id){
@@ -669,6 +873,7 @@ function listenHabits(){
     renderHabits();
     renderTodayWidgets();
     renderGlobalProgress();
+    renderProfilePage();
   }, (err) => { console.error("habits listener:", err); showToast("⚠️ Impossible de charger les habitudes."); });
 }
 
@@ -699,6 +904,20 @@ function computeStreak(checkins){
     else break;
   }
   return streak;
+}
+
+function computeBestStreak(checkins){
+  if (!checkins || !checkins.length) return 0;
+  const sorted = [...checkins].sort();
+  let best = 1, cur = 1;
+  for (let i=1;i<sorted.length;i++){
+    const prev = new Date(sorted[i-1]+"T00:00");
+    const cur2 = new Date(sorted[i]+"T00:00");
+    const diffDays = Math.round((cur2-prev)/86400000);
+    if (diffDays === 1){ cur++; best = Math.max(best, cur); }
+    else if (diffDays > 1){ cur = 1; }
+  }
+  return best;
 }
 
 function habitRowHtml(h){
@@ -734,7 +953,8 @@ async function toggleHabitToday(id){
   const newCheckins = already ? checkins.filter(d=>d!==today) : [...checkins, today];
   try {
     await updateDoc(doc(db,"users",currentUser.uid,"habits",id), { checkins: newCheckins });
-    if (!already) awardXP(15);
+    if (!already) { awardXPOnce(`habit_${id}_${today}`, 5, "habitude complétée"); logActivity(`Habitude complétée : ${h.name}`, "habit"); }
+    else { revokeXPOnce(`habit_${id}_${today}`); }
   } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 async function deleteHabit(id){
@@ -793,6 +1013,82 @@ function renderGlobalProgress(){
   $("global-progress-fill").style.width = pct + "%";
 }
 
+// ═══════════════ PROFIL ═══════════════
+function renderProfilePage(){
+  if (!currentUser || !profile) return;
+  const username = profile.username || "toi";
+  const color = avatarColorFor(profile, currentUser.uid);
+  $("profile-avatar-lg").textContent = username[0].toUpperCase();
+  $("profile-avatar-lg").className = "profile-avatar-lg c-" + color;
+  $("profile-avatar-lg").style.background = ({amber:"linear-gradient(135deg,var(--amber),#d4872a)",teal:"linear-gradient(135deg,var(--teal),#1f8e86)",coral:"linear-gradient(135deg,var(--coral),#c23d3b)",violet:"linear-gradient(135deg,var(--violet),#6f5fd4)"})[color];
+  $("profile-name").textContent = username;
+  $("profile-email").textContent = profile.email || currentUser.email || "";
+
+  const level = profile.level || 1, xp = profile.xp || 0, xpNext = xpForLevel(level);
+  $("profile-level-label").textContent = `Niveau ${level}`;
+  $("profile-xp-label").textContent = `${xp} / ${xpNext} XP`;
+  $("profile-xp-fill").style.width = Math.min(100,(xp/xpNext)*100) + "%";
+
+  $("stat-tasks-done").textContent = tasks.filter(t=>t.status==="done").length;
+  $("stat-projects-done").textContent = projects.filter(p=>p.status==="terminé").length;
+  const bestStreaks = habits.map(h=>computeBestStreak(h.checkins));
+  $("stat-habit-streak").textContent = bestStreaks.length ? Math.max(...bestStreaks) : 0;
+  $("stat-active-habits").textContent = habits.length;
+}
+
+// ═══════════════ PARAMÈTRES ═══════════════
+const WIDGET_DEFS = [
+  { key:"today-tasks", label:"Tâches du jour" },
+  { key:"today-habits", label:"Habitudes" },
+  { key:"today-projects", label:"Projets actifs" },
+  { key:"activity", label:"Activité récente" }
+];
+
+function renderSettingsPage(){
+  if (!profile) return;
+  $("settings-username").value = profile.username || "";
+  $("settings-email").value = profile.email || currentUser.email || "";
+  $("settings-timezone-desc").textContent = profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "Non défini";
+
+  const activeWidgets = profile.preferences?.widgets || WIDGET_DEFS.map(w=>w.key);
+  $("settings-widgets-list").innerHTML = WIDGET_DEFS.map(w => `
+    <div class="settings-row">
+      <div><div class="settings-row-label">${w.label}</div></div>
+      <div class="toggle-switch ${activeWidgets.includes(w.key)?"on":""}" data-widget="${w.key}"><div class="knob"></div></div>
+    </div>`).join("");
+
+  $("settings-widgets-list").querySelectorAll(".toggle-switch").forEach(el=>{
+    el.addEventListener("click", () => toggleWidget(el.dataset.widget, el));
+  });
+}
+
+async function toggleWidget(key, el){
+  const current = profile.preferences?.widgets || WIDGET_DEFS.map(w=>w.key);
+  const isOn = current.includes(key);
+  const updated = isOn ? current.filter(k=>k!==key) : [...current, key];
+  profile.preferences = { ...(profile.preferences||{}), widgets: updated };
+  el.classList.toggle("on", !isOn);
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid), { "preferences.widgets": updated });
+    showToast(isOn ? "Widget masqué du tableau de bord." : "Widget affiché sur le tableau de bord.");
+  } catch(e){ console.error(e); showToast("⚠️ Erreur lors de l'enregistrement."); }
+}
+
+$("settings-account-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = $("settings-username").value.trim();
+  if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) { showToast("⚠️ Pseudo invalide (3-20 caractères)."); return; }
+  const btn = e.target.querySelector("button");
+  btn.disabled = true;
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid), { username });
+    profile.username = username;
+    renderShell(); renderTodayHeader(); renderProfilePage();
+    showToast("✅ Profil mis à jour.");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'enregistrement."); }
+  btn.disabled = false;
+});
+
 // ═══════════════ TOPBAR ═══════════════
 $("logout-btn").addEventListener("click", () => signOut(auth));
 $("sidebar-toggle-btn").addEventListener("click", () => $("sidebar").classList.toggle("open"));
@@ -802,7 +1098,7 @@ $("global-search").addEventListener("input", (e) => {
   const term = e.target.value.trim().toLowerCase();
   if (!term){ return; }
   const hit = [...tasks, ...projects, ...habits].find(x => (x.title||x.name||"").toLowerCase().includes(term));
-  if (hit) { /* résultats affichés dans les vues respectives — recherche complète à venir */ }
+  if (hit) { /* résultats affichés dans les vues respectives — recherche complète à venir en Phase 6 */ }
 });
 
 // ═══════════════ TOAST ═══════════════
