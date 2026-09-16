@@ -82,13 +82,15 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .btn-icon:hover{color:var(--tx);border-color:var(--tx2)}
 .btn-full{width:100%}
 .btn-sm-link{background:none;border:none;color:var(--amber);font-size:.76rem;font-weight:700;cursor:pointer;padding:0}
+.btn-xs{background:rgba(128,128,128,.08);border:1px solid var(--bd2);color:var(--tx2);font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;transition:.15s}
+.btn-xs:hover{border-color:var(--amber);color:var(--amber)}
 .seg-control{display:flex;gap:4px;background:rgba(128,128,128,.08);border:1px solid var(--bd2);border-radius:var(--radius-sm);padding:3px}
-.seg-btn{flex:1;background:transparent;border:none;color:var(--tx2);font-size:.78rem;font-weight:700;padding:7px 10px;border-radius:7px;cursor:pointer;transition:.15s}
+.seg-btn{flex:1;background:transparent;border:none;color:var(--tx2);font-size:.78rem;font-weight:700;padding:7px 10px;border-radius:7px;cursor:pointer;transition:.15s;white-space:nowrap}
 .seg-btn.active{background:var(--amber-dim);color:var(--amber)}
 
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:.72rem;font-weight:600;color:var(--tx2)}
-.input-wrap input,.input-wrap textarea,.input-wrap select{width:100%;background:rgba(128,128,128,.07);border:1.5px solid var(--bd2);border-radius:var(--radius-sm);color:var(--tx);font-size:.88rem;padding:10px 13px;outline:none;transition:.2s}
+.input-wrap input,.input-wrap textarea,.input-wrap select{width:100%;background:rgba(128,128,128,.07);border:1.5px solid var(--bd2);border-radius:var(--radius-sm);color:var(--tx);font-size:.88rem;padding:10px 13px;outline:none;transition:.2s;resize:vertical}
 .input-wrap input:focus,.input-wrap textarea:focus,.input-wrap select:focus{border-color:var(--amber);box-shadow:0 0 0 4px var(--amber-dim)}
 .input-wrap input::placeholder,.input-wrap textarea::placeholder{color:var(--tx3)}
 .input-wrap select{cursor:pointer}
@@ -99,6 +101,7 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 .progress-track{width:100%;height:8px;border-radius:99px;background:rgba(128,128,128,.14);overflow:hidden}
 .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--amber),#f4c469);width:0%;transition:width 1s cubic-bezier(.23,1,.32,1);position:relative}
 .progress-fill.teal{background:linear-gradient(90deg,var(--teal),#6fe0d6)}
+.progress-fill.coral{background:linear-gradient(90deg,var(--coral),#f28d8b)}
 .progress-fill.pulse::after{content:'';position:absolute;inset:0;border-radius:99px;background:rgba(255,255,255,.65);animation:pulseFade .6s ease-out}
 @keyframes pulseFade{from{opacity:.9}to{opacity:0}}
 
@@ -113,16 +116,20 @@ h1,h2,h3,.font-display{font-family:var(--font-display)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
 
 .app-shell{display:flex;min-height:100dvh;position:relative;z-index:1}
-.sidebar{width:248px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--bd);background:var(--glass);backdrop-filter:blur(20px);position:fixed;top:0;bottom:0;left:0;z-index:80;transition:transform .25s,background-color .4s}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:75;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.sidebar-overlay.show{opacity:1;pointer-events:auto}
+@media(min-width:861px){.sidebar-overlay{display:none}}
+.sidebar{width:248px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--bd);background:var(--glass);backdrop-filter:blur(20px);position:fixed;top:0;bottom:0;left:0;z-index:80;transition:transform .25s cubic-bezier(.23,1,.32,1),background-color .4s,box-shadow .25s}
 .sidebar-mark{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:1.02rem;padding:22px 22px 18px}
 .sidebar-mark .dot{color:var(--amber)}
 .sidebar-nav{flex:1;overflow-y:auto;padding:6px 14px;display:flex;flex-direction:column;gap:2px}
 .sidebar-group-label{font-size:.65rem;font-weight:700;letter-spacing:.6px;color:var(--tx3);padding:16px 10px 6px}
-.sidebar-link{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--tx2);font-size:.86rem;font-weight:600;cursor:pointer;transition:.15s;border:1px solid transparent}
+.sidebar-link{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--tx2);font-size:.86rem;font-weight:600;cursor:pointer;transition:.15s;border:1px solid transparent;position:relative}
 .sidebar-link svg{flex-shrink:0;opacity:.85}
 .sidebar-link:hover{background:rgba(128,128,128,.08);color:var(--tx)}
 .sidebar-link.active{background:var(--amber-dim);color:var(--amber);border-color:var(--amber-bd)}
 .sidebar-link.active svg{opacity:1}
+.sidebar-link.active::before{content:'';position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:3px;height:16px;border-radius:0 4px 4px 0;background:var(--amber)}
 .sidebar-foot{padding:14px;border-top:1px solid var(--bd)}
 .sidebar-user{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;cursor:pointer;transition:.15s}
 .sidebar-user:hover{background:rgba(128,128,128,.08)}
@@ -175,7 +182,7 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
 @media(max-width:1100px){.w-3{grid-column:span 6}.w-4{grid-column:span 6}.w-8{grid-column:span 12}}
 @media(max-width:860px){
   .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
+  .sidebar.open{transform:translateX(0);box-shadow:20px 0 60px -20px rgba(0,0,0,.5)}
   .main-area{margin-left:0}
   .sidebar-toggle{display:flex}
   .topbar-search{display:none}
@@ -227,6 +234,9 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
 .project-tasklist{display:flex;flex-direction:column;gap:6px;padding-top:8px;border-top:1px solid var(--bd);margin-top:2px}
 .project-tasklist .item-row{padding:8px 10px;background:rgba(128,128,128,.03)}
 .project-tasklist .item-title{font-size:.82rem}
+.mini-add-row{display:flex;gap:6px;margin-top:4px}
+.mini-add-row input{flex:1;background:rgba(128,128,128,.07);border:1.5px solid var(--bd2);border-radius:8px;color:var(--tx);font-size:.8rem;padding:7px 10px;outline:none}
+.mini-add-row input:focus{border-color:var(--amber)}
 
 .habit-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);animation:fadeUp .35s cubic-bezier(.23,1,.32,1) both}
 .habit-info{flex:1;min-width:0}
@@ -323,11 +333,53 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
 .tx-amount{font-weight:700;font-size:.9rem;flex-shrink:0}
 .tx-amount.income{color:var(--teal)}
 .tx-amount.expense{color:var(--coral)}
+
+/* ── Budgets ── */
+.budget-row{padding:14px 16px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);display:flex;flex-direction:column;gap:8px;animation:fadeUp .3s ease both}
+.budget-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.budget-cat{font-size:.87rem;font-weight:700}
+.budget-nums{font-size:.76rem;color:var(--tx3)}
+.budget-alert{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:99px}
+.budget-alert.warn{background:var(--amber-dim);color:var(--amber)}
+.budget-alert.over{background:var(--coral-dim);color:var(--coral)}
+
+/* ── Debts & loans ── */
+.debt-row{padding:14px 16px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);display:flex;flex-direction:column;gap:8px;animation:fadeUp .3s ease both}
+.debt-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.debt-type-badge{font-size:.64rem;font-weight:700;padding:2px 9px;border-radius:99px}
+.debt-type-badge.debt{background:var(--coral-dim);color:var(--coral)}
+.debt-type-badge.loan{background:var(--teal-dim);color:var(--teal)}
+
+/* ── Notes ── */
+.notes-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.note-card{padding:16px;border-radius:16px;background:rgba(128,128,128,.045);border:1px solid var(--bd);display:flex;flex-direction:column;gap:8px;animation:fadeUp .3s ease both;transition:.2s}
+.note-card:hover{border-color:var(--bd2)}
+.note-title{font-weight:700;font-size:.9rem}
+.note-content{font-size:.8rem;color:var(--tx2);line-height:1.5;white-space:pre-wrap;max-height:110px;overflow:hidden}
+.note-tags{display:flex;gap:5px;flex-wrap:wrap}
+.note-tag{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--violet-dim);color:var(--violet)}
+.note-foot{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.note-date{font-size:.68rem;color:var(--tx3)}
+.note-actions{display:flex;gap:6px}
+.star-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--tx3);transition:.15s}
+.star-btn.active{color:var(--amber)}
+
+/* ── Time tracking ── */
+.timer-display{font-family:var(--font-display);font-size:3rem;font-weight:700;text-align:center;letter-spacing:1px}
+.timer-controls{display:flex;gap:10px;justify-content:center}
+.session-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);animation:fadeUp .3s ease both}
+
+/* ── Quests ── */
+.quest-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;background:rgba(128,128,128,.045);border:1px solid var(--bd);animation:fadeUp .3s ease both}
+.quest-item.completed{opacity:.6}
+.quest-type-badge{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--violet-dim);color:var(--violet);text-transform:capitalize}
 </style>
 </head>
 <body>
 
 <div class="app-shell">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-mark">Life<span class="dot">OS</span></div>
@@ -419,52 +471,39 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
 
       <div id="dash-content" class="hidden">
 
-        <!-- ═══ VUE : AUJOURD'HUI ═══ -->
+        <!-- ═══ AUJOURD'HUI ═══ -->
         <section class="view-section" id="view-today">
           <div class="page-head">
-            <div>
-              <div class="page-eyebrow" id="page-date">—</div>
-              <h1 class="page-title" id="page-greeting">Bonjour 👋</h1>
-            </div>
+            <div><div class="page-eyebrow" id="page-date">—</div><h1 class="page-title" id="page-greeting">Bonjour 👋</h1></div>
           </div>
-
           <div class="widget-grid">
             <div class="w-card glass liftable w-8">
               <div class="w-head"><div class="w-title">Ma progression</div></div>
               <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
-                <div>
-                  <div style="font-family:var(--font-display);font-size:2.2rem;font-weight:700" id="global-progress-pct">0%</div>
-                  <div style="font-size:.76rem;color:var(--tx3)">Progression globale — calculée automatiquement</div>
-                </div>
-                <div style="flex:1;min-width:160px">
-                  <div class="progress-track"><div class="progress-fill" id="global-progress-fill"></div></div>
-                </div>
+                <div><div style="font-family:var(--font-display);font-size:2.2rem;font-weight:700" id="global-progress-pct">0%</div>
+                <div style="font-size:.76rem;color:var(--tx3)">Progression globale — calculée automatiquement</div></div>
+                <div style="flex:1;min-width:160px"><div class="progress-track"><div class="progress-fill" id="global-progress-fill"></div></div></div>
               </div>
               <div class="w-empty" id="global-progress-empty">Crée un projet ou une tâche pour voir ta progression ici.</div>
             </div>
-
             <div class="w-card glass liftable w-4">
               <div class="w-head"><div class="w-title">Niveau</div></div>
               <div style="font-family:var(--font-display);font-size:1.7rem;font-weight:700" id="widget-level">Niveau 1</div>
               <div class="progress-track"><div class="progress-fill teal" id="xp-fill" style="width:0%"></div></div>
               <div style="font-size:.72rem;color:var(--tx3)" id="xp-label">0 / 100 XP</div>
             </div>
-
             <div class="w-card glass liftable w-4">
               <div class="w-head"><div class="w-title">Tâches du jour</div><span style="font-size:.7rem;color:var(--tx3)" id="tasks-today-count"></span></div>
               <div class="list-col" id="today-tasks-list"><div class="w-empty">Aucune tâche pour aujourd'hui.</div></div>
             </div>
-
             <div class="w-card glass liftable w-4">
               <div class="w-head"><div class="w-title">Habitudes</div></div>
               <div class="list-col" id="today-habits-list"><div class="w-empty">Pas encore d'habitude suivie.</div></div>
             </div>
-
             <div class="w-card glass liftable w-4">
               <div class="w-head"><div class="w-title">Projets actifs</div></div>
               <div class="list-col" id="today-projects-list"><div class="w-empty">Aucun projet en cours.</div></div>
             </div>
-
             <div class="w-card glass liftable w-4">
               <div class="w-head"><div class="w-title">Activité récente</div></div>
               <div class="list-col" id="today-activity-list"><div class="w-empty">Ton activité apparaîtra ici.</div></div>
@@ -472,79 +511,94 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
           </div>
         </section>
 
-        <!-- ═══ VUE : TÂCHES ═══ -->
+        <!-- ═══ TÂCHES ═══ -->
         <section class="view-section hidden" id="view-tasks">
           <div class="page-head"><div><div class="page-eyebrow">Gestion</div><h1 class="page-title">Tâches</h1></div></div>
-
           <div class="w-card glass">
             <div class="w-title">Nouvelle tâche</div>
             <form class="quick-form" id="task-form">
               <div class="field grow input-wrap"><label>Titre</label><input type="text" id="task-title" placeholder="Ex : Préparer la présentation" required/></div>
-              <div class="field input-wrap"><label>Projet lié</label>
-                <select id="task-project"><option value="">Aucun</option></select>
-              </div>
-              <div class="field input-wrap"><label>Priorité</label>
-                <select id="task-priority"><option value="basse">Basse</option><option value="moyenne" selected>Moyenne</option><option value="haute">Haute</option></select>
-              </div>
+              <div class="field input-wrap"><label>Projet lié</label><select id="task-project"><option value="">Aucun</option></select></div>
+              <div class="field input-wrap"><label>Priorité</label><select id="task-priority"><option value="basse">Basse</option><option value="moyenne" selected>Moyenne</option><option value="haute">Haute</option></select></div>
               <div class="field input-wrap"><label>Échéance</label><input type="date" id="task-deadline"/></div>
               <button type="submit" class="btn-primary"><span>Ajouter</span></button>
             </form>
           </div>
-
           <div class="w-card glass">
             <div class="w-head"><div class="w-title">Toutes les tâches</div><span style="font-size:.72rem;color:var(--tx3)" id="tasks-count"></span></div>
             <div class="list-col" id="all-tasks-list"><div class="w-empty">Aucune tâche pour l'instant.</div></div>
           </div>
         </section>
 
-        <!-- ═══ VUE : PROJETS ═══ -->
+        <!-- ═══ PROJETS ═══ -->
         <section class="view-section hidden" id="view-projects">
           <div class="page-head"><div><div class="page-eyebrow">Gestion</div><h1 class="page-title">Projets</h1></div></div>
-
           <div class="w-card glass">
             <div class="w-title">Nouveau projet</div>
-            <p style="font-size:.76rem;color:var(--tx3)">La progression se calcule automatiquement à partir des tâches que tu lies à ce projet — coche-les au jour le jour, la barre se remplit toute seule.</p>
+            <p style="font-size:.76rem;color:var(--tx3)">La progression se calcule automatiquement à partir des tâches liées — coche-les au jour le jour.</p>
             <form class="quick-form" id="project-form">
               <div class="field grow input-wrap"><label>Nom</label><input type="text" id="project-name" placeholder="Ex : Refonte du site" required/></div>
               <div class="field grow input-wrap"><label>Description</label><input type="text" id="project-desc" placeholder="Courte description"/></div>
-              <div class="field input-wrap"><label>Statut</label>
-                <select id="project-status"><option value="en cours" selected>En cours</option><option value="pause">En pause</option><option value="terminé">Terminé</option></select>
-              </div>
+              <div class="field input-wrap"><label>Statut</label><select id="project-status"><option value="en cours" selected>En cours</option><option value="pause">En pause</option><option value="terminé">Terminé</option></select></div>
               <div class="field input-wrap"><label>Échéance</label><input type="date" id="project-deadline"/></div>
               <button type="submit" class="btn-primary"><span>Créer</span></button>
             </form>
           </div>
-
-          <div class="widget-grid" id="projects-grid">
-            <div class="w-empty w-12">Aucun projet pour l'instant.</div>
-          </div>
+          <div class="widget-grid" id="projects-grid"><div class="w-empty w-12">Aucun projet pour l'instant.</div></div>
         </section>
 
-        <!-- ═══ VUE : HABITUDES ═══ -->
+        <!-- ═══ OBJECTIFS ═══ -->
+        <section class="view-section hidden" id="view-goals">
+          <div class="page-head"><div><div class="page-eyebrow">Productivité</div><h1 class="page-title">Objectifs</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Nouvel objectif</div>
+            <p style="font-size:.76rem;color:var(--tx3)">Ajoute des jalons à ton objectif — la progression se calcule automatiquement dès que tu en coches.</p>
+            <form class="quick-form" id="goal-form">
+              <div class="field grow input-wrap"><label>Titre</label><input type="text" id="goal-title" placeholder="Ex : Lancer mon projet" required/></div>
+              <div class="field grow input-wrap"><label>Description</label><input type="text" id="goal-desc" placeholder="Courte description"/></div>
+              <div class="field input-wrap"><label>Échéance</label><input type="date" id="goal-target-date"/></div>
+              <button type="submit" class="btn-primary"><span>Créer</span></button>
+            </form>
+          </div>
+          <div class="widget-grid" id="goals-grid"><div class="w-empty w-12">Aucun objectif pour l'instant.</div></div>
+        </section>
+
+        <!-- ═══ QUÊTES ═══ -->
+        <section class="view-section hidden" id="view-quests">
+          <div class="page-head"><div><div class="page-eyebrow">Productivité</div><h1 class="page-title">Quêtes</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Nouvelle quête</div>
+            <form class="quick-form" id="quest-form">
+              <div class="field grow input-wrap"><label>Titre</label><input type="text" id="quest-title" placeholder="Ex : Terminer 3 tâches" required/></div>
+              <div class="field input-wrap"><label>Type</label><select id="quest-type"><option value="daily">Quotidienne</option><option value="weekly">Hebdomadaire</option><option value="monthly">Mensuelle</option><option value="custom" selected>Personnalisée</option></select></div>
+              <div class="field input-wrap"><label>Objectif (cible)</label><input type="number" id="quest-target" min="1" value="1" required/></div>
+              <div class="field input-wrap"><label>Récompense XP</label><input type="number" id="quest-xp" min="5" value="20" required/></div>
+              <button type="submit" class="btn-primary"><span>Créer</span></button>
+            </form>
+          </div>
+          <div class="list-col" id="quests-list"><div class="w-empty">Aucune quête pour l'instant.</div></div>
+        </section>
+
+        <!-- ═══ HABITUDES ═══ -->
         <section class="view-section hidden" id="view-habits">
           <div class="page-head"><div><div class="page-eyebrow">Gestion</div><h1 class="page-title">Habitudes</h1></div></div>
-
           <div class="w-card glass">
             <div class="w-title">Nouvelle habitude</div>
             <form class="quick-form" id="habit-form">
               <div class="field grow input-wrap"><label>Nom</label><input type="text" id="habit-name" placeholder="Ex : Lire 20 minutes" required/></div>
-              <div class="field input-wrap"><label>Fréquence</label>
-                <select id="habit-frequency"><option value="quotidien" selected>Quotidienne</option><option value="hebdo">Hebdomadaire</option></select>
-              </div>
+              <div class="field input-wrap"><label>Fréquence</label><select id="habit-frequency"><option value="quotidien" selected>Quotidienne</option><option value="hebdo">Hebdomadaire</option></select></div>
               <button type="submit" class="btn-primary"><span>Créer</span></button>
             </form>
           </div>
-
           <div class="w-card glass">
             <div class="w-title">Tes habitudes</div>
             <div class="list-col" id="all-habits-list" style="margin-top:6px"><div class="w-empty">Aucune habitude pour l'instant.</div></div>
           </div>
         </section>
 
-        <!-- ═══ VUE : CALENDRIER ═══ -->
+        <!-- ═══ CALENDRIER ═══ -->
         <section class="view-section hidden" id="view-calendar">
           <div class="page-head"><div><div class="page-eyebrow">Temps</div><h1 class="page-title">Calendrier</h1></div></div>
-
           <div class="w-card glass">
             <div class="calendar-head">
               <div class="calendar-month-label" id="calendar-month-label">—</div>
@@ -557,62 +611,61 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
             <div class="calendar-grid" id="calendar-dow-row"></div>
             <div class="calendar-grid" id="calendar-grid" style="margin-top:2px"></div>
           </div>
-
           <div class="w-card glass">
             <div class="agenda-day-title" id="agenda-day-title">—</div>
-
             <form class="quick-form" id="event-form" style="margin-top:14px">
               <div class="field grow input-wrap"><label>Titre de l'événement</label><input type="text" id="event-title" placeholder="Ex : Rendez-vous médecin" required/></div>
               <div class="field input-wrap"><label>Heure</label><input type="time" id="event-time"/></div>
-              <div class="field input-wrap"><label>Catégorie</label>
-                <select id="event-category">
-                  <option value="travail" selected>Travail</option>
-                  <option value="perso">Personnel</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="autre">Autre</option>
-                </select>
-              </div>
+              <div class="field input-wrap"><label>Catégorie</label><select id="event-category"><option value="travail" selected>Travail</option><option value="perso">Personnel</option><option value="urgent">Urgent</option><option value="autre">Autre</option></select></div>
               <div class="field input-wrap"><label>Projet lié</label><select id="event-project"><option value="">Aucun</option></select></div>
               <button type="submit" class="btn-primary"><span>Ajouter</span></button>
             </form>
-
             <div class="list-col" id="agenda-list" style="margin-top:16px"><div class="w-empty">Aucun événement ce jour-là.</div></div>
           </div>
         </section>
 
-        <!-- ═══ VUE : FINANCES — VUE D'ENSEMBLE ═══ -->
+        <!-- ═══ TEMPS ═══ -->
+        <section class="view-section hidden" id="view-time">
+          <div class="page-head"><div><div class="page-eyebrow">Temps</div><h1 class="page-title">Time tracking</h1></div></div>
+          <div class="w-card glass">
+            <div class="timer-display" id="timer-display">00:00:00</div>
+            <div class="quick-form" style="margin-top:6px">
+              <div class="field grow input-wrap"><label>Sur quoi tu travailles ?</label><input type="text" id="timer-label" placeholder="Ex : Rédaction du rapport"/></div>
+              <div class="field input-wrap"><label>Projet lié</label><select id="timer-project"><option value="">Aucun</option></select></div>
+            </div>
+            <div class="timer-controls" style="margin-top:10px">
+              <button class="btn-primary" id="timer-start">Démarrer</button>
+              <button class="btn-ghost" id="timer-pause" disabled>Pause</button>
+              <button class="btn-danger" id="timer-stop" disabled style="padding:11px 20px">Arrêter &amp; enregistrer</button>
+            </div>
+          </div>
+          <div class="widget-grid">
+            <div class="w-card glass w-4"><div class="w-title">Aujourd'hui</div><div class="fin-hero-num" id="time-today">0h 00</div></div>
+            <div class="w-card glass w-4"><div class="w-title">7 derniers jours</div><div class="fin-hero-num" id="time-week">0h 00</div></div>
+            <div class="w-card glass w-4"><div class="w-title">Ce mois</div><div class="fin-hero-num" id="time-month">0h 00</div></div>
+          </div>
+          <div class="w-card glass">
+            <div class="w-head"><div class="w-title">Sessions récentes</div></div>
+            <div class="list-col" id="sessions-list"><div class="w-empty">Aucune session enregistrée pour l'instant.</div></div>
+          </div>
+        </section>
+
+        <!-- ═══ FINANCES — VUE D'ENSEMBLE ═══ -->
         <section class="view-section hidden" id="view-finances-overview">
           <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Vue d'ensemble</h1></div></div>
-
           <div class="widget-grid">
-            <div class="w-card glass liftable w-4">
-              <div class="w-title">Solde total</div>
-              <div class="fin-hero-num" id="fin-balance">0 €</div>
-              <div style="font-size:.72rem;color:var(--tx3)">Revenus − dépenses, toutes périodes</div>
-            </div>
-            <div class="w-card glass liftable w-4">
-              <div class="w-title">Revenus — ce mois</div>
-              <div class="fin-hero-num positive" id="fin-income-month">0 €</div>
-            </div>
-            <div class="w-card glass liftable w-4">
-              <div class="w-title">Dépenses — ce mois</div>
-              <div class="fin-hero-num negative" id="fin-expense-month">0 €</div>
-            </div>
+            <div class="w-card glass liftable w-4"><div class="w-title">Solde total</div><div class="fin-hero-num" id="fin-balance">0 €</div><div style="font-size:.72rem;color:var(--tx3)">Revenus − dépenses, toutes périodes</div></div>
+            <div class="w-card glass liftable w-4"><div class="w-title">Revenus — ce mois</div><div class="fin-hero-num positive" id="fin-income-month">0 €</div></div>
+            <div class="w-card glass liftable w-4"><div class="w-title">Dépenses — ce mois</div><div class="fin-hero-num negative" id="fin-expense-month">0 €</div></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:6px">Revenus vs dépenses — ce mois</div>
-            <div class="fin-bar-wrap" id="fin-bar-chart">
-              <div class="w-empty">Ajoute une transaction pour voir le comparatif.</div>
-            </div>
+            <div class="fin-bar-wrap" id="fin-bar-chart"><div class="w-empty">Ajoute une transaction pour voir le comparatif.</div></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title">Nouvelle transaction</div>
-            <form class="quick-form" id="transaction-form" data-fixed-type="">
-              <div class="field input-wrap"><label>Type</label>
-                <select id="tx-type"><option value="expense" selected>Dépense</option><option value="income">Revenu</option></select>
-              </div>
+            <form class="quick-form" id="transaction-form">
+              <div class="field input-wrap"><label>Type</label><select id="tx-type"><option value="expense" selected>Dépense</option><option value="income">Revenu</option></select></div>
               <div class="field input-wrap"><label>Montant</label><input type="number" id="tx-amount" step="0.01" min="0.01" placeholder="0.00" required/></div>
               <div class="field input-wrap"><label>Catégorie</label><select id="tx-category"></select></div>
               <div class="field grow input-wrap"><label>Description</label><input type="text" id="tx-desc" placeholder="Ex : Courses de la semaine"/></div>
@@ -620,57 +673,136 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
               <button type="submit" class="btn-primary"><span>Ajouter</span></button>
             </form>
           </div>
-
           <div class="w-card glass">
             <div class="w-head"><div class="w-title">Transactions récentes</div><span style="font-size:.72rem;color:var(--tx3)" id="tx-count"></span></div>
             <div class="list-col" id="tx-list-all"><div class="w-empty">Aucune transaction pour l'instant.</div></div>
           </div>
         </section>
 
-        <!-- ═══ VUE : FINANCES — REVENUS ═══ -->
+        <!-- ═══ FINANCES — REVENUS ═══ -->
         <section class="view-section hidden" id="view-finances-income">
           <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Revenus</h1></div></div>
-          <div class="w-card glass">
-            <div class="w-title">Total des revenus (ce mois)</div>
-            <div class="fin-hero-num positive" id="fin-income-total-page">0 €</div>
-          </div>
-          <div class="w-card glass">
-            <div class="w-title">Toutes tes rentrées d'argent</div>
-            <div class="list-col" id="tx-list-income" style="margin-top:8px"><div class="w-empty">Aucun revenu enregistré.</div></div>
-          </div>
+          <div class="w-card glass"><div class="w-title">Total des revenus (ce mois)</div><div class="fin-hero-num positive" id="fin-income-total-page">0 €</div></div>
+          <div class="w-card glass"><div class="w-title">Toutes tes rentrées d'argent</div><div class="list-col" id="tx-list-income" style="margin-top:8px"><div class="w-empty">Aucun revenu enregistré.</div></div></div>
         </section>
 
-        <!-- ═══ VUE : FINANCES — DÉPENSES ═══ -->
+        <!-- ═══ FINANCES — DÉPENSES ═══ -->
         <section class="view-section hidden" id="view-finances-expenses">
           <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Dépenses</h1></div></div>
+          <div class="w-card glass"><div class="w-title">Total des dépenses (ce mois)</div><div class="fin-hero-num negative" id="fin-expense-total-page">0 €</div></div>
+          <div class="w-card glass"><div class="w-title">Toutes tes sorties d'argent</div><div class="list-col" id="tx-list-expense" style="margin-top:8px"><div class="w-empty">Aucune dépense enregistrée.</div></div></div>
+        </section>
+
+        <!-- ═══ FINANCES — BUDGETS ═══ -->
+        <section class="view-section hidden" id="view-finances-budgets">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Budgets</h1></div></div>
           <div class="w-card glass">
-            <div class="w-title">Total des dépenses (ce mois)</div>
-            <div class="fin-hero-num negative" id="fin-expense-total-page">0 €</div>
+            <div class="w-title">Définir un budget mensuel</div>
+            <form class="quick-form" id="budget-form">
+              <div class="field input-wrap"><label>Catégorie</label><select id="budget-category"></select></div>
+              <div class="field input-wrap"><label>Budget mensuel</label><input type="number" id="budget-amount" step="0.01" min="1" required/></div>
+              <button type="submit" class="btn-primary"><span>Enregistrer</span></button>
+            </form>
           </div>
           <div class="w-card glass">
-            <div class="w-title">Toutes tes sorties d'argent</div>
-            <div class="list-col" id="tx-list-expense" style="margin-top:8px"><div class="w-empty">Aucune dépense enregistrée.</div></div>
+            <div class="w-title">Tes budgets</div>
+            <div class="list-col" id="budgets-list" style="margin-top:8px"><div class="w-empty">Aucun budget défini pour l'instant.</div></div>
           </div>
         </section>
 
-        <!-- ═══ VUE : PROFIL ═══ -->
+        <!-- ═══ FINANCES — OBJECTIFS FINANCIERS ═══ -->
+        <section class="view-section hidden" id="view-finances-goals">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Objectifs financiers</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Nouvel objectif financier</div>
+            <form class="quick-form" id="fingoal-form">
+              <div class="field grow input-wrap"><label>Titre</label><input type="text" id="fingoal-title" placeholder="Ex : Nouvel ordinateur" required/></div>
+              <div class="field input-wrap"><label>Montant cible</label><input type="number" id="fingoal-target" step="0.01" min="1" required/></div>
+              <div class="field input-wrap"><label>Échéance</label><input type="date" id="fingoal-date"/></div>
+              <button type="submit" class="btn-primary"><span>Créer</span></button>
+            </form>
+          </div>
+          <div class="widget-grid" id="fingoals-grid"><div class="w-empty w-12">Aucun objectif financier pour l'instant.</div></div>
+        </section>
+
+        <!-- ═══ FINANCES — DETTES & EMPRUNTS ═══ -->
+        <section class="view-section hidden" id="view-finances-debts">
+          <div class="page-head"><div><div class="page-eyebrow">Finances</div><h1 class="page-title">Dettes &amp; emprunts</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Nouvelle entrée</div>
+            <form class="quick-form" id="debt-form">
+              <div class="field input-wrap"><label>Type</label><select id="debt-type"><option value="debt" selected>Dette (je dois)</option><option value="loan">Emprunt (on me doit)</option></select></div>
+              <div class="field grow input-wrap"><label>Personne</label><input type="text" id="debt-person" placeholder="Ex : Jean" required/></div>
+              <div class="field input-wrap"><label>Montant total</label><input type="number" id="debt-amount" step="0.01" min="1" required/></div>
+              <div class="field input-wrap"><label>Échéance</label><input type="date" id="debt-date"/></div>
+              <button type="submit" class="btn-primary"><span>Ajouter</span></button>
+            </form>
+          </div>
+          <div class="list-col" id="debts-list"><div class="w-empty">Aucune dette ni emprunt pour l'instant.</div></div>
+        </section>
+
+        <!-- ═══ NOTES ═══ -->
+        <section class="view-section hidden" id="view-notes">
+          <div class="page-head"><div><div class="page-eyebrow">Espace</div><h1 class="page-title">Notes</h1></div></div>
+          <div class="w-card glass">
+            <div class="w-title">Nouvelle note</div>
+            <form class="quick-form" id="note-form">
+              <div class="field grow input-wrap"><label>Titre</label><input type="text" id="note-title" placeholder="Titre de la note" required/></div>
+              <div class="field grow input-wrap" style="grid-column:1/-1"><label>Contenu</label><textarea id="note-content" rows="3" placeholder="Écris ta note ici…"></textarea></div>
+              <div class="field grow input-wrap"><label>Tags (séparés par des virgules)</label><input type="text" id="note-tags" placeholder="idée, travail, urgent"/></div>
+              <button type="submit" class="btn-primary"><span>Créer</span></button>
+            </form>
+          </div>
+          <div class="notes-toolbar">
+            <div class="input-wrap" style="flex:1;min-width:180px"><input type="text" id="notes-search" placeholder="Rechercher une note…"/></div>
+            <div class="seg-control" style="width:280px">
+              <button type="button" class="seg-btn active" data-notefilter="all">Toutes</button>
+              <button type="button" class="seg-btn" data-notefilter="favorite">Favoris</button>
+              <button type="button" class="seg-btn" data-notefilter="archived">Archivées</button>
+            </div>
+          </div>
+          <div class="notes-grid" id="notes-grid"><div class="w-empty w-12">Aucune note pour l'instant.</div></div>
+        </section>
+
+        <!-- ═══ STATISTIQUES ═══ -->
+        <section class="view-section hidden" id="view-stats">
+          <div class="page-head">
+            <div><div class="page-eyebrow">Espace</div><h1 class="page-title">Statistiques</h1></div>
+            <div class="seg-control" style="width:280px">
+              <button type="button" class="seg-btn active" data-statperiod="7">7 jours</button>
+              <button type="button" class="seg-btn" data-statperiod="30">30 jours</button>
+              <button type="button" class="seg-btn" data-statperiod="90">90 jours</button>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-box"><div class="stat-num" id="st-tasks-done">0</div><div class="stat-label">Tâches terminées</div></div>
+            <div class="stat-box"><div class="stat-num" id="st-completion-rate">0%</div><div class="stat-label">Taux de complétion</div></div>
+            <div class="stat-box"><div class="stat-num teal" id="st-time-worked">0h</div><div class="stat-label">Temps travaillé</div></div>
+            <div class="stat-box"><div class="stat-num" id="st-habit-rate">0%</div><div class="stat-label">Réussite habitudes</div></div>
+            <div class="stat-box"><div class="stat-num" id="st-projects-done">0</div><div class="stat-label">Projets terminés</div></div>
+            <div class="stat-box"><div class="stat-num" id="st-xp-gained">0</div><div class="stat-label">XP gagné</div></div>
+          </div>
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:6px">Tâches terminées — 7 derniers jours</div>
+            <div class="fin-bar-wrap" id="st-chart"><div class="w-empty">Termine des tâches pour voir ton évolution ici.</div></div>
+          </div>
+          <div class="w-card glass">
+            <div class="w-title" style="margin-bottom:6px">Finances — période sélectionnée</div>
+            <div class="fin-bar-wrap" id="st-fin-chart"><div class="w-empty">Ajoute des transactions pour voir ton évolution ici.</div></div>
+          </div>
+        </section>
+
+        <!-- ═══ PROFIL ═══ -->
         <section class="view-section hidden" id="view-profile">
           <div class="page-head"><div><div class="page-eyebrow">Ton espace</div><h1 class="page-title">Profil</h1></div></div>
-
           <div class="w-card glass profile-hero">
             <div class="profile-avatar-lg" id="profile-avatar-lg">?</div>
-            <div class="profile-hero-info">
-              <div class="profile-hero-name" id="profile-name">—</div>
-              <div class="profile-hero-email" id="profile-email">—</div>
-            </div>
+            <div class="profile-hero-info"><div class="profile-hero-name" id="profile-name">—</div><div class="profile-hero-email" id="profile-email">—</div></div>
             <div style="min-width:200px;flex:1">
-              <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--tx3);margin-bottom:6px">
-                <span id="profile-level-label">Niveau 1</span><span id="profile-xp-label">0 / 100 XP</span>
-              </div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--tx3);margin-bottom:6px"><span id="profile-level-label">Niveau 1</span><span id="profile-xp-label">0 / 100 XP</span></div>
               <div class="progress-track"><div class="progress-fill" id="profile-xp-fill"></div></div>
             </div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:6px">Tes chiffres</div>
             <div class="stat-grid">
@@ -681,17 +813,12 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
               <div class="stat-box"><div class="stat-num teal" id="stat-fin-balance">0 €</div><div class="stat-label">Solde</div></div>
             </div>
           </div>
-
-          <div class="w-card glass">
-            <div class="w-head"><div class="w-title">Activité récente</div></div>
-            <div class="list-col" id="profile-activity-list"><div class="w-empty">Aucune activité pour l'instant.</div></div>
-          </div>
+          <div class="w-card glass"><div class="w-head"><div class="w-title">Activité récente</div></div><div class="list-col" id="profile-activity-list"><div class="w-empty">Aucune activité pour l'instant.</div></div></div>
         </section>
 
-        <!-- ═══ VUE : PARAMÈTRES ═══ -->
+        <!-- ═══ PARAMÈTRES ═══ -->
         <section class="view-section hidden" id="view-settings">
           <div class="page-head"><div><div class="page-eyebrow">Ton espace</div><h1 class="page-title">Paramètres</h1></div></div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Compte</div>
             <form class="quick-form" id="settings-account-form" style="margin-top:8px">
@@ -701,7 +828,6 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
             </form>
             <div id="settings-account-msg" style="margin-top:10px"></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Sécurité</div>
             <form class="quick-form" id="settings-password-form" style="margin-top:8px">
@@ -711,76 +837,37 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
             </form>
             <div id="settings-password-msg" style="margin-top:10px"></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Apparence</div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Thème</div><div class="settings-row-desc">Bascule entre le mode sombre et le mode clair, tout en gardant le style verre dépoli.</div></div>
-              <div class="toggle-switch" id="settings-theme-toggle"><div class="knob"></div></div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Densité d'affichage</div><div class="settings-row-desc">Confortable pour plus d'air, compact pour voir plus d'informations à l'écran.</div></div>
-              <div class="seg-control" style="width:220px">
-                <button type="button" class="seg-btn" data-density="comfortable">Confortable</button>
-                <button type="button" class="seg-btn" data-density="compact">Compact</button>
-              </div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Couleur de ton avatar</div><div class="settings-row-desc">Visible dans la sidebar et sur ton profil.</div></div>
-              <div class="avatar-swatches" id="avatar-swatches"></div>
-            </div>
+            <div class="settings-row"><div><div class="settings-row-label">Thème</div><div class="settings-row-desc">Sombre ou clair, toujours en verre dépoli.</div></div><div class="toggle-switch" id="settings-theme-toggle"><div class="knob"></div></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Densité d'affichage</div><div class="settings-row-desc">Confortable pour plus d'air, compact pour voir plus d'informations.</div></div>
+              <div class="seg-control" style="width:220px"><button type="button" class="seg-btn" data-density="comfortable">Confortable</button><button type="button" class="seg-btn" data-density="compact">Compact</button></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Couleur de ton avatar</div><div class="settings-row-desc">Visible dans la sidebar et sur ton profil.</div></div><div class="avatar-swatches" id="avatar-swatches"></div></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Préférences</div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Fuseau horaire</div><div class="settings-row-desc">Utilisé pour calculer tes journées et tes échéances.</div></div>
-              <div class="input-wrap" style="width:220px"><select id="settings-timezone"></select></div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Devise du portefeuille</div><div class="settings-row-desc">Utilisée sur toutes les pages Finances.</div></div>
-              <div class="input-wrap" style="width:220px"><select id="settings-currency"></select></div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Premier jour de la semaine</div><div class="settings-row-desc">Change le point de départ du calendrier.</div></div>
-              <div class="seg-control" style="width:220px">
-                <button type="button" class="seg-btn" data-weekstart="monday">Lundi</button>
-                <button type="button" class="seg-btn" data-weekstart="sunday">Dimanche</button>
-              </div>
-            </div>
+            <div class="settings-row"><div><div class="settings-row-label">Fuseau horaire</div><div class="settings-row-desc">Utilisé pour calculer tes journées et tes échéances.</div></div><div class="input-wrap" style="width:220px"><select id="settings-timezone"></select></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Devise du portefeuille</div><div class="settings-row-desc">Utilisée sur toutes les pages Finances.</div></div><div class="input-wrap" style="width:220px"><select id="settings-currency"></select></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Premier jour de la semaine</div><div class="settings-row-desc">Change le point de départ du calendrier.</div></div>
+              <div class="seg-control" style="width:220px"><button type="button" class="seg-btn" data-weekstart="monday">Lundi</button><button type="button" class="seg-btn" data-weekstart="sunday">Dimanche</button></div></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Notifications</div>
             <p style="font-size:.74rem;color:var(--tx3);margin-bottom:6px">Ces préférences seront appliquées dès que le centre de notifications (Phase 6) sera actif — elles sont déjà enregistrées.</p>
             <div id="settings-notifs-list"></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:4px">Widgets du tableau de bord "Aujourd'hui"</div>
             <div id="settings-widgets-list" style="margin-top:8px"></div>
           </div>
-
           <div class="w-card glass">
             <div class="w-title" style="margin-bottom:10px">Données</div>
-            <div class="settings-row">
-              <div><div class="settings-row-label">Exporter mes données</div><div class="settings-row-desc">Télécharge un fichier JSON avec tes tâches, projets, habitudes, événements, transactions et activités.</div></div>
-              <button class="btn-ghost" id="settings-export-btn">Exporter</button>
-            </div>
+            <div class="settings-row"><div><div class="settings-row-label">Exporter mes données</div><div class="settings-row-desc">Télécharge un fichier JSON avec toutes tes données.</div></div><button class="btn-ghost" id="settings-export-btn">Exporter</button></div>
             <div class="danger-zone" style="margin-top:14px">
               <div class="settings-row-label" style="color:var(--coral)">Supprimer mon compte</div>
               <div class="settings-row-desc">Action définitive : ton compte et tes données seront supprimés.</div>
               <button class="btn-danger" id="settings-delete-btn" style="margin-top:10px">Supprimer mon compte</button>
             </div>
-          </div>
-        </section>
-
-        <!-- ═══ VUES PLACEHOLDER (à construire) ═══ -->
-        <section class="view-section hidden" id="view-placeholder">
-          <div class="page-head"><div><div class="page-eyebrow">Bientôt</div><h1 class="page-title" id="placeholder-title">—</h1></div></div>
-          <div class="w-card glass placeholder-card">
-            <div class="placeholder-icon">🛠️</div>
-            <p>Ce module n'est pas encore construit. Il arrive dans une prochaine passe.</p>
           </div>
         </section>
 
@@ -800,7 +887,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp,
-  collection, addDoc, deleteDoc, onSnapshot, query, orderBy, limit, getDocs
+  collection, addDoc, deleteDoc, onSnapshot, query, orderBy, limit, getDocs, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -822,12 +909,16 @@ function escHtml(str){ return String(str||"").replace(/&/g,"&amp;").replace(/</g
 function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
 function dstr(d){ return d.toISOString().slice(0,10); }
 function monthKey(dateStr){ return (dateStr||"").slice(0,7); }
+function uid8(){ return Math.random().toString(36).slice(2,10); }
 
 let currentUser = null, profile = null;
 let tasks = [], projects = [], habits = [], activities = [], events = [], transactions = [];
+let goals = [], quests = [], timeSessions = [], budgets = [], financialGoals = [], debts = [], notes = [], xpEvents = [];
 let tasksLoaded = false, projectsLoaded = false;
 let calendarMonth = new Date(); calendarMonth.setDate(1);
 let selectedDay = todayStr();
+let noteFilter = "all";
+let statPeriod = 7;
 
 const AVATAR_COLORS = ["amber","teal","coral","violet"];
 function avatarColorFor(profileData, uid){
@@ -855,6 +946,10 @@ function formatMoney(amount){
   const sign = amount < 0 ? "-" : "";
   return `${sign}${Math.abs(amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})} ${currencySymbol()}`;
 }
+function formatHours(totalSeconds){
+  const h = Math.floor(totalSeconds/3600); const m = Math.floor((totalSeconds%3600)/60);
+  return `${h}h ${String(m).padStart(2,"0")}`;
+}
 
 // ── AUTH GUARD ──
 onAuthStateChanged(auth, async (user) => {
@@ -878,6 +973,7 @@ onAuthStateChanged(auth, async (user) => {
   populateTimezoneSelect();
   populateCurrencySelect();
   populateTxCategorySelect();
+  populateBudgetCategorySelect();
   $("tx-date").value = todayStr();
   listenTasks();
   listenProjects();
@@ -885,6 +981,14 @@ onAuthStateChanged(auth, async (user) => {
   listenActivities();
   listenEvents();
   listenTransactions();
+  listenGoals();
+  listenQuests();
+  listenTimeSessions();
+  listenBudgets();
+  listenFinancialGoals();
+  listenDebts();
+  listenNotes();
+  listenXpEvents();
   renderCalendar();
 }, (err) => {
   console.error("Auth error:", err);
@@ -909,6 +1013,15 @@ function renderTodayHeader(){
   $("page-greeting").textContent = `${greet}, ${profile?.username||"toi"} 👋`;
 }
 
+// ═══════════════ SIDEBAR (menu pro : overlay + fermeture au clic extérieur) ═══════════════
+function setSidebarOpen(open){
+  $("sidebar").classList.toggle("open", open);
+  $("sidebar-overlay").classList.toggle("show", open);
+}
+$("sidebar-toggle-btn").addEventListener("click", () => setSidebarOpen(!$("sidebar").classList.contains("open")));
+$("sidebar-overlay").addEventListener("click", () => setSidebarOpen(false));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") setSidebarOpen(false); });
+
 // ═══════════════ THÈME & AFFICHAGE ═══════════════
 function applyTheme(theme){
   document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
@@ -921,34 +1034,25 @@ async function toggleTheme(){
   const next = current === "light" ? "dark" : "light";
   applyTheme(next);
   profile.preferences = { ...(profile.preferences||{}), theme: next };
-  try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.theme": next }); }
-  catch(e){ console.error(e); }
+  try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.theme": next }); } catch(e){ console.error(e); }
 }
-
 function applyDensity(density){
   document.body.classList.toggle("density-compact", density === "compact");
-  document.querySelectorAll("[data-density]").forEach(btn=>{
-    btn.classList.toggle("active", btn.dataset.density === density);
-  });
+  document.querySelectorAll("[data-density]").forEach(btn=>{ btn.classList.toggle("active", btn.dataset.density === density); });
 }
 document.querySelectorAll("[data-density]").forEach(btn=>{
   btn.addEventListener("click", async () => {
     applyDensity(btn.dataset.density);
     profile.preferences = { ...(profile.preferences||{}), density: btn.dataset.density };
-    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.density": btn.dataset.density }); }
-    catch(e){ console.error(e); }
+    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.density": btn.dataset.density }); } catch(e){ console.error(e); }
   });
 });
-
-function applyWeekStart(ws){
-  document.querySelectorAll("[data-weekstart]").forEach(btn=>{ btn.classList.toggle("active", btn.dataset.weekstart === ws); });
-}
+function applyWeekStart(ws){ document.querySelectorAll("[data-weekstart]").forEach(btn=>{ btn.classList.toggle("active", btn.dataset.weekstart === ws); }); }
 document.querySelectorAll("[data-weekstart]").forEach(btn=>{
   btn.addEventListener("click", async () => {
     applyWeekStart(btn.dataset.weekstart);
     profile.preferences = { ...(profile.preferences||{}), weekStart: btn.dataset.weekstart };
-    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.weekStart": btn.dataset.weekstart }); }
-    catch(e){ console.error(e); }
+    try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.weekStart": btn.dataset.weekstart }); } catch(e){ console.error(e); }
     renderCalendarDow(); renderCalendar();
   });
 });
@@ -966,7 +1070,6 @@ function updateXpWidget(){
   renderProfilePage();
 }
 
-/** Système XP anti-duplication (règle 42). */
 async function awardXPOnce(eventId, amount, label){
   if (!currentUser) return;
   const evRef = doc(db, "users", currentUser.uid, "xpEvents", eventId);
@@ -984,8 +1087,7 @@ async function awardXPOnce(eventId, amount, label){
   profile.level = level; profile.xp = xp;
   updateXpWidget();
   $("sb-level").textContent = `Niveau ${level}`;
-  try { await updateDoc(doc(db,"users",currentUser.uid), { xp, level }); }
-  catch(e){ console.error("XP update failed:", e); }
+  try { await updateDoc(doc(db,"users",currentUser.uid), { xp, level }); } catch(e){ console.error("XP update failed:", e); }
 
   pulseFill($("xp-fill")); pulseFill($("sb-mini-xp"));
   showXpFloat(`+${amount} XP · ${label}`, leveledUp ? level : null);
@@ -1011,7 +1113,6 @@ async function revokeXPOnce(eventId){
 }
 
 function pulseFill(el){ if(!el) return; el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse"); }
-
 function showXpFloat(msg, newLevel){
   const el = $("xp-float");
   el.textContent = newLevel ? `NIVEAU SUPÉRIEUR · Niveau ${newLevel}` : msg;
@@ -1025,14 +1126,12 @@ async function logActivity(text, type){
   try { await addDoc(collection(db,"users",currentUser.uid,"activities"), { text, type, createdAt: serverTimestamp() }); }
   catch(e){ console.error("activity log failed:", e); }
 }
-
 function listenActivities(){
   const q = query(collection(db,"users",currentUser.uid,"activities"), orderBy("createdAt","desc"), limit(12));
   onSnapshot(q, (snap) => { activities = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderActivityWidgets(); },
     (err) => console.error("activities listener:", err));
 }
-
-const ACTIVITY_COLORS = { task:"var(--amber)", project:"var(--teal)", habit:"var(--coral)", finance:"var(--violet)" };
+const ACTIVITY_COLORS = { task:"var(--amber)", project:"var(--teal)", habit:"var(--coral)", finance:"var(--violet)", goal:"var(--amber)", quest:"var(--violet)" };
 function activityRowHtml(a,i){
   const time = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "à l'instant";
   return `<div class="activity-row" style="animation-delay:${i*0.03}s">
@@ -1047,27 +1146,25 @@ function renderActivityWidgets(){
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const realPages = { today:"view-today", tasks:"view-tasks", projects:"view-projects", habits:"view-habits", profile:"view-profile", settings:"view-settings", calendar:"view-calendar", "finances-overview":"view-finances-overview", "finances-income":"view-finances-income", "finances-expenses":"view-finances-expenses" };
-const pageLabels = { goals:"Objectifs", quests:"Quêtes", time:"Temps", "finances-budgets":"Budgets", "finances-goals":"Objectifs financiers", "finances-debts":"Dettes & emprunts", notes:"Notes", stats:"Statistiques" };
-
+const realPages = {
+  today:"view-today", tasks:"view-tasks", projects:"view-projects", goals:"view-goals", quests:"view-quests",
+  habits:"view-habits", calendar:"view-calendar", time:"view-time",
+  "finances-overview":"view-finances-overview", "finances-income":"view-finances-income", "finances-expenses":"view-finances-expenses",
+  "finances-budgets":"view-finances-budgets", "finances-goals":"view-finances-goals", "finances-debts":"view-finances-debts",
+  notes:"view-notes", stats:"view-stats", profile:"view-profile", settings:"view-settings"
+};
 function showPage(page){
   document.querySelectorAll(".view-section").forEach(s=>s.classList.add("hidden"));
-  if (realPages[page]){
-    const el = $(realPages[page]);
-    el.classList.remove("hidden");
-    el.style.animation = "none"; void el.offsetWidth; el.style.animation = "";
-  } else {
-    $("placeholder-title").textContent = pageLabels[page] || page;
-    $("view-placeholder").classList.remove("hidden");
-  }
+  const target = realPages[page] || "view-today";
+  const el = $(target);
+  el.classList.remove("hidden");
+  el.style.animation = "none"; void el.offsetWidth; el.style.animation = "";
   document.querySelectorAll(".sidebar-link").forEach(l=>l.classList.toggle("active", l.dataset.page===page));
-  $("sidebar").classList.remove("open");
+  setSidebarOpen(false);
   $("page-body").scrollTo?.(0,0);
   window.scrollTo(0,0);
 }
-document.querySelectorAll(".sidebar-link").forEach(link=>{
-  link.addEventListener("click", () => showPage(link.dataset.page));
-});
+document.querySelectorAll(".sidebar-link").forEach(link=>{ link.addEventListener("click", () => showPage(link.dataset.page)); });
 $("sidebar-user-btn").addEventListener("click", () => showPage("profile"));
 
 // ═══════════════ TÂCHES ═══════════════
@@ -1076,43 +1173,34 @@ function listenTasks(){
   onSnapshot(q, (snap) => {
     tasks = snap.docs.map(d=>({ id:d.id, ...d.data() }));
     tasksLoaded = true;
-    renderTasks();
-    renderTodayWidgets();
-    renderGlobalProgress();
-    renderProfilePage();
+    renderTasks(); renderTodayWidgets(); renderGlobalProgress(); renderProfilePage(); renderStats();
     populateProjectSelects();
     if (projectsLoaded) syncProjectProgress();
   }, (err) => { console.error("tasks listener:", err); showToast("⚠️ Impossible de charger les tâches."); });
 }
-
 function populateProjectSelects(){
   const opts = '<option value="">Aucun</option>' + projects.map(p=>`<option value="${p.id}">${escHtml(p.name)}</option>`).join("");
-  ["task-project","event-project"].forEach(id=>{
+  ["task-project","event-project","timer-project"].forEach(id=>{
     const el = $(id); if (!el) return;
     const cur = el.value; el.innerHTML = opts; el.value = cur;
   });
 }
-
 $("task-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = $("task-title").value.trim();
   if (!title) return;
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
   try {
     await addDoc(collection(db,"users",currentUser.uid,"tasks"), {
       title, priority: $("task-priority").value, deadline: $("task-deadline").value || null,
-      projectId: $("task-project").value || null,
-      status: "todo", createdAt: serverTimestamp()
+      projectId: $("task-project").value || null, status: "todo", completedAt: null, createdAt: serverTimestamp()
     });
     $("task-form").reset(); $("task-priority").value = "moyenne";
     showToast("✅ Tâche ajoutée !");
   } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'ajout."); }
   btn.disabled = false;
 });
-
 function projectNameFor(id){ const p = projects.find(x=>x.id===id); return p ? p.name : null; }
-
 function taskRowHtml(t,i){
   const done = t.status === "done";
   const meta = [];
@@ -1120,35 +1208,25 @@ function taskRowHtml(t,i){
   if (t.deadline) meta.push(`<span>📅 ${new Date(t.deadline+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</span>`);
   const pname = t.projectId ? projectNameFor(t.projectId) : null;
   if (pname) meta.push(`<span class="item-tag-project">${escHtml(pname)}</span>`);
-  return `
-    <div class="item-row ${done?"done":""}" data-id="${t.id}" style="animation-delay:${Math.min(i,10)*0.025}s">
+  return `<div class="item-row ${done?"done":""}" data-id="${t.id}" style="animation-delay:${Math.min(i,10)*0.025}s">
       <button class="check-btn ${done?"checked":""}" data-action="toggle" data-id="${t.id}">${done?"✓":""}</button>
-      <div class="item-body">
-        <div class="item-title">${escHtml(t.title)}</div>
-        <div class="item-meta">${meta.join("")}</div>
-      </div>
+      <div class="item-body"><div class="item-title">${escHtml(t.title)}</div><div class="item-meta">${meta.join("")}</div></div>
       <div class="item-actions"><button class="btn-danger" data-action="delete" data-id="${t.id}">Suppr.</button></div>
     </div>`;
 }
-
 function renderTasks(){
   const list = $("all-tasks-list");
   $("tasks-count").textContent = tasks.length ? `${tasks.length} tâche${tasks.length>1?"s":""}` : "";
   list.innerHTML = tasks.length ? tasks.map(taskRowHtml).join("") : '<div class="w-empty">Aucune tâche pour l\'instant.</div>';
   list.querySelectorAll("[data-action]").forEach(btn=>{
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.id;
-      if (btn.dataset.action==="toggle") toggleTask(id);
-      if (btn.dataset.action==="delete") deleteTask(id);
-    });
+    btn.addEventListener("click", () => { const id = btn.dataset.id; if (btn.dataset.action==="toggle") toggleTask(id); if (btn.dataset.action==="delete") deleteTask(id); });
   });
 }
-
 async function toggleTask(id){
   const t = tasks.find(x=>x.id===id); if (!t) return;
   const newStatus = t.status === "done" ? "todo" : "done";
   try {
-    await updateDoc(doc(db,"users",currentUser.uid,"tasks",id), { status: newStatus });
+    await updateDoc(doc(db,"users",currentUser.uid,"tasks",id), { status: newStatus, completedAt: newStatus==="done" ? serverTimestamp() : null });
     if (newStatus === "done") { awardXPOnce(`task_done_${id}`, 10, "tâche terminée"); logActivity(`Tâche terminée : ${t.title}`, "task"); }
     else { revokeXPOnce(`task_done_${id}`); }
   } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
@@ -1164,21 +1242,16 @@ function listenProjects(){
   onSnapshot(q, (snap) => {
     projects = snap.docs.map(d=>({ id:d.id, ...d.data() }));
     projectsLoaded = true;
-    renderProjects();
-    renderTodayWidgets();
-    renderGlobalProgress();
-    renderProfilePage();
+    renderProjects(); renderTodayWidgets(); renderGlobalProgress(); renderProfilePage();
     populateProjectSelects();
     if (tasksLoaded) syncProjectProgress();
   }, (err) => { console.error("projects listener:", err); showToast("⚠️ Impossible de charger les projets."); });
 }
-
 $("project-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = $("project-name").value.trim();
   if (!name) return;
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
   try {
     await addDoc(collection(db,"users",currentUser.uid,"projects"), {
       name, description: $("project-desc").value.trim(), status: $("project-status").value,
@@ -1189,14 +1262,12 @@ $("project-form").addEventListener("submit", async (e) => {
   } catch(err){ console.error(err); showToast("⚠️ Erreur lors de la création."); }
   btn.disabled = false;
 });
-
 function calculateProjectProgress(project){
   const linked = tasks.filter(t=>t.projectId === project.id);
   if (!linked.length) return null;
   const done = linked.filter(t=>t.status==="done").length;
   return { pct: Math.round((done/linked.length)*100), done, total: linked.length };
 }
-
 async function syncProjectProgress(){
   for (const p of projects){
     const calc = calculateProjectProgress(p);
@@ -1205,53 +1276,35 @@ async function syncProjectProgress(){
     const wasComplete = (p.progress||0) >= 100;
     p.progress = calc.pct;
     try {
-      await updateDoc(doc(db,"users",currentUser.uid,"projects",p.id), {
-        progress: calc.pct, status: calc.pct>=100 ? "terminé" : (p.status==="terminé"?"en cours":p.status)
-      });
+      await updateDoc(doc(db,"users",currentUser.uid,"projects",p.id), { progress: calc.pct, status: calc.pct>=100 ? "terminé" : (p.status==="terminé"?"en cours":p.status) });
       if (calc.pct>=100 && !wasComplete){ awardXPOnce(`project_done_${p.id}`,50,"projet terminé"); logActivity(`Projet terminé : ${p.name}`,"project"); }
       if (calc.pct<100 && wasComplete){ revokeXPOnce(`project_done_${p.id}`); }
     } catch(e){ console.error("sync project progress failed:", e); }
   }
   renderProjects();
 }
-
 function projectCardHtml(p,i){
   const calc = calculateProjectProgress(p);
   const progress = calc ? calc.pct : (p.progress || 0);
   const linkedTasks = tasks.filter(t=>t.projectId===p.id);
-  return `
-    <div class="project-card w-4" data-id="${p.id}" style="animation-delay:${Math.min(i,8)*0.03}s">
-      <div class="project-card-head">
-        <div class="project-name">${escHtml(p.name)}</div>
-        <div class="project-status status-${p.status}">${p.status}</div>
-      </div>
+  return `<div class="project-card w-4" data-id="${p.id}" style="animation-delay:${Math.min(i,8)*0.03}s">
+      <div class="project-card-head"><div class="project-name">${escHtml(p.name)}</div><div class="project-status status-${p.status}">${p.status}</div></div>
       ${p.description ? `<div class="project-desc">${escHtml(p.description)}</div>` : ""}
-      <div class="project-progress-row">
-        <div class="progress-track" style="flex:1"><div class="progress-fill teal" style="width:${progress}%"></div></div>
-        <div class="project-progress-num">${progress}%</div>
-      </div>
+      <div class="project-progress-row"><div class="progress-track" style="flex:1"><div class="progress-fill teal" style="width:${progress}%"></div></div><div class="project-progress-num">${progress}%</div></div>
       ${calc
         ? `<div class="project-progress-sub">${calc.done} / ${calc.total} tâches terminées — automatique</div>
            <button class="btn-sm-link" data-action="toggle-tasklist" data-id="${p.id}">Voir les tâches (${calc.total})</button>
            <div class="project-tasklist hidden" id="project-tasklist-${p.id}">${linkedTasks.map((t,ti)=>taskRowHtml(t,ti)).join("")}</div>`
         : `<div class="project-progress-sub">Aucune tâche liée — progression manuelle</div>
-           <input type="range" min="0" max="100" value="${progress}" data-action="progress" data-id="${p.id}" style="accent-color:var(--teal)"/>`
-      }
-      <div style="display:flex;gap:6px;align-items:center;margin-top:2px;justify-content:flex-end">
-        <button class="btn-danger" data-action="delete-project" data-id="${p.id}">Suppr.</button>
-      </div>
+           <input type="range" min="0" max="100" value="${progress}" data-action="progress" data-id="${p.id}" style="accent-color:var(--teal)"/>`}
+      <div style="display:flex;gap:6px;align-items:center;margin-top:2px;justify-content:flex-end"><button class="btn-danger" data-action="delete-project" data-id="${p.id}">Suppr.</button></div>
     </div>`;
 }
-
 function renderProjects(){
   const grid = $("projects-grid");
   grid.innerHTML = projects.length ? projects.map(projectCardHtml).join("") : '<div class="w-empty w-12">Aucun projet pour l\'instant.</div>';
-  grid.querySelectorAll("[data-action='delete-project']").forEach(btn=>{
-    btn.addEventListener("click", () => deleteProject(btn.dataset.id));
-  });
-  grid.querySelectorAll("[data-action='progress']").forEach(input=>{
-    input.addEventListener("change", () => updateProjectProgress(input.dataset.id, parseInt(input.value)));
-  });
+  grid.querySelectorAll("[data-action='delete-project']").forEach(btn=>{ btn.addEventListener("click", () => deleteProject(btn.dataset.id)); });
+  grid.querySelectorAll("[data-action='progress']").forEach(input=>{ input.addEventListener("change", () => updateProjectProgress(input.dataset.id, parseInt(input.value))); });
   grid.querySelectorAll("[data-action='toggle-tasklist']").forEach(btn=>{
     btn.addEventListener("click", () => {
       const panel = $("project-tasklist-"+btn.dataset.id);
@@ -1260,14 +1313,9 @@ function renderProjects(){
     });
   });
   grid.querySelectorAll(".project-tasklist [data-action]").forEach(btn=>{
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.id;
-      if (btn.dataset.action==="toggle") toggleTask(id);
-      if (btn.dataset.action==="delete") deleteTask(id);
-    });
+    btn.addEventListener("click", () => { const id = btn.dataset.id; if (btn.dataset.action==="toggle") toggleTask(id); if (btn.dataset.action==="delete") deleteTask(id); });
   });
 }
-
 async function updateProjectProgress(id, value){
   const p = projects.find(x=>x.id===id); if (!p) return;
   if (calculateProjectProgress(p)) return;
@@ -1283,38 +1331,181 @@ async function deleteProject(id){
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 
+// ═══════════════ OBJECTIFS ═══════════════
+function listenGoals(){
+  const q = query(collection(db,"users",currentUser.uid,"goals"), orderBy("createdAt","desc"));
+  onSnapshot(q, (snap) => { goals = snap.docs.map(d=>({ id:d.id, milestones:[], ...d.data() })); renderGoals(); },
+    (err) => console.error("goals listener:", err));
+}
+$("goal-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = $("goal-title").value.trim();
+  if (!title) return;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"goals"), {
+      title, description: $("goal-desc").value.trim(), targetDate: $("goal-target-date").value || null,
+      milestones: [], progress: 0, status: "en cours", createdAt: serverTimestamp()
+    });
+    $("goal-form").reset();
+    showToast("✅ Objectif créé !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de la création."); }
+  btn.disabled = false;
+});
+function calculateGoalProgress(g){
+  const ms = g.milestones || [];
+  if (!ms.length) return null;
+  const done = ms.filter(m=>m.done).length;
+  return { pct: Math.round((done/ms.length)*100), done, total: ms.length };
+}
+function goalCardHtml(g,i){
+  const calc = calculateGoalProgress(g);
+  const progress = calc ? calc.pct : (g.progress || 0);
+  const ms = g.milestones || [];
+  return `<div class="project-card w-4" data-id="${g.id}" style="animation-delay:${Math.min(i,8)*0.03}s">
+      <div class="project-card-head"><div class="project-name">${escHtml(g.title)}</div><div class="project-status status-${g.status==='terminé'?'terminé':''}">${g.status||"en cours"}</div></div>
+      ${g.description ? `<div class="project-desc">${escHtml(g.description)}</div>` : ""}
+      ${g.targetDate ? `<div class="project-progress-sub">📅 ${new Date(g.targetDate+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})}</div>` : ""}
+      <div class="project-progress-row"><div class="progress-track" style="flex:1"><div class="progress-fill" style="width:${progress}%"></div></div><div class="project-progress-num">${progress}%</div></div>
+      ${calc ? `<div class="project-progress-sub">${calc.done} / ${calc.total} jalons atteints</div>` : `<input type="range" min="0" max="100" value="${progress}" data-action="goal-progress" data-id="${g.id}" style="accent-color:var(--amber)"/>`}
+      <div class="project-tasklist">
+        ${ms.map(m=>`<div class="item-row" style="padding:8px 10px">
+            <button class="check-btn ${m.done?"checked":""}" data-action="toggle-milestone" data-id="${g.id}" data-mid="${m.id}">${m.done?"✓":""}</button>
+            <div class="item-body"><div class="item-title" style="font-size:.82rem">${escHtml(m.text)}</div></div>
+          </div>`).join("")}
+      </div>
+      <div class="mini-add-row"><input type="text" placeholder="Ajouter un jalon…" data-goal-milestone-input="${g.id}"/><button class="btn-xs" data-action="add-milestone" data-id="${g.id}">Ajouter</button></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:2px"><button class="btn-danger" data-action="delete-goal" data-id="${g.id}">Suppr.</button></div>
+    </div>`;
+}
+function renderGoals(){
+  const grid = $("goals-grid");
+  grid.innerHTML = goals.length ? goals.map(goalCardHtml).join("") : '<div class="w-empty w-12">Aucun objectif pour l\'instant.</div>';
+  grid.querySelectorAll("[data-action='delete-goal']").forEach(btn=>{ btn.addEventListener("click", () => deleteGoal(btn.dataset.id)); });
+  grid.querySelectorAll("[data-action='goal-progress']").forEach(input=>{ input.addEventListener("change", () => updateGoalProgress(input.dataset.id, parseInt(input.value))); });
+  grid.querySelectorAll("[data-action='toggle-milestone']").forEach(btn=>{ btn.addEventListener("click", () => toggleMilestone(btn.dataset.id, btn.dataset.mid)); });
+  grid.querySelectorAll("[data-action='add-milestone']").forEach(btn=>{ btn.addEventListener("click", () => addMilestone(btn.dataset.id)); });
+}
+async function addMilestone(goalId){
+  const input = document.querySelector(`[data-goal-milestone-input="${goalId}"]`);
+  const text = input.value.trim(); if (!text) return;
+  const g = goals.find(x=>x.id===goalId); if (!g) return;
+  const milestones = [...(g.milestones||[]), { id: uid8(), text, done: false }];
+  try { await updateDoc(doc(db,"users",currentUser.uid,"goals",goalId), { milestones }); input.value = ""; }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function toggleMilestone(goalId, mid){
+  const g = goals.find(x=>x.id===goalId); if (!g) return;
+  const milestones = (g.milestones||[]).map(m => m.id===mid ? { ...m, done: !m.done } : m);
+  const done = milestones.filter(m=>m.done).length;
+  const pct = milestones.length ? Math.round((done/milestones.length)*100) : 0;
+  const wasComplete = (g.progress||0) >= 100 || g.status === "terminé";
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid,"goals",goalId), { milestones, progress: pct, status: pct>=100 ? "terminé" : "en cours" });
+    if (pct>=100 && !wasComplete){ awardXPOnce(`goal_done_${goalId}`,200,"objectif terminé"); logActivity(`Objectif terminé : ${g.title}`,"goal"); }
+    if (pct<100 && wasComplete){ revokeXPOnce(`goal_done_${goalId}`); }
+  } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function updateGoalProgress(id, value){
+  const g = goals.find(x=>x.id===id); if (!g) return;
+  if (calculateGoalProgress(g)) return;
+  const wasComplete = g.progress >= 100;
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid,"goals",id), { progress: value, status: value>=100 ? "terminé" : "en cours" });
+    if (value>=100 && !wasComplete){ awardXPOnce(`goal_done_${id}`,200,"objectif terminé"); logActivity(`Objectif terminé : ${g.title}`,"goal"); }
+    if (value<100 && wasComplete){ revokeXPOnce(`goal_done_${id}`); }
+  } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function deleteGoal(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"goals",id)); showToast("🗑️ Objectif supprimé."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ QUÊTES ═══════════════
+function listenQuests(){
+  const q = query(collection(db,"users",currentUser.uid,"quests"), orderBy("createdAt","desc"));
+  onSnapshot(q, (snap) => { quests = snap.docs.map(d=>({ id:d.id, resetCount:0, ...d.data() })); renderQuests(); },
+    (err) => console.error("quests listener:", err));
+}
+const QUEST_TYPE_LABELS = { daily:"Quotidienne", weekly:"Hebdomadaire", monthly:"Mensuelle", custom:"Personnalisée" };
+$("quest-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = $("quest-title").value.trim();
+  if (!title) return;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"quests"), {
+      title, type: $("quest-type").value, target: parseInt($("quest-target").value)||1,
+      current: 0, xpReward: parseInt($("quest-xp").value)||20, resetCount: 0, createdAt: serverTimestamp()
+    });
+    $("quest-form").reset(); $("quest-target").value=1; $("quest-xp").value=20;
+    showToast("✅ Quête créée !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de la création."); }
+  btn.disabled = false;
+});
+function questItemHtml(qst,i){
+  const completed = qst.current >= qst.target;
+  return `<div class="quest-item ${completed?"completed":""}" data-id="${qst.id}" style="animation-delay:${Math.min(i,10)*0.03}s">
+      <div class="item-body">
+        <div class="item-title">${escHtml(qst.title)} <span class="quest-type-badge">${QUEST_TYPE_LABELS[qst.type]||qst.type}</span></div>
+        <div class="item-meta">${qst.current} / ${qst.target} · +${qst.xpReward} XP</div>
+        <div class="progress-track" style="margin-top:6px;max-width:220px"><div class="progress-fill" style="width:${Math.min(100,(qst.current/qst.target)*100)}%"></div></div>
+      </div>
+      <div class="item-actions">
+        ${!completed ? `<button class="btn-xs" data-action="quest-inc" data-id="${qst.id}">+1</button>` : `<span class="item-badge" style="background:var(--ok-dim);color:var(--ok)">Accomplie ✓</span>`}
+        <button class="btn-ghost" data-action="quest-reset" data-id="${qst.id}" style="padding:6px 10px;font-size:.72rem">Réinitialiser</button>
+        <button class="btn-danger" data-action="quest-delete" data-id="${qst.id}">Suppr.</button>
+      </div>
+    </div>`;
+}
+function renderQuests(){
+  const list = $("quests-list");
+  list.innerHTML = quests.length ? quests.map(questItemHtml).join("") : '<div class="w-empty">Aucune quête pour l\'instant.</div>';
+  list.querySelectorAll("[data-action='quest-inc']").forEach(btn=>{ btn.addEventListener("click", () => incrementQuest(btn.dataset.id)); });
+  list.querySelectorAll("[data-action='quest-reset']").forEach(btn=>{ btn.addEventListener("click", () => resetQuest(btn.dataset.id)); });
+  list.querySelectorAll("[data-action='quest-delete']").forEach(btn=>{ btn.addEventListener("click", () => deleteQuest(btn.dataset.id)); });
+}
+async function incrementQuest(id){
+  const qst = quests.find(x=>x.id===id); if (!qst) return;
+  const newCurrent = Math.min(qst.target, (qst.current||0) + 1);
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid,"quests",id), { current: newCurrent });
+    if (newCurrent >= qst.target){ awardXPOnce(`quest_done_${id}_r${qst.resetCount||0}`, qst.xpReward, "quête accomplie"); logActivity(`Quête accomplie : ${qst.title}`, "quest"); }
+  } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function resetQuest(id){
+  const qst = quests.find(x=>x.id===id); if (!qst) return;
+  try { await updateDoc(doc(db,"users",currentUser.uid,"quests",id), { current: 0, resetCount: (qst.resetCount||0)+1 }); showToast("🔄 Quête réinitialisée."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function deleteQuest(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"quests",id)); showToast("🗑️ Quête supprimée."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
 // ═══════════════ HABITUDES ═══════════════
 function listenHabits(){
   const q = query(collection(db,"users",currentUser.uid,"habits"), orderBy("createdAt","desc"));
   onSnapshot(q, (snap) => {
     habits = snap.docs.map(d=>({ id:d.id, checkins:[], ...d.data() }));
-    renderHabits();
-    renderTodayWidgets();
-    renderGlobalProgress();
-    renderProfilePage();
+    renderHabits(); renderTodayWidgets(); renderGlobalProgress(); renderProfilePage(); renderStats();
   }, (err) => { console.error("habits listener:", err); showToast("⚠️ Impossible de charger les habitudes."); });
 }
-
 $("habit-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = $("habit-name").value.trim();
   if (!name) return;
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
   try {
-    await addDoc(collection(db,"users",currentUser.uid,"habits"), {
-      name, frequency: $("habit-frequency").value, checkins: [], createdAt: serverTimestamp()
-    });
+    await addDoc(collection(db,"users",currentUser.uid,"habits"), { name, frequency: $("habit-frequency").value, checkins: [], createdAt: serverTimestamp() });
     $("habit-form").reset(); $("habit-frequency").value = "quotidien";
     showToast("✅ Habitude créée !");
   } catch(err){ console.error(err); showToast("⚠️ Erreur lors de la création."); }
   btn.disabled = false;
 });
-
 function computeStreak(checkins){
   if (!checkins || !checkins.length) return 0;
-  const set = new Set(checkins);
-  let streak = 0; let d = new Date();
+  const set = new Set(checkins); let streak = 0; let d = new Date();
   while (true){ const key = d.toISOString().slice(0,10); if (set.has(key)){ streak++; d.setDate(d.getDate()-1); } else break; }
   return streak;
 }
@@ -1328,28 +1519,21 @@ function computeBestStreak(checkins){
   }
   return best;
 }
-
 function habitRowHtml(h,i){
   const doneToday = (h.checkins||[]).includes(todayStr());
   const streak = computeStreak(h.checkins);
-  return `
-    <div class="habit-item" data-id="${h.id}" style="animation-delay:${Math.min(i,10)*0.025}s">
-      <div class="habit-info">
-        <div class="habit-name">${escHtml(h.name)}</div>
-        <div class="habit-streak">${streak>0 ? `🔥 ${streak} jour${streak>1?"s":""} de suite` : (h.frequency==="hebdo"?"Hebdomadaire":"Quotidienne")}</div>
-      </div>
+  return `<div class="habit-item" data-id="${h.id}" style="animation-delay:${Math.min(i,10)*0.025}s">
+      <div class="habit-info"><div class="habit-name">${escHtml(h.name)}</div><div class="habit-streak">${streak>0 ? `🔥 ${streak} jour${streak>1?"s":""} de suite` : (h.frequency==="hebdo"?"Hebdomadaire":"Quotidienne")}</div></div>
       <button class="habit-check-btn ${doneToday?"done":""}" data-action="check-habit" data-id="${h.id}">${doneToday ? "✓ Fait" : "Marquer fait"}</button>
       <button class="btn-danger" data-action="delete-habit" data-id="${h.id}">Suppr.</button>
     </div>`;
 }
-
 function renderHabits(){
   const list = $("all-habits-list");
   list.innerHTML = habits.length ? habits.map(habitRowHtml).join("") : '<div class="w-empty">Aucune habitude pour l\'instant.</div>';
   list.querySelectorAll("[data-action='check-habit']").forEach(btn=>{ btn.addEventListener("click", () => toggleHabitToday(btn.dataset.id)); });
   list.querySelectorAll("[data-action='delete-habit']").forEach(btn=>{ btn.addEventListener("click", () => deleteHabit(btn.dataset.id)); });
 }
-
 async function toggleHabitToday(id){
   const h = habits.find(x=>x.id===id); if (!h) return;
   const today = todayStr();
@@ -1376,19 +1560,15 @@ function renderTodayWidgets(){
   $("today-tasks-list").querySelectorAll("[data-action]").forEach(btn=>{
     btn.addEventListener("click", () => { const id = btn.dataset.id; if (btn.dataset.action==="toggle") toggleTask(id); if (btn.dataset.action==="delete") deleteTask(id); });
   });
-
   $("today-habits-list").innerHTML = habits.length ? habits.slice(0,5).map(habitRowHtml).join("") : '<div class="w-empty">Pas encore d\'habitude suivie.</div>';
   $("today-habits-list").querySelectorAll("[data-action='check-habit']").forEach(btn=>{ btn.addEventListener("click", () => toggleHabitToday(btn.dataset.id)); });
   $("today-habits-list").querySelectorAll("[data-action='delete-habit']").forEach(btn=>{ btn.addEventListener("click", () => deleteHabit(btn.dataset.id)); });
-
   const activeProjects = projects.filter(p=>p.status!=="terminé");
   $("today-projects-list").innerHTML = activeProjects.length ? activeProjects.slice(0,4).map(p => `
-        <div class="item-row"><div class="item-body">
-          <div class="item-title">${escHtml(p.name)}</div>
+        <div class="item-row"><div class="item-body"><div class="item-title">${escHtml(p.name)}</div>
           <div class="progress-track" style="margin-top:6px"><div class="progress-fill teal" style="width:${p.progress||0}%"></div></div>
         </div></div>`).join("") : '<div class="w-empty">Aucun projet en cours.</div>';
 }
-
 function renderGlobalProgress(){
   const parts = [];
   if (tasks.length) parts.push(tasks.filter(t=>t.status==="done").length / tasks.length);
@@ -1410,12 +1590,10 @@ function renderProfilePage(){
   $("profile-avatar-lg").className = "profile-avatar-lg c-" + color;
   $("profile-name").textContent = username;
   $("profile-email").textContent = profile.email || currentUser.email || "";
-
   const level = profile.level || 1, xp = profile.xp || 0, xpNext = xpForLevel(level);
   $("profile-level-label").textContent = `Niveau ${level}`;
   $("profile-xp-label").textContent = `${xp} / ${xpNext} XP`;
   $("profile-xp-fill").style.width = Math.min(100,(xp/xpNext)*100) + "%";
-
   $("stat-tasks-done").textContent = tasks.filter(t=>t.status==="done").length;
   $("stat-projects-done").textContent = projects.filter(p=>p.status==="terminé").length;
   const bestStreaks = habits.map(h=>computeBestStreak(h.checkins));
@@ -1428,10 +1606,8 @@ function renderProfilePage(){
 
 // ═══════════════ PARAMÈTRES ═══════════════
 const WIDGET_DEFS = [
-  { key:"today-tasks", label:"Tâches du jour" },
-  { key:"today-habits", label:"Habitudes" },
-  { key:"today-projects", label:"Projets actifs" },
-  { key:"activity", label:"Activité récente" }
+  { key:"today-tasks", label:"Tâches du jour" }, { key:"today-habits", label:"Habitudes" },
+  { key:"today-projects", label:"Projets actifs" }, { key:"activity", label:"Activité récente" }
 ];
 const NOTIF_DEFS = [
   { key:"deadlines", label:"Échéances proches", desc:"Tâches et projets qui approchent de leur date limite." },
@@ -1440,7 +1616,6 @@ const NOTIF_DEFS = [
   { key:"levelUp", label:"Passage de niveau", desc:"Prévenu·e quand tu montes de niveau." },
   { key:"budgetAlerts", label:"Alertes de budget", desc:"Prévenu·e à 80 %, 90 % et 100 % d'un budget dépensé." }
 ];
-
 function populateTimezoneSelect(){
   const zones = ["Europe/Paris","Europe/London","Europe/Brussels","Europe/Zurich","America/Montreal","America/New_York","America/Los_Angeles","Africa/Casablanca","Africa/Tunis","Africa/Algiers","Asia/Dubai","Indian/Reunion"];
   const current = profile?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris";
@@ -1452,7 +1627,6 @@ function populateTimezoneSelect(){
     catch(err){ console.error(err); showToast("⚠️ Erreur."); }
   });
 }
-
 function populateCurrencySelect(){
   const current = profile?.preferences?.currency || "EUR";
   $("settings-currency").innerHTML = Object.keys(CURRENCIES).map(c=>`<option value="${c}" ${c===current?"selected":""}>${c} (${CURRENCIES[c]})</option>`).join("");
@@ -1460,41 +1634,32 @@ function populateCurrencySelect(){
     profile.preferences = { ...(profile.preferences||{}), currency: e.target.value };
     try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.currency": e.target.value }); showToast("✅ Devise mise à jour."); }
     catch(err){ console.error(err); showToast("⚠️ Erreur."); }
-    renderFinances();
+    renderFinances(); renderBudgets(); renderFinancialGoals(); renderDebts();
   });
 }
-
 function renderSettingsPage(){
   if (!profile) return;
   $("settings-username").value = profile.username || "";
   $("settings-email").value = profile.email || currentUser.email || "";
   applyDensity(profile.preferences?.density || "comfortable");
   applyWeekStart(profile.preferences?.weekStart || "monday");
-
   const activeWidgets = profile.preferences?.widgets || WIDGET_DEFS.map(w=>w.key);
-  $("settings-widgets-list").innerHTML = WIDGET_DEFS.map(w => `
-    <div class="settings-row"><div><div class="settings-row-label">${w.label}</div></div>
+  $("settings-widgets-list").innerHTML = WIDGET_DEFS.map(w => `<div class="settings-row"><div><div class="settings-row-label">${w.label}</div></div>
       <div class="toggle-switch ${activeWidgets.includes(w.key)?"on":""}" data-widget="${w.key}"><div class="knob"></div></div></div>`).join("");
   $("settings-widgets-list").querySelectorAll(".toggle-switch").forEach(el=>{ el.addEventListener("click", () => toggleWidget(el.dataset.widget, el)); });
-
   const activeNotifs = profile.preferences?.notifications || {};
-  $("settings-notifs-list").innerHTML = NOTIF_DEFS.map(n => `
-    <div class="settings-row"><div><div class="settings-row-label">${n.label}</div><div class="settings-row-desc">${n.desc}</div></div>
+  $("settings-notifs-list").innerHTML = NOTIF_DEFS.map(n => `<div class="settings-row"><div><div class="settings-row-label">${n.label}</div><div class="settings-row-desc">${n.desc}</div></div>
       <div class="toggle-switch ${activeNotifs[n.key]!==false?"on":""}" data-notif="${n.key}"><div class="knob"></div></div></div>`).join("");
   $("settings-notifs-list").querySelectorAll(".toggle-switch").forEach(el=>{ el.addEventListener("click", () => toggleNotif(el.dataset.notif, el)); });
-
   const color = avatarColorFor(profile, currentUser.uid);
   $("avatar-swatches").innerHTML = AVATAR_COLORS.map(c=>`<button type="button" class="avatar-swatch ${c===color?"selected":""}" data-color="${c}" style="background:${colorVar(c)}"></button>`).join("");
   $("avatar-swatches").querySelectorAll(".avatar-swatch").forEach(el=>{ el.addEventListener("click", () => setAvatarColor(el.dataset.color)); });
 }
-
 async function setAvatarColor(color){
   profile.avatarColor = color;
   renderShell(); renderProfilePage(); renderSettingsPage();
-  try { await updateDoc(doc(db,"users",currentUser.uid), { avatarColor: color }); }
-  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+  try { await updateDoc(doc(db,"users",currentUser.uid), { avatarColor: color }); } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
-
 async function toggleWidget(key, el){
   const current = profile.preferences?.widgets || WIDGET_DEFS.map(w=>w.key);
   const isOn = current.includes(key);
@@ -1504,7 +1669,6 @@ async function toggleWidget(key, el){
   try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.widgets": updated }); showToast(isOn ? "Widget masqué." : "Widget affiché."); }
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
-
 async function toggleNotif(key, el){
   const current = profile.preferences?.notifications || {};
   const isOn = current[key] !== false;
@@ -1514,45 +1678,30 @@ async function toggleNotif(key, el){
   try { await updateDoc(doc(db,"users",currentUser.uid), { "preferences.notifications": updated }); showToast("✅ Préférence enregistrée."); }
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
-
 $("settings-theme-toggle").addEventListener("click", () => toggleTheme());
-
-/**
- * Modifier le nom d'utilisateur — met à jour Firestore ET le profil Firebase Auth,
- * avec un message de confirmation visible directement sous le formulaire.
- */
 $("settings-account-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const msgEl = $("settings-account-msg"); msgEl.innerHTML = "";
   const username = $("settings-username").value.trim();
-  if (!/^[\p{L}\p{N} _'-]{2,30}$/u.test(username)) {
-    msgEl.innerHTML = '<div class="error-msg">Le nom d\'utilisateur doit faire 2 à 30 caractères (lettres, chiffres, espaces, _ - \').</div>';
-    return;
-  }
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
+  if (!/^[\p{L}\p{N} _'-]{2,30}$/u.test(username)) { msgEl.innerHTML = '<div class="error-msg">2 à 30 caractères (lettres, chiffres, espaces, _ - \').</div>'; return; }
+  const btn = e.target.querySelector("button"); btn.disabled = true;
   try {
     await updateDoc(doc(db,"users",currentUser.uid), { username });
-    try { await updateProfile(currentUser, { displayName: username }); } catch(_e){ /* non bloquant */ }
+    try { await updateProfile(currentUser, { displayName: username }); } catch(_e){}
     profile.username = username;
     renderShell(); renderTodayHeader(); renderProfilePage();
     msgEl.innerHTML = '<div class="success-msg">Nom d\'utilisateur mis à jour.</div>';
     showToast("✅ Profil mis à jour.");
-  } catch(err){
-    console.error(err);
-    msgEl.innerHTML = '<div class="error-msg">Impossible d\'enregistrer — vérifie ta connexion et réessaie.</div>';
-  }
+  } catch(err){ console.error(err); msgEl.innerHTML = '<div class="error-msg">Impossible d\'enregistrer — réessaie.</div>'; }
   btn.disabled = false;
 });
-
 $("settings-password-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const msgEl = $("settings-password-msg"); msgEl.innerHTML = "";
   const currentPw = $("settings-current-password").value;
   const newPw = $("settings-new-password").value;
-  if (newPw.length < 8) { msgEl.innerHTML = '<div class="error-msg">Le nouveau mot de passe doit faire 8 caractères min.</div>'; return; }
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
+  if (newPw.length < 8) { msgEl.innerHTML = '<div class="error-msg">8 caractères min.</div>'; return; }
+  const btn = e.target.querySelector("button"); btn.disabled = true;
   try {
     const cred = EmailAuthProvider.credential(currentUser.email, currentPw);
     await reauthenticateWithCredential(currentUser, cred);
@@ -1562,40 +1711,34 @@ $("settings-password-form").addEventListener("submit", async (e) => {
   } catch(err){
     console.error(err);
     const code = err.code || "";
-    const friendly = code.includes("wrong-password") || code.includes("invalid-credential") ? "Mot de passe actuel incorrect." : "Une erreur est survenue.";
-    msgEl.innerHTML = `<div class="error-msg">${friendly}</div>`;
+    msgEl.innerHTML = `<div class="error-msg">${code.includes("wrong-password")||code.includes("invalid-credential") ? "Mot de passe actuel incorrect." : "Une erreur est survenue."}</div>`;
   }
   btn.disabled = false;
 });
-
 $("settings-export-btn").addEventListener("click", async () => {
   const btn = $("settings-export-btn"); btn.disabled = true; btn.textContent = "Export en cours…";
   try {
-    const data = { profile, tasks, projects, habits, activities, events, transactions, exportedAt: new Date().toISOString() };
+    const data = { profile, tasks, projects, habits, activities, events, transactions, goals, quests, timeSessions, budgets, financialGoals, debts, notes, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `life-os-export-${todayStr()}.json`;
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    const a = document.createElement("a"); a.href = url; a.download = `life-os-export-${todayStr()}.json`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     showToast("✅ Export téléchargé.");
   } catch(e){ console.error(e); showToast("⚠️ Erreur lors de l'export."); }
   btn.disabled = false; btn.textContent = "Exporter";
 });
-
 let deleteConfirmStep = false;
 $("settings-delete-btn").addEventListener("click", async () => {
   const btn = $("settings-delete-btn");
   if (!deleteConfirmStep){
-    deleteConfirmStep = true;
-    btn.textContent = "Confirmer la suppression définitive";
+    deleteConfirmStep = true; btn.textContent = "Confirmer la suppression définitive";
     showToast("⚠️ Clique à nouveau pour confirmer.");
     setTimeout(()=>{ deleteConfirmStep = false; btn.textContent = "Supprimer mon compte"; }, 6000);
     return;
   }
   btn.disabled = true; btn.textContent = "Suppression…";
   try {
-    const collections = ["tasks","projects","habits","activities","events","xpEvents","transactions"];
+    const collections = ["tasks","projects","habits","activities","events","xpEvents","transactions","goals","quests","timeSessions","budgets","financialGoals","debts","notes"];
     for (const col of collections){
       const snap = await getDocs(collection(db,"users",currentUser.uid,col));
       await Promise.all(snap.docs.map(d => deleteDoc(d.ref)));
@@ -1606,8 +1749,7 @@ $("settings-delete-btn").addEventListener("click", async () => {
   } catch(err){
     console.error(err);
     showToast("⚠️ Reconnecte-toi puis réessaie (action sensible).");
-    btn.disabled = false; btn.textContent = "Supprimer mon compte";
-    deleteConfirmStep = false;
+    btn.disabled = false; btn.textContent = "Supprimer mon compte"; deleteConfirmStep = false;
   }
 });
 
@@ -1617,22 +1759,19 @@ function listenEvents(){
   onSnapshot(q, (snap) => { events = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderCalendar(); renderAgenda(); },
     (err) => console.error("events listener:", err));
 }
-
 function renderCalendarDow(){
   const ws = profile?.preferences?.weekStart || "monday";
   const labels = ws === "sunday" ? ["D","L","M","M","J","V","S"] : ["L","M","M","J","V","S","D"];
   $("calendar-dow-row").innerHTML = labels.map(d=>`<div class="calendar-dow">${d}</div>`).join("");
 }
 renderCalendarDow();
-
 function renderCalendar(){
   const ws = profile?.preferences?.weekStart || "monday";
   const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
   $("calendar-month-label").textContent = calendarMonth.toLocaleDateString("fr-FR",{ month:"long", year:"numeric" });
   const firstOfMonth = new Date(year, month, 1);
   let startOffset;
-  if (ws === "sunday"){ startOffset = firstOfMonth.getDay(); }
-  else { startOffset = firstOfMonth.getDay() - 1; if (startOffset < 0) startOffset = 6; }
+  if (ws === "sunday"){ startOffset = firstOfMonth.getDay(); } else { startOffset = firstOfMonth.getDay() - 1; if (startOffset < 0) startOffset = 6; }
   const startDate = new Date(year, month, 1 - startOffset);
   const cells = [];
   for (let i=0;i<42;i++){ const d = new Date(startDate); d.setDate(startDate.getDate()+i); cells.push(d); }
@@ -1646,15 +1785,10 @@ function renderCalendar(){
     const dayEvents = events.filter(e=>e.date===ds);
     const dots = dayEvents.slice(0,4).map(e=>`<span class="calendar-dot" style="background:${colorVar(e.color||CATEGORY_COLORS[e.category])}"></span>`).join("");
     return `<div class="calendar-cell ${isOtherMonth?"other-month":""} ${isToday?"today":""} ${isSelected?"selected":""}" data-date="${ds}" style="animation-delay:${i*0.006}s">
-      <div class="calendar-daynum">${d.getDate()}</div>
-      <div class="calendar-dots">${dots}</div>
-    </div>`;
+      <div class="calendar-daynum">${d.getDate()}</div><div class="calendar-dots">${dots}</div></div>`;
   }).join("");
-  grid.querySelectorAll(".calendar-cell").forEach(cell=>{
-    cell.addEventListener("click", () => { selectedDay = cell.dataset.date; renderCalendar(); renderAgenda(); });
-  });
+  grid.querySelectorAll(".calendar-cell").forEach(cell=>{ cell.addEventListener("click", () => { selectedDay = cell.dataset.date; renderCalendar(); renderAgenda(); }); });
 }
-
 function renderAgenda(){
   const d = new Date(selectedDay+"T00:00");
   $("agenda-day-title").textContent = d.toLocaleDateString("fr-FR",{ weekday:"long", day:"numeric", month:"long" });
@@ -1662,105 +1796,146 @@ function renderAgenda(){
   $("agenda-list").innerHTML = dayEvents.length ? dayEvents.map((e,i)=>`
     <div class="event-row" style="animation-delay:${i*0.04}s">
       <div class="event-dot" style="background:${colorVar(e.color||CATEGORY_COLORS[e.category])}"></div>
-      <div class="event-body">
-        <div class="event-title">${escHtml(e.title)}</div>
-        <div class="event-time">${e.time ? e.time+" · " : ""}${CATEGORY_LABELS[e.category]||"Autre"}${e.projectId && projectNameFor(e.projectId) ? " · "+escHtml(projectNameFor(e.projectId)) : ""}</div>
-      </div>
+      <div class="event-body"><div class="event-title">${escHtml(e.title)}</div>
+        <div class="event-time">${e.time ? e.time+" · " : ""}${CATEGORY_LABELS[e.category]||"Autre"}${e.projectId && projectNameFor(e.projectId) ? " · "+escHtml(projectNameFor(e.projectId)) : ""}</div></div>
       <button class="btn-danger" data-action="delete-event" data-id="${e.id}">Suppr.</button>
     </div>`).join("") : '<div class="w-empty">Aucun événement ce jour-là.</div>';
-  $("agenda-list").querySelectorAll("[data-action='delete-event']").forEach(btn=>{
-    btn.addEventListener("click", () => deleteEvent(btn.dataset.id));
-  });
+  $("agenda-list").querySelectorAll("[data-action='delete-event']").forEach(btn=>{ btn.addEventListener("click", () => deleteEvent(btn.dataset.id)); });
 }
-
 $("calendar-prev").addEventListener("click", () => { calendarMonth.setMonth(calendarMonth.getMonth()-1); renderCalendar(); });
 $("calendar-next").addEventListener("click", () => { calendarMonth.setMonth(calendarMonth.getMonth()+1); renderCalendar(); });
 $("calendar-today").addEventListener("click", () => { calendarMonth = new Date(); calendarMonth.setDate(1); selectedDay = todayStr(); renderCalendar(); renderAgenda(); });
-
 $("event-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const title = $("event-title").value.trim();
-  if (!title) return;
+  const title = $("event-title").value.trim(); if (!title) return;
   const btn = e.target.querySelector("button"); btn.disabled = true;
   const category = $("event-category").value;
   try {
     await addDoc(collection(db,"users",currentUser.uid,"events"), {
-      title, date: selectedDay, time: $("event-time").value || null,
-      category, color: CATEGORY_COLORS[category], projectId: $("event-project").value || null,
-      createdAt: serverTimestamp()
+      title, date: selectedDay, time: $("event-time").value || null, category, color: CATEGORY_COLORS[category],
+      projectId: $("event-project").value || null, createdAt: serverTimestamp()
     });
     $("event-form").reset(); $("event-category").value = "travail";
     showToast("✅ Événement ajouté !");
   } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'ajout."); }
   btn.disabled = false;
 });
-
 async function deleteEvent(id){
   try { await deleteDoc(doc(db,"users",currentUser.uid,"events",id)); showToast("🗑️ Événement supprimé."); }
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 
-// ═══════════════ FINANCES (PORTEFEUILLE) ═══════════════
+// ═══════════════ TEMPS (STOPWATCH) ═══════════════
+let timerElapsedMs = 0, timerStartTs = null, timerRunning = false, timerInterval = null;
+function formatTimer(ms){
+  const totalSec = Math.floor(ms/1000);
+  const h = String(Math.floor(totalSec/3600)).padStart(2,"0");
+  const m = String(Math.floor((totalSec%3600)/60)).padStart(2,"0");
+  const s = String(totalSec%60).padStart(2,"0");
+  return `${h}:${m}:${s}`;
+}
+function tickTimer(){ $("timer-display").textContent = formatTimer(Date.now() - timerStartTs); }
+$("timer-start").addEventListener("click", () => {
+  timerStartTs = Date.now() - timerElapsedMs; timerRunning = true;
+  timerInterval = setInterval(tickTimer, 1000);
+  $("timer-start").disabled = true; $("timer-pause").disabled = false; $("timer-stop").disabled = false;
+});
+$("timer-pause").addEventListener("click", () => {
+  clearInterval(timerInterval); timerElapsedMs = Date.now() - timerStartTs; timerRunning = false;
+  $("timer-start").disabled = false; $("timer-pause").disabled = true;
+});
+$("timer-stop").addEventListener("click", async () => {
+  clearInterval(timerInterval);
+  const finalMs = timerRunning ? (Date.now() - timerStartTs) : timerElapsedMs;
+  const durationSec = Math.round(finalMs/1000);
+  timerElapsedMs = 0; timerRunning = false;
+  $("timer-display").textContent = "00:00:00";
+  $("timer-start").disabled = false; $("timer-pause").disabled = true; $("timer-stop").disabled = true;
+  if (durationSec < 5){ showToast("⏱️ Session trop courte, non enregistrée."); return; }
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"timeSessions"), {
+      label: $("timer-label").value.trim() || "Session de travail", projectId: $("timer-project").value || null,
+      duration: durationSec, date: todayStr(), createdAt: serverTimestamp()
+    });
+    awardXPOnce(`timesession_${Date.now()}_${uid8()}`, 10, "session de concentration");
+    logActivity(`Session de travail enregistrée : ${formatHours(durationSec)}`, "task");
+    $("timer-label").value = "";
+    showToast("✅ Session enregistrée !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'enregistrement."); }
+});
+function listenTimeSessions(){
+  const q = query(collection(db,"users",currentUser.uid,"timeSessions"), orderBy("createdAt","desc"), limit(40));
+  onSnapshot(q, (snap) => { timeSessions = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderTimeTracking(); renderStats(); },
+    (err) => console.error("timeSessions listener:", err));
+}
+function renderTimeTracking(){
+  const today = todayStr();
+  const weekAgo = dstr(new Date(Date.now()-6*86400000));
+  const thisMonth = today.slice(0,7);
+  const sum = (arr) => arr.reduce((a,s)=>a+(s.duration||0),0);
+  $("time-today").textContent = formatHours(sum(timeSessions.filter(s=>s.date===today)));
+  $("time-week").textContent = formatHours(sum(timeSessions.filter(s=>s.date>=weekAgo)));
+  $("time-month").textContent = formatHours(sum(timeSessions.filter(s=>s.date && s.date.slice(0,7)===thisMonth)));
+  const list = $("sessions-list");
+  list.innerHTML = timeSessions.length ? timeSessions.slice(0,15).map((s,i)=>`
+    <div class="session-row" style="animation-delay:${Math.min(i,10)*0.025}s">
+      <div class="item-body"><div class="item-title">${escHtml(s.label)}</div>
+        <div class="item-meta">${formatHours(s.duration)} · ${new Date(s.date+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}${s.projectId && projectNameFor(s.projectId) ? " · "+escHtml(projectNameFor(s.projectId)) : ""}</div></div>
+      <button class="btn-danger" data-action="delete-session" data-id="${s.id}">Suppr.</button>
+    </div>`).join("") : '<div class="w-empty">Aucune session enregistrée pour l\'instant.</div>';
+  list.querySelectorAll("[data-action='delete-session']").forEach(btn=>{ btn.addEventListener("click", () => deleteSession(btn.dataset.id)); });
+}
+async function deleteSession(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"timeSessions",id)); showToast("🗑️ Session supprimée."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ FINANCES — TRANSACTIONS ═══════════════
 function populateTxCategorySelect(){
   const type = $("tx-type").value;
   const cats = type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
   $("tx-category").innerHTML = cats.map(c=>`<option value="${c.key}">${c.label}</option>`).join("");
 }
 $("tx-type").addEventListener("change", populateTxCategorySelect);
-
 function listenTransactions(){
   const q = query(collection(db,"users",currentUser.uid,"transactions"), orderBy("date","desc"));
-  onSnapshot(q, (snap) => { transactions = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderFinances(); renderProfilePage(); },
+  onSnapshot(q, (snap) => { transactions = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderFinances(); renderProfilePage(); renderBudgets(); renderStats(); },
     (err) => { console.error("transactions listener:", err); showToast("⚠️ Impossible de charger les finances."); });
 }
-
 function categoryLabelFor(tx){
   const cats = tx.type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
   return (cats.find(c=>c.key===tx.category) || {}).label || "Autre";
 }
-
 function txRowHtml(t,i){
   const dLabel = new Date(t.date+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
-  return `
-    <div class="tx-row" style="animation-delay:${Math.min(i,10)*0.025}s" data-id="${t.id}">
+  return `<div class="tx-row" style="animation-delay:${Math.min(i,10)*0.025}s" data-id="${t.id}">
       <div class="tx-icon ${t.type}">${t.type==="income"?"↑":"↓"}</div>
-      <div class="tx-body">
-        <div class="tx-desc">${escHtml(t.description || categoryLabelFor(t))}</div>
-        <div class="tx-meta">${categoryLabelFor(t)} · ${dLabel}</div>
-      </div>
+      <div class="tx-body"><div class="tx-desc">${escHtml(t.description || categoryLabelFor(t))}</div><div class="tx-meta">${categoryLabelFor(t)} · ${dLabel}</div></div>
       <div class="tx-amount ${t.type}">${t.type==="income"?"+":"-"}${formatMoney(Math.abs(t.amount))}</div>
       <button class="btn-danger" data-action="delete-tx" data-id="${t.id}">Suppr.</button>
     </div>`;
 }
-
 function renderFinances(){
   const thisMonth = todayStr().slice(0,7);
   const balance = transactions.reduce((a,t)=>a+(t.type==="income"?t.amount:-t.amount),0);
   const monthTx = transactions.filter(t=>monthKey(t.date)===thisMonth);
   const incomeMonth = monthTx.filter(t=>t.type==="income").reduce((a,t)=>a+t.amount,0);
   const expenseMonth = monthTx.filter(t=>t.type==="expense").reduce((a,t)=>a+t.amount,0);
-
-  if ($("fin-balance")){
-    $("fin-balance").textContent = formatMoney(balance);
-    $("fin-balance").className = "fin-hero-num " + (balance>=0?"positive":"negative");
-  }
+  if ($("fin-balance")){ $("fin-balance").textContent = formatMoney(balance); $("fin-balance").className = "fin-hero-num " + (balance>=0?"positive":"negative"); }
   if ($("fin-income-month")) $("fin-income-month").textContent = formatMoney(incomeMonth);
   if ($("fin-expense-month")) $("fin-expense-month").textContent = formatMoney(expenseMonth);
   if ($("fin-income-total-page")) $("fin-income-total-page").textContent = formatMoney(incomeMonth);
   if ($("fin-expense-total-page")) $("fin-expense-total-page").textContent = formatMoney(expenseMonth);
-
   const chartEl = $("fin-bar-chart");
   if (chartEl){
-    if (!incomeMonth && !expenseMonth){
-      chartEl.innerHTML = '<div class="w-empty">Ajoute une transaction pour voir le comparatif.</div>';
-    } else {
+    if (!incomeMonth && !expenseMonth){ chartEl.innerHTML = '<div class="w-empty">Ajoute une transaction pour voir le comparatif.</div>'; }
+    else {
       const max = Math.max(incomeMonth, expenseMonth, 1);
       chartEl.innerHTML = `
         <div class="fin-bar-row"><div class="fin-bar-label">Revenus</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(incomeMonth/max)*100}%;background:linear-gradient(90deg,var(--teal),#6fe0d6)"></div></div><div class="fin-bar-amount">${formatMoney(incomeMonth)}</div></div>
         <div class="fin-bar-row"><div class="fin-bar-label">Dépenses</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(expenseMonth/max)*100}%;background:linear-gradient(90deg,var(--coral),#f28d8b)"></div></div><div class="fin-bar-amount">${formatMoney(expenseMonth)}</div></div>`;
     }
   }
-
   if ($("tx-list-all")){
     $("tx-count").textContent = transactions.length ? `${transactions.length} transaction${transactions.length>1?"s":""}` : "";
     $("tx-list-all").innerHTML = transactions.length ? transactions.slice(0,25).map(txRowHtml).join("") : '<div class="w-empty">Aucune transaction pour l\'instant.</div>';
@@ -1777,10 +1952,7 @@ function renderFinances(){
     wireTxDelete($("tx-list-expense"));
   }
 }
-function wireTxDelete(container){
-  container.querySelectorAll("[data-action='delete-tx']").forEach(btn=>{ btn.addEventListener("click", () => deleteTransaction(btn.dataset.id)); });
-}
-
+function wireTxDelete(container){ container.querySelectorAll("[data-action='delete-tx']").forEach(btn=>{ btn.addEventListener("click", () => deleteTransaction(btn.dataset.id)); }); }
 $("transaction-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const amount = parseFloat($("tx-amount").value);
@@ -1789,8 +1961,7 @@ $("transaction-form").addEventListener("submit", async (e) => {
   const type = $("tx-type").value;
   try {
     await addDoc(collection(db,"users",currentUser.uid,"transactions"), {
-      type, amount, category: $("tx-category").value, description: $("tx-desc").value.trim(),
-      date: $("tx-date").value || todayStr(), createdAt: serverTimestamp()
+      type, amount, category: $("tx-category").value, description: $("tx-desc").value.trim(), date: $("tx-date").value || todayStr(), createdAt: serverTimestamp()
     });
     logActivity(`${type==="income"?"Revenu":"Dépense"} ajouté${type==="income"?"":"e"} : ${formatMoney(amount)}`, "finance");
     $("transaction-form").reset(); $("tx-type").value = "expense"; populateTxCategorySelect(); $("tx-date").value = todayStr();
@@ -1798,17 +1969,314 @@ $("transaction-form").addEventListener("submit", async (e) => {
   } catch(err){ console.error(err); showToast("⚠️ Erreur lors de l'ajout."); }
   btn.disabled = false;
 });
-
 async function deleteTransaction(id){
   try { await deleteDoc(doc(db,"users",currentUser.uid,"transactions",id)); showToast("🗑️ Transaction supprimée."); }
   catch(e){ console.error(e); showToast("⚠️ Erreur."); }
 }
 
+// ═══════════════ FINANCES — BUDGETS ═══════════════
+function populateBudgetCategorySelect(){ $("budget-category").innerHTML = EXPENSE_CATEGORIES.map(c=>`<option value="${c.key}">${c.label}</option>`).join(""); }
+function listenBudgets(){
+  const q = query(collection(db,"users",currentUser.uid,"budgets"));
+  onSnapshot(q, (snap) => { budgets = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderBudgets(); },
+    (err) => console.error("budgets listener:", err));
+}
+$("budget-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const category = $("budget-category").value;
+  const amount = parseFloat($("budget-amount").value);
+  if (!amount || amount<=0) { showToast("⚠️ Montant invalide."); return; }
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try {
+    await setDoc(doc(db,"users",currentUser.uid,"budgets",category), { category, monthlyBudget: amount, updatedAt: serverTimestamp() });
+    $("budget-form").reset();
+    showToast("✅ Budget enregistré !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur."); }
+  btn.disabled = false;
+});
+function renderBudgets(){
+  const list = $("budgets-list"); if (!list) return;
+  const thisMonth = todayStr().slice(0,7);
+  if (!budgets.length){ list.innerHTML = '<div class="w-empty">Aucun budget défini pour l\'instant.</div>'; return; }
+  list.innerHTML = budgets.map((b,i)=>{
+    const spent = transactions.filter(t=>t.type==="expense" && t.category===b.category && monthKey(t.date)===thisMonth).reduce((a,t)=>a+t.amount,0);
+    const pct = Math.min(100, Math.round((spent/b.monthlyBudget)*100));
+    const catLabel = (EXPENSE_CATEGORIES.find(c=>c.key===b.category)||{}).label || b.category;
+    let alert = "";
+    if (pct>=100) alert = '<span class="budget-alert over">100% dépassé</span>';
+    else if (pct>=90) alert = '<span class="budget-alert over">90% atteint</span>';
+    else if (pct>=80) alert = '<span class="budget-alert warn">80% atteint</span>';
+    return `<div class="budget-row" style="animation-delay:${Math.min(i,10)*0.03}s">
+        <div class="budget-row-head"><div class="budget-cat">${escHtml(catLabel)}</div>${alert}</div>
+        <div class="budget-nums">${formatMoney(spent)} / ${formatMoney(b.monthlyBudget)} — ${pct}%</div>
+        <div class="progress-track"><div class="progress-fill ${pct>=90?'coral':''}" style="width:${pct}%"></div></div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn-danger" data-action="delete-budget" data-id="${b.id}">Suppr.</button></div>
+      </div>`;
+  }).join("");
+  list.querySelectorAll("[data-action='delete-budget']").forEach(btn=>{ btn.addEventListener("click", () => deleteBudget(btn.dataset.id)); });
+}
+async function deleteBudget(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"budgets",id)); showToast("🗑️ Budget supprimé."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ FINANCES — OBJECTIFS FINANCIERS ═══════════════
+function listenFinancialGoals(){
+  const q = query(collection(db,"users",currentUser.uid,"financialGoals"), orderBy("createdAt","desc"));
+  onSnapshot(q, (snap) => { financialGoals = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderFinancialGoals(); },
+    (err) => console.error("financialGoals listener:", err));
+}
+$("fingoal-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = $("fingoal-title").value.trim();
+  const target = parseFloat($("fingoal-target").value);
+  if (!title || !target || target<=0) return;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"financialGoals"), { title, targetAmount: target, currentAmount: 0, targetDate: $("fingoal-date").value || null, createdAt: serverTimestamp() });
+    $("fingoal-form").reset();
+    showToast("✅ Objectif financier créé !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur."); }
+  btn.disabled = false;
+});
+function renderFinancialGoals(){
+  const grid = $("fingoals-grid"); if (!grid) return;
+  grid.innerHTML = financialGoals.length ? financialGoals.map((g,i)=>{
+    const pct = Math.min(100, Math.round(((g.currentAmount||0)/g.targetAmount)*100));
+    return `<div class="project-card w-4" data-id="${g.id}" style="animation-delay:${Math.min(i,8)*0.03}s">
+        <div class="project-card-head"><div class="project-name">${escHtml(g.title)}</div></div>
+        <div class="project-progress-sub">${formatMoney(g.currentAmount||0)} / ${formatMoney(g.targetAmount)}</div>
+        <div class="project-progress-row"><div class="progress-track" style="flex:1"><div class="progress-fill teal" style="width:${pct}%"></div></div><div class="project-progress-num">${pct}%</div></div>
+        ${g.targetDate ? `<div class="project-progress-sub">📅 ${new Date(g.targetDate+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})}</div>` : ""}
+        <div class="mini-add-row"><input type="number" step="0.01" min="0.01" placeholder="Montant de la contribution" data-fingoal-contrib="${g.id}"/><button class="btn-xs" data-action="fingoal-contribute" data-id="${g.id}">Ajouter</button></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:2px"><button class="btn-danger" data-action="delete-fingoal" data-id="${g.id}">Suppr.</button></div>
+      </div>`;
+  }).join("") : '<div class="w-empty w-12">Aucun objectif financier pour l\'instant.</div>';
+  grid.querySelectorAll("[data-action='fingoal-contribute']").forEach(btn=>{ btn.addEventListener("click", () => contributeFinGoal(btn.dataset.id)); });
+  grid.querySelectorAll("[data-action='delete-fingoal']").forEach(btn=>{ btn.addEventListener("click", () => deleteFinGoal(btn.dataset.id)); });
+}
+async function contributeFinGoal(id){
+  const input = document.querySelector(`[data-fingoal-contrib="${id}"]`);
+  const amount = parseFloat(input.value);
+  if (!amount || amount<=0) return;
+  const g = financialGoals.find(x=>x.id===id); if (!g) return;
+  const wasComplete = (g.currentAmount||0) >= g.targetAmount;
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid,"financialGoals",id), { currentAmount: increment(amount) });
+    logActivity(`Contribution de ${formatMoney(amount)} à "${g.title}"`, "finance");
+    input.value = "";
+    const newTotal = (g.currentAmount||0)+amount;
+    if (newTotal >= g.targetAmount && !wasComplete){ awardXPOnce(`fingoal_done_${id}`,100,"objectif financier atteint"); logActivity(`Objectif financier atteint : ${g.title}`,"finance"); }
+    showToast("✅ Contribution ajoutée !");
+  } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function deleteFinGoal(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"financialGoals",id)); showToast("🗑️ Objectif supprimé."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ FINANCES — DETTES & EMPRUNTS ═══════════════
+function listenDebts(){
+  const q = query(collection(db,"users",currentUser.uid,"debts"), orderBy("createdAt","desc"));
+  onSnapshot(q, (snap) => { debts = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderDebts(); },
+    (err) => console.error("debts listener:", err));
+}
+$("debt-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const person = $("debt-person").value.trim();
+  const amount = parseFloat($("debt-amount").value);
+  if (!person || !amount || amount<=0) return;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"debts"), {
+      type: $("debt-type").value, person, totalAmount: amount, remainingAmount: amount, dueDate: $("debt-date").value || null, createdAt: serverTimestamp()
+    });
+    $("debt-form").reset();
+    showToast("✅ Ajouté !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur."); }
+  btn.disabled = false;
+});
+function renderDebts(){
+  const list = $("debts-list"); if (!list) return;
+  if (!debts.length){ list.innerHTML = '<div class="w-empty">Aucune dette ni emprunt pour l\'instant.</div>'; return; }
+  list.innerHTML = debts.map((d,i)=>{
+    const paidPct = Math.round(((d.totalAmount-d.remainingAmount)/d.totalAmount)*100);
+    const soldé = d.remainingAmount <= 0;
+    return `<div class="debt-row" style="animation-delay:${Math.min(i,10)*0.03}s">
+        <div class="debt-row-head">
+          <div><span class="debt-type-badge ${d.type}">${d.type==="debt"?"Dette":"Emprunt"}</span> <strong style="margin-left:6px">${escHtml(d.person)}</strong></div>
+          ${soldé ? '<span class="item-badge" style="background:var(--ok-dim);color:var(--ok)">Soldé ✓</span>' : (d.dueDate ? `<span style="font-size:.72rem;color:var(--tx3)">📅 ${new Date(d.dueDate+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</span>` : "")}
+        </div>
+        <div class="budget-nums">Restant : ${formatMoney(Math.max(0,d.remainingAmount))} / ${formatMoney(d.totalAmount)} (${paidPct}% ${d.type==="debt"?"remboursé":"récupéré"})</div>
+        <div class="progress-track"><div class="progress-fill teal" style="width:${paidPct}%"></div></div>
+        ${!soldé ? `<div class="mini-add-row"><input type="number" step="0.01" min="0.01" placeholder="Montant du paiement" data-debt-payment="${d.id}"/><button class="btn-xs" data-action="debt-payment" data-id="${d.id}">Enregistrer</button></div>` : ""}
+        <div style="display:flex;justify-content:flex-end"><button class="btn-danger" data-action="delete-debt" data-id="${d.id}">Suppr.</button></div>
+      </div>`;
+  }).join("");
+  list.querySelectorAll("[data-action='debt-payment']").forEach(btn=>{ btn.addEventListener("click", () => addDebtPayment(btn.dataset.id)); });
+  list.querySelectorAll("[data-action='delete-debt']").forEach(btn=>{ btn.addEventListener("click", () => deleteDebt(btn.dataset.id)); });
+}
+async function addDebtPayment(id){
+  const input = document.querySelector(`[data-debt-payment="${id}"]`);
+  const amount = parseFloat(input.value);
+  if (!amount || amount<=0) return;
+  const d = debts.find(x=>x.id===id); if (!d) return;
+  const newRemaining = Math.max(0, d.remainingAmount - amount);
+  try {
+    await updateDoc(doc(db,"users",currentUser.uid,"debts",id), { remainingAmount: newRemaining });
+    logActivity(`Paiement de ${formatMoney(amount)} — ${d.person}`, "finance");
+    input.value = "";
+    showToast("✅ Paiement enregistré !");
+  } catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function deleteDebt(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"debts",id)); showToast("🗑️ Supprimé."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ NOTES ═══════════════
+function listenNotes(){
+  const q = query(collection(db,"users",currentUser.uid,"notes"), orderBy("updatedAt","desc"));
+  onSnapshot(q, (snap) => { notes = snap.docs.map(d=>({ id:d.id, tags:[], ...d.data() })); renderNotes(); },
+    (err) => console.error("notes listener:", err));
+}
+$("note-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = $("note-title").value.trim();
+  if (!title) return;
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  const tags = $("note-tags").value.split(",").map(t=>t.trim()).filter(Boolean);
+  try {
+    await addDoc(collection(db,"users",currentUser.uid,"notes"), {
+      title, content: $("note-content").value.trim(), tags, favorite: false, archived: false,
+      createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+    });
+    $("note-form").reset();
+    showToast("✅ Note créée !");
+  } catch(err){ console.error(err); showToast("⚠️ Erreur."); }
+  btn.disabled = false;
+});
+document.querySelectorAll("[data-notefilter]").forEach(btn=>{
+  btn.addEventListener("click", () => {
+    noteFilter = btn.dataset.notefilter;
+    document.querySelectorAll("[data-notefilter]").forEach(b=>b.classList.toggle("active", b===btn));
+    renderNotes();
+  });
+});
+$("notes-search").addEventListener("input", renderNotes);
+function noteCardHtml(n,i){
+  const dateLabel = n.updatedAt?.toDate ? n.updatedAt.toDate().toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "";
+  return `<div class="note-card" data-id="${n.id}" style="animation-delay:${Math.min(i,10)*0.03}s">
+      <div class="note-title">${escHtml(n.title)}</div>
+      <div class="note-content">${escHtml(n.content)}</div>
+      ${n.tags && n.tags.length ? `<div class="note-tags">${n.tags.map(t=>`<span class="note-tag">${escHtml(t)}</span>`).join("")}</div>` : ""}
+      <div class="note-foot">
+        <div class="note-date">${dateLabel}${n.archived?" · archivée":""}</div>
+        <div class="note-actions">
+          <button class="star-btn ${n.favorite?"active":""}" data-action="fav-note" data-id="${n.id}" title="Favori">★</button>
+          <button class="btn-xs" data-action="archive-note" data-id="${n.id}">${n.archived?"Désarchiver":"Archiver"}</button>
+          <button class="btn-danger" data-action="delete-note" data-id="${n.id}">Suppr.</button>
+        </div>
+      </div>
+    </div>`;
+}
+function renderNotes(){
+  const grid = $("notes-grid"); if (!grid) return;
+  const term = ($("notes-search").value||"").trim().toLowerCase();
+  let filtered = notes.filter(n => {
+    if (noteFilter === "favorite" && !n.favorite) return false;
+    if (noteFilter === "archived" && !n.archived) return false;
+    if (noteFilter !== "archived" && n.archived) return false;
+    if (term && !((n.title||"").toLowerCase().includes(term) || (n.content||"").toLowerCase().includes(term) || (n.tags||[]).some(t=>t.toLowerCase().includes(term)))) return false;
+    return true;
+  });
+  grid.innerHTML = filtered.length ? filtered.map(noteCardHtml).join("") : '<div class="w-empty w-12">Aucune note ne correspond.</div>';
+  grid.querySelectorAll("[data-action='fav-note']").forEach(btn=>{ btn.addEventListener("click", () => toggleNoteField(btn.dataset.id,"favorite")); });
+  grid.querySelectorAll("[data-action='archive-note']").forEach(btn=>{ btn.addEventListener("click", () => toggleNoteField(btn.dataset.id,"archived")); });
+  grid.querySelectorAll("[data-action='delete-note']").forEach(btn=>{ btn.addEventListener("click", () => deleteNote(btn.dataset.id)); });
+}
+async function toggleNoteField(id, field){
+  const n = notes.find(x=>x.id===id); if (!n) return;
+  try { await updateDoc(doc(db,"users",currentUser.uid,"notes",id), { [field]: !n[field], updatedAt: serverTimestamp() }); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+async function deleteNote(id){
+  try { await deleteDoc(doc(db,"users",currentUser.uid,"notes",id)); showToast("🗑️ Note supprimée."); }
+  catch(e){ console.error(e); showToast("⚠️ Erreur."); }
+}
+
+// ═══════════════ STATISTIQUES ═══════════════
+function listenXpEvents(){
+  const q = query(collection(db,"users",currentUser.uid,"xpEvents"), orderBy("createdAt","desc"), limit(300));
+  onSnapshot(q, (snap) => { xpEvents = snap.docs.map(d=>({ id:d.id, ...d.data() })); renderStats(); },
+    (err) => console.error("xpEvents listener:", err));
+}
+document.querySelectorAll("[data-statperiod]").forEach(btn=>{
+  btn.addEventListener("click", () => {
+    statPeriod = parseInt(btn.dataset.statperiod);
+    document.querySelectorAll("[data-statperiod]").forEach(b=>b.classList.toggle("active", b===btn));
+    renderStats();
+  });
+});
+function renderStats(){
+  if (!$("st-tasks-done")) return;
+  const cutoff = dstr(new Date(Date.now() - (statPeriod-1)*86400000));
+  const isWithinPeriod = (tsField) => {
+    if (!tsField || !tsField.toDate) return false;
+    return dstr(tsField.toDate()) >= cutoff;
+  };
+  const periodTasksDone = tasks.filter(t=>t.status==="done" && isWithinPeriod(t.completedAt));
+  const periodTasksCreated = tasks.filter(t=>t.createdAt && isWithinPeriod(t.createdAt));
+  $("st-tasks-done").textContent = periodTasksDone.length;
+  $("st-completion-rate").textContent = periodTasksCreated.length ? Math.round((periodTasksDone.length/periodTasksCreated.length)*100)+"%" : (tasks.length ? Math.round((tasks.filter(t=>t.status==="done").length/tasks.length)*100)+"%" : "0%");
+
+  const periodSessions = timeSessions.filter(s=>s.date && s.date >= cutoff);
+  $("st-time-worked").textContent = formatHours(periodSessions.reduce((a,s)=>a+(s.duration||0),0));
+
+  if (habits.length){
+    let totalDays=0, doneDays=0;
+    habits.forEach(h=>{ for (let i=0;i<statPeriod;i++){ const d=dstr(new Date(Date.now()-i*86400000)); totalDays++; if ((h.checkins||[]).includes(d)) doneDays++; } });
+    $("st-habit-rate").textContent = totalDays ? Math.round((doneDays/totalDays)*100)+"%" : "0%";
+  } else { $("st-habit-rate").textContent = "0%"; }
+
+  $("st-projects-done").textContent = projects.filter(p=>p.status==="terminé").length;
+
+  const periodXp = xpEvents.filter(x=>isWithinPeriod(x.createdAt)).reduce((a,x)=>a+(x.amount||0),0);
+  $("st-xp-gained").textContent = periodXp;
+
+  const chartEl = $("st-chart");
+  if (chartEl){
+    const days = [];
+    for (let i=6;i>=0;i--){ days.push(dstr(new Date(Date.now()-i*86400000))); }
+    const counts = days.map(d => tasks.filter(t=>t.completedAt && t.completedAt.toDate && dstr(t.completedAt.toDate())===d).length);
+    const max = Math.max(...counts, 1);
+    if (counts.every(c=>c===0)){ chartEl.innerHTML = '<div class="w-empty">Termine des tâches pour voir ton évolution ici.</div>'; }
+    else {
+      chartEl.innerHTML = days.map((d,i)=>{
+        const label = new Date(d+"T00:00").toLocaleDateString("fr-FR",{weekday:"short"});
+        return `<div class="fin-bar-row"><div class="fin-bar-label" style="text-transform:capitalize">${label}</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(counts[i]/max)*100}%;background:linear-gradient(90deg,var(--amber),#f4c469)"></div></div><div class="fin-bar-amount">${counts[i]}</div></div>`;
+      }).join("");
+    }
+  }
+
+  const finChartEl = $("st-fin-chart");
+  if (finChartEl){
+    const periodTx = transactions.filter(t=>t.date >= cutoff);
+    const income = periodTx.filter(t=>t.type==="income").reduce((a,t)=>a+t.amount,0);
+    const expense = periodTx.filter(t=>t.type==="expense").reduce((a,t)=>a+t.amount,0);
+    if (!income && !expense){ finChartEl.innerHTML = '<div class="w-empty">Ajoute des transactions pour voir ton évolution ici.</div>'; }
+    else {
+      const max = Math.max(income, expense, 1);
+      finChartEl.innerHTML = `
+        <div class="fin-bar-row"><div class="fin-bar-label">Revenus</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(income/max)*100}%;background:linear-gradient(90deg,var(--teal),#6fe0d6)"></div></div><div class="fin-bar-amount">${formatMoney(income)}</div></div>
+        <div class="fin-bar-row"><div class="fin-bar-label">Dépenses</div><div class="fin-bar-track"><div class="fin-bar-fill" style="width:${(expense/max)*100}%;background:linear-gradient(90deg,var(--coral),#f28d8b)"></div></div><div class="fin-bar-amount">${formatMoney(expense)}</div></div>`;
+    }
+  }
+}
+
 // ═══════════════ TOPBAR ═══════════════
 $("logout-btn").addEventListener("click", () => signOut(auth));
-$("sidebar-toggle-btn").addEventListener("click", () => $("sidebar").classList.toggle("open"));
 $("notif-btn").addEventListener("click", () => { $("notif-dot").classList.add("hidden"); showToast("🔔 Pas de nouvelle notification."); });
-
 $("global-search").addEventListener("input", (e) => {
   const term = e.target.value.trim().toLowerCase();
   if (!term){ return; }
