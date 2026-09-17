@@ -1661,6 +1661,7 @@ function listenHabits(){
     renderHabits(); renderTodayWidgets(); renderGlobalProgress(); renderProfilePage(); renderStats();
     refreshNotifDot();
   }, (err) => { console.error("habits listener:", err); showToast("⚠️ Impossible de charger les habitudes."); });
+}
 $("habit-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = $("habit-name").value.trim();
