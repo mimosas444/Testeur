@@ -939,7 +939,8 @@ body.density-compact .item-row,body.density-compact .habit-item,body.density-com
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, signOut, onAuthStateChanged, EmailAuthProvider,
-  reauthenticateWithCredential, updatePassword, updateProfile, deleteUser
+  reauthenticateWithCredential, updatePassword, updateProfile, deleteUser,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp,
@@ -1033,15 +1034,56 @@ setTimeout(() => {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    showSkeletonMessage(`
-      <div class="placeholder-card">
-        <div class="placeholder-icon">🔒</div>
-        <div style="font-weight:700;margin-bottom:6px">Tu n'es pas connecté·e</div>
-        <div style="font-size:.82rem;color:var(--tx3);margin-bottom:14px">Redirection vers la page de connexion…</div>
-        <a class="btn-primary" href="index.html" style="text-decoration:none">Aller à la connexion</a>
-      </div>`);
     dashboardReady = true;
-    setTimeout(() => { window.location.href = "index.html"; }, 1200);
+    showSkeletonMessage(`
+      <div class="placeholder-card" style="max-width:360px;margin:40px auto;text-align:left">
+        <div style="text-align:center;margin-bottom:16px">
+          <div class="placeholder-icon" style="margin-bottom:4px">🔒</div>
+          <div style="font-weight:700;font-family:var(--font-display);font-size:1.15rem">Connexion à Life<span style="color:var(--amber)">OS</span></div>
+        </div>
+        <div id="login-error"></div>
+        <form id="inline-login-form" style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+          <div class="field input-wrap"><label>Email</label><input type="email" id="login-email" required/></div>
+          <div class="field input-wrap"><label>Mot de passe</label><input type="password" id="login-password" required minlength="6"/></div>
+          <button type="submit" class="btn-primary btn-full" style="margin-top:4px">Se connecter</button>
+        </form>
+        <div style="text-align:center;margin-top:14px;font-size:.78rem;color:var(--tx3)">
+          Pas encore de compte ? <button type="button" id="inline-signup-btn" class="btn-sm-link">Créer un compte</button>
+        </div>
+      </div>`);
+    const form = $("inline-login-form");
+    const errBox = $("login-error");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errBox.innerHTML = "";
+      const email = $("login-email").value.trim();
+      const password = $("login-password").value;
+      const btn = form.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = "Connexion…";
+      try { await signInWithEmailAndPassword(auth, email, password); }
+      catch(err){
+        console.error(err);
+        const code = err.code || "";
+        const msg = code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")
+          ? "Email ou mot de passe incorrect." : "Impossible de se connecter — réessaie.";
+        errBox.innerHTML = `<div class="error-msg">${msg}</div>`;
+        btn.disabled = false; btn.textContent = "Se connecter";
+      }
+    });
+    $("inline-signup-btn").addEventListener("click", async () => {
+      errBox.innerHTML = "";
+      const email = $("login-email").value.trim();
+      const password = $("login-password").value;
+      if (!email || password.length < 6) { errBox.innerHTML = '<div class="error-msg">Renseigne un email et un mot de passe (6 caractères min.) puis clique sur "Créer un compte".</div>'; return; }
+      try { await createUserWithEmailAndPassword(auth, email, password); }
+      catch(err){
+        console.error(err);
+        const code = err.code || "";
+        const msg = code.includes("email-already-in-use") ? "Ce compte existe déjà — connecte-toi plutôt."
+          : code.includes("weak-password") ? "Mot de passe trop faible (6 caractères min.)."
+          : "Impossible de créer le compte — réessaie.";
+        errBox.innerHTML = `<div class="error-msg">${msg}</div>`;
+      }
+    });
     return;
   }
   try {
